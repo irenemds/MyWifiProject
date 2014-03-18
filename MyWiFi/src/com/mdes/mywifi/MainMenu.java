@@ -3,13 +3,13 @@ package com.mdes.mywifi;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +25,7 @@ public class MainMenu extends Activity {
 	List<ScanResult> resultWifiList;
     ArrayList<String> wifiList;
 	private ListView lista;
+	private WifiInfo wifiInfo;
 	
 	
 	@Override
@@ -54,17 +55,21 @@ public class MainMenu extends Activity {
 	            @Override
 	            public void onReceive(Context c, Intent intent) 
 	            {
-	               resultWifiList = wifiManager.getScanResults();
-	               wifiList = new ArrayList<String>();
-	               resultWifiList = wifiManager.getScanResults();
-	               Log.i("App irene", "\n        Number Of Wifi connections :"+resultWifiList.size()+"\n\n");
-	               for(int i = 0; i < resultWifiList.size(); i++){
-	               	wifiList.add(resultWifiList.get(i).toString());
-	               }
-	               final StableArrayAdapter adapter = new StableArrayAdapter(c,
+	            	resultWifiList = wifiManager.getScanResults();
+                	wifiList = new ArrayList<String>();
+                	resultWifiList = wifiManager.getScanResults();
+                	Log.i("Redes Wifi", "\n        Number Of Wifi connections :"+resultWifiList.size()+"\n\n");
+                	for(int i = 0; i < resultWifiList.size(); i++){
+                		String[] content = null;
+                		String normal = resultWifiList.get(i).toString();
+                   		content = normal.split(" ");
+                		Log.i("Redes Wifi", resultWifiList.get(i).toString() );
+                		wifiList.add(content[1].replace(",", " "));
+                	}
+                	final StableArrayAdapter adapter = new StableArrayAdapter(c,
 	                       android.R.layout.simple_list_item_1, wifiList);
 
-	               lista.setAdapter(adapter);
+                	lista.setAdapter(adapter);
 	            }
 	        }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)); 
       wifiManager.startScan();
