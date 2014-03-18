@@ -24,8 +24,9 @@ public class MainMenu extends Activity {
 	private WifiManager  wifiManager;
 	List<ScanResult> resultWifiList;
     ArrayList<String> wifiList;
+    ArrayList<String> signalList;
 	private ListView lista;
-	private WifiInfo wifiInfo;
+	
 	
 	
 	@Override
@@ -49,7 +50,7 @@ public class MainMenu extends Activity {
 	            }
 
 	        });
-	     //BroadcastReceiver para cambios externos
+	     //BroadcastReceiver para mostrar redes 
 	     registerReceiver(new BroadcastReceiver()
 	        {
 	            @Override
@@ -57,6 +58,7 @@ public class MainMenu extends Activity {
 	            {
 	            	resultWifiList = wifiManager.getScanResults();
                 	wifiList = new ArrayList<String>();
+                	signalList = new ArrayList<String>();
                 	resultWifiList = wifiManager.getScanResults();
                 	Log.i("Redes Wifi", "\n        Number Of Wifi connections :"+resultWifiList.size()+"\n\n");
                 	for(int i = 0; i < resultWifiList.size(); i++){
@@ -64,7 +66,12 @@ public class MainMenu extends Activity {
                 		String normal = resultWifiList.get(i).toString();
                    		content = normal.split(" ");
                 		Log.i("Redes Wifi", resultWifiList.get(i).toString() );
+                		Log.i("Potencia de red", content[7]);
                 		wifiList.add(content[1].replace(",", " "));
+                		
+                		// TODO Mostrar potencias de señal recibidas en el ListView
+                		
+                		signalList.add(content[7].replace(","," "));
                 	}
                 	final StableArrayAdapter adapter = new StableArrayAdapter(c,
 	                       android.R.layout.simple_list_item_1, wifiList);
@@ -72,8 +79,17 @@ public class MainMenu extends Activity {
                 	lista.setAdapter(adapter);
 	            }
 	        }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)); 
-      wifiManager.startScan();
-      	    
+      
+	      registerReceiver (new BroadcastReceiver() {
+	    	  
+	    	  @Override
+	    	  public void onReceive(Context c, Intent intent) 
+	          {
+	    		  wifiOn.setChecked(wifiManager.isWifiEnabled()); 
+	    	  }
+	      }, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+	     
+	     wifiManager.startScan();
 	    }
 	
 }
