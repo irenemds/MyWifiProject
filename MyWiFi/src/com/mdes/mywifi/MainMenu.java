@@ -79,17 +79,17 @@ public class MainMenu extends Activity {
                 	lista.setAdapter(adapter);
 	            }
 	        }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)); 
-      
-	      registerReceiver (new BroadcastReceiver() {
+/*	      registerReceiver (new BroadcastReceiver() {
 	    	  
 	    	  @Override
 	    	  public void onReceive(Context c, Intent intent) 
 	          {
 	    		  wifiOn.setChecked(wifiManager.isWifiEnabled()); 
 	    	  }
-	      }, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+	      }, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION)); */
 	     
 	     wifiManager.startScan();
+
 	    }
 	
 }
