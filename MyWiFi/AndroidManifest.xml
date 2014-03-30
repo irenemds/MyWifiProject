@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.mdes.mywifi.MainMenu"
-            android:label="@string/app_name" >
+            android:label="@string/main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
