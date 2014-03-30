@@ -1,28 +1,31 @@
 package com.mdes.mywifi;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class MainMenu extends Activity {
+public class MainMenu extends Activity implements OnItemClickListener  {
 
 	private ToggleButton wifiOn;
 	private WifiManager  wifiManager;
-	List<ScanResult> resultWifiList;
+	public static List<ScanResult> resultWifiList;
     ArrayList<String> wifiList;
     ArrayList<String> signalList;
 	private ListView lista;
@@ -62,21 +65,17 @@ public class MainMenu extends Activity {
                 	resultWifiList = wifiManager.getScanResults();
                 	Log.i("Redes Wifi", "\n        Number Of Wifi connections :"+resultWifiList.size()+"\n\n");
                 	for(int i = 0; i < resultWifiList.size(); i++){
-                		String[] content = null;
-                		String normal = resultWifiList.get(i).toString();
-                   		content = normal.split(" ");
                 		Log.i("Redes Wifi", resultWifiList.get(i).toString() );
-                		Log.i("Potencia de red", content[7]);
-                		wifiList.add(content[1].replace(",", " "));
+                		wifiList.add(resultWifiList.get(i).SSID);
+                  		// TODO Mostrar potencias de señal recibidas en el ListView
                 		
-                		// TODO Mostrar potencias de señal recibidas en el ListView
-                		
-                		signalList.add(content[7].replace(","," "));
+                		signalList.add(Integer.toString(resultWifiList.get(i).level));
+                		Log.i("Potencia de red", Integer.toString(resultWifiList.get(i).level));
                 	}
-                	final StableArrayAdapter adapter = new StableArrayAdapter(c,
-	                       android.R.layout.simple_list_item_1, wifiList);
+                	CustomAdapter adapter = new CustomAdapter(c, resultWifiList);
+                    lista.setAdapter(adapter);
+//                    lista.setOnItemClickListener(this);
 
-                	lista.setAdapter(adapter);
 	            }
 	        }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)); 
 /*	      registerReceiver (new BroadcastReceiver() {
@@ -91,5 +90,16 @@ public class MainMenu extends Activity {
 	     wifiManager.startScan();
 
 	    }
+
+
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int posicion, long id) {
+		Toast toast = Toast.makeText(getApplicationContext(),
+                "Item " + (posicion + 1) + ": " + resultWifiList.get(posicion), Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+		
+	}
 	
 }
