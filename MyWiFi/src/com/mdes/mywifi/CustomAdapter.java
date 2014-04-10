@@ -16,7 +16,11 @@ import android.widget.TextView;
 public class CustomAdapter extends BaseAdapter {
 	Context contexto;
 	List<ScanResult> scanResult;
-
+	int[] flags = new int[]{
+	        R.drawable.contento,
+	        R.drawable.triste,
+	        R.drawable.enfadado
+	    };
 	
 	
 	public CustomAdapter (Context contexto, List<ScanResult> scanResult){
@@ -26,7 +30,7 @@ public class CustomAdapter extends BaseAdapter {
 	
 
     private class ViewHolder {
-        ImageView foto;
+        ImageView barraNivel;
         TextView SSID;
         TextView level;
     }
@@ -44,7 +48,7 @@ public class CustomAdapter extends BaseAdapter {
 			holder = new ViewHolder();
             holder.level = (TextView) vistaReciclada.findViewById(R.id.level);
             holder.SSID = (TextView) vistaReciclada.findViewById(R.id.SSID);
-            holder.foto = (ImageView) vistaReciclada.findViewById(R.id.foto);
+            holder.barraNivel = (ImageView) vistaReciclada.findViewById(R.id.barraNivel);
             vistaReciclada.setTag(holder);
         }
         else {
@@ -53,8 +57,21 @@ public class CustomAdapter extends BaseAdapter {
 		
 		ScanResult result = (ScanResult) getItem(posicion);
 		Log.i("layout_info", result.toString());
-		holder.SSID.setText(Integer.toString(result.level)+" dBm");
-		holder.level.setText(result.SSID); 
+		if (result == null){
+			holder.SSID.setText("No hay redes que mostrar");
+		}
+		else {
+			holder.level.setText(Integer.toString(result.level)+" dBm");
+			holder.SSID.setText(result.SSID); 
+			//	Diferentes imágenes de prueba en función del nivel de señal
+			if(result.level <=0 && result.level >-60){
+				holder.barraNivel.setImageResource(R.drawable.contento);}
+			if(result.level <=-60 && result.level >-80){
+				holder.barraNivel.setImageResource(R.drawable.triste);}
+			if(result.level <=-80){
+				holder.barraNivel.setImageResource(R.drawable.enfadado);
+			}
+		}
 		
 		return vistaReciclada;
 		
