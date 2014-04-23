@@ -59,10 +59,7 @@ public class CustomAdapter extends BaseAdapter {
 		
 		ScanResult result = (ScanResult) getItem(posicion);
 		Log.i("layout_info", result.toString());
-		if (result == null){
-			holder.SSID.setText("No hay redes que mostrar");
-		}
-		else {
+
 			holder.level.setText(Integer.toString(result.level)+" dBm");
 			holder.SSID.setText(result.SSID); 
 			//	Diferentes imágenes de prueba en función del nivel de señal
@@ -77,7 +74,6 @@ public class CustomAdapter extends BaseAdapter {
 			if(result.level <=-80){
 				holder.barraNivel.setImageResource(R.drawable.signal1);
 			}
-		}
 		
 		return vistaReciclada;
 		

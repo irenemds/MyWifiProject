@@ -38,6 +38,7 @@ public class MainMenu extends Activity implements OnItemClickListener  {
 		setContentView(R.layout.main_menu);
 		
 		 lista = (ListView) findViewById(R.id.List1);
+		 lista.setOnItemClickListener(this);
 		
 		//ToggleButton
 		wifiOn = (ToggleButton)findViewById(R.id.wifiOn);
@@ -54,30 +55,30 @@ public class MainMenu extends Activity implements OnItemClickListener  {
 
 	        });
 	     //BroadcastReceiver para mostrar redes 
-	     registerReceiver(new BroadcastReceiver()
-	        {
-	            @Override
-	            public void onReceive(Context c, Intent intent) 
-	            {
-	            	resultWifiList = wifiManager.getScanResults();
-                	wifiList = new ArrayList<String>();
-                	signalList = new ArrayList<String>();
-                	resultWifiList = wifiManager.getScanResults();
-                	Log.i("Redes Wifi", "\n        Number Of Wifi connections :"+resultWifiList.size()+"\n\n");
-                	for(int i = 0; i < resultWifiList.size(); i++){
-                		Log.i("Redes Wifi", resultWifiList.get(i).toString() );
-                		wifiList.add(resultWifiList.get(i).SSID);
-                  		// TODO Mostrar potencias de señal recibidas en el ListView
-                		
-                		signalList.add(Integer.toString(resultWifiList.get(i).level));
-                		Log.i("Potencia de red", Integer.toString(resultWifiList.get(i).level));
-                	}
-                	CustomAdapter adapter = new CustomAdapter(c, resultWifiList);
-                    lista.setAdapter(adapter);
-//                    lista.setOnItemClickListener(this);
-
-	            }
-	        }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)); 
+	     
+//	     registerReceiver(new BroadcastReceiver()
+//	        {
+//	            @Override
+//	            public void onReceive(Context c, Intent intent) 
+//	            {	
+//                	wifiList = new ArrayList<String>();
+//                	signalList = new ArrayList<String>();
+//                	resultWifiList = wifiManager.getScanResults();
+//                	Log.i("Redes Wifi", "\n        Number Of Wifi connections :"+resultWifiList.size()+"\n\n");
+//                	for(int i = 0; i < resultWifiList.size(); i++){
+//                		Log.i("Redes Wifi", resultWifiList.get(i).toString() );
+//                		wifiList.add(resultWifiList.get(i).SSID);
+//                  		// TODO Mostrar potencias de señal recibidas en el ListView
+//                		
+//                		signalList.add(Integer.toString(resultWifiList.get(i).level));
+//                		Log.i("Potencia de red", Integer.toString(resultWifiList.get(i).level));
+//                	}
+//                	CustomAdapter adapter = new CustomAdapter(c, resultWifiList);
+//                    lista.setAdapter(adapter);
+////                    lista.setOnItemClickListener(this);
+//
+//	            }
+//	        }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)); 
 /*	      registerReceiver (new BroadcastReceiver() {
 	    	  
 	    	  @Override
@@ -92,6 +93,18 @@ public class MainMenu extends Activity implements OnItemClickListener  {
 	    }
 
 
+	public BroadcastReceiver scanResultReceiver = new BroadcastReceiver() {
+        
+   	 @Override
+        
+   	 public void onReceive(Context context, Intent intent) {
+   		 Bundle extras = intent.getExtras();
+   		    ArrayList<ScanResult> scanResults = extras.getParcelableArrayList("ScanResults");
+   		    CustomAdapter adapter = new CustomAdapter(context, scanResults);
+   		    lista.setAdapter(adapter);
+   	 }
+    };
+    
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int posicion, long id) {
@@ -101,5 +114,9 @@ public class MainMenu extends Activity implements OnItemClickListener  {
         toast.show();
 		
 	}
+	public void changeWifiList(	List<ScanResult> newResults){
+		resultWifiList = newResults;
+	}
+
 	
 }
