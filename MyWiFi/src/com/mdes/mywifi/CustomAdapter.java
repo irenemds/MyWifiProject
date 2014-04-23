@@ -16,10 +16,12 @@ import android.widget.TextView;
 public class CustomAdapter extends BaseAdapter {
 	Context contexto;
 	List<ScanResult> scanResult;
-	int[] flags = new int[]{
-	        R.drawable.contento,
-	        R.drawable.triste,
-	        R.drawable.enfadado
+	int[] signals = new int[]{
+	        R.drawable.signal1,
+	        R.drawable.signal2,
+	        R.drawable.signal3,
+	        R.drawable.signal4,
+	        R.drawable.signal5
 	    };
 	
 	
@@ -64,12 +66,16 @@ public class CustomAdapter extends BaseAdapter {
 			holder.level.setText(Integer.toString(result.level)+" dBm");
 			holder.SSID.setText(result.SSID); 
 			//	Diferentes imágenes de prueba en función del nivel de señal
-			if(result.level <=0 && result.level >-60){
-				holder.barraNivel.setImageResource(R.drawable.contento);}
-			if(result.level <=-60 && result.level >-80){
-				holder.barraNivel.setImageResource(R.drawable.triste);}
+			if(result.level <=0 && result.level >-30){
+				holder.barraNivel.setImageResource(R.drawable.signal5);}
+			if(result.level <=-30 && result.level >-50){
+				holder.barraNivel.setImageResource(R.drawable.signal4);}
+			if(result.level <=-50 && result.level >-70){
+				holder.barraNivel.setImageResource(R.drawable.signal3);}
+			if(result.level <=-70 && result.level >-80){
+				holder.barraNivel.setImageResource(R.drawable.signal2);}
 			if(result.level <=-80){
-				holder.barraNivel.setImageResource(R.drawable.enfadado);
+				holder.barraNivel.setImageResource(R.drawable.signal1);
 			}
 		}
 		
