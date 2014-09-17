@@ -58,22 +58,21 @@ public class CustomAdapter extends BaseAdapter {
         }
 		
 		ScanResult result = (ScanResult) getItem(posicion);
-		Log.i("layout_info", result.toString());
 
 			holder.level.setText(Integer.toString(result.level)+" dBm");
 			holder.SSID.setText(result.SSID); 
 			//	Diferentes imágenes de prueba en función del nivel de señal
-			if(result.level <=0 && result.level >-30){
-				holder.barraNivel.setImageResource(R.drawable.signal5);}
-			if(result.level <=-30 && result.level >-50){
-				holder.barraNivel.setImageResource(R.drawable.signal4);}
-			if(result.level <=-50 && result.level >-70){
-				holder.barraNivel.setImageResource(R.drawable.signal3);}
-			if(result.level <=-70 && result.level >-80){
-				holder.barraNivel.setImageResource(R.drawable.signal2);}
-			if(result.level <=-80){
-				holder.barraNivel.setImageResource(R.drawable.signal1);
-			}
+//			if(result.level <=0 && result.level >-30){
+//				holder.barraNivel.setImageResource(R.drawable.signal5);}
+//			else if(result.level <=-30 && result.level >-50){
+//				holder.barraNivel.setImageResource(R.drawable.signal4);}
+//			else if(result.level <=-50 && result.level >-70){
+//				holder.barraNivel.setImageResource(R.drawable.signal3);}
+//			else if(result.level <=-70 && result.level >-80){
+//				holder.barraNivel.setImageResource(R.drawable.signal2);}
+//			if(result.level <=-80){
+//				holder.barraNivel.setImageResource(R.drawable.signal1);
+//			}
 		
 		return vistaReciclada;
 		
@@ -88,6 +87,18 @@ public class CustomAdapter extends BaseAdapter {
 
 	public long getItemId(int posicion) {
 		return scanResult.indexOf(getItem(posicion));
+	}
+	
+	
+	/*
+	 * Método para actualizar los valores del ListView
+	 * Recibe la nueva lista, borra la anterior 
+	 * y la cambia pr la nueva
+	 */
+	public void updateWifiList(List<ScanResult> scanRec) {
+	    scanResult.clear();
+	    scanResult.addAll(scanRec);
+	    this.notifyDataSetChanged();
 	}
 	
 }

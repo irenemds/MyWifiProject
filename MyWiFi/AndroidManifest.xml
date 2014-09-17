@@ -7,24 +7,32 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+
     <application
-        android:debuggable="true"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name="com.mdes.mywifi.MainMenu"
-            android:label="@string/main" >
+        <activity android:name="com.mdes.mywifi.WifiList" android:label="@string/main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".BroadcastService" />
+
+        <activity android:name=".InfoRed" android:label="@string/title_activity_info_red" >
+            <intent-filter >
+                <action android:name="com.mdes.mywifi.INFORED" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK" >
+    </uses-permission>
 
 </manifest>

@@ -19,8 +19,8 @@
         android:id="@+id/level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/SSID"
+        android:layout_below="@+id/SSID"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="nivel de señal"
@@ -30,6 +30,9 @@
         android:id="@+id/barraNivel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="Nivel de señal" />
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/ic_launcher" />
     
 </RelativeLayout>
