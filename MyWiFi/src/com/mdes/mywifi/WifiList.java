@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
@@ -15,14 +17,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 public class WifiList extends Activity implements OnItemClickListener {
 
-	private ToggleButton wifiButton;
 	private WifiManager wifiManager;
 	public static List<ScanResult> resultWifiList;
 	ArrayList<String> wifiList;
@@ -31,7 +30,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 	private Intent intent;
 	public CustomAdapter adapter;
 	public HiloWifi hiloWifi;
-	private WifiState wifiState;
+//	private WifiState wifiState;
 	private Toast toast;
 	
 	@Override
@@ -43,37 +42,20 @@ public class WifiList extends Activity implements OnItemClickListener {
 
 		lista = (ListView) findViewById(R.id.List1);
 //		lista.setOnItemClickListener(this);
+		
+//		wifiState = new WifiState(this);
+		
+		//Comprobar estado inicial de Wifi, si esta desactivado mostrar dialogo
+		if (wifiManager.isWifiEnabled() == false)
+		{  
+			wifiAlertDialog(this);
 
-		// ToggleButton establecer estado inicial
-		wifiButton = (ToggleButton) findViewById(R.id.wifiOn);
-		wifiButton.setChecked(wifiManager.isWifiEnabled());
-		wifiState = new WifiState(this);
+		} 
 
-		// Listener para ToggleButton
-		wifiButton
-				.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		// EL wifi está activado, lanzar hilo
+//		hiloWifi = new HiloWifi(this);
+//		hiloWifi.start();
 
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						if (isChecked) {
-							if (!wifiState.isState()) {
-								wifiState.On();
-								Log.i("INFO", "Button -  Wifi on");
-							}
-						} else {
-							if (wifiState.isState()) {
-								wifiState.Off();
-								Log.i("INFO", "Button -  Wifi off");
-							}
-						}
-						wifiState.setInternalChange(true);
-					}
-
-				});
-		if (wifiState.isState()){
-			hiloWifi = new HiloWifi(this);
-			hiloWifi.start();}
 
 		registerReceiver(new BroadcastReceiver() {
 
@@ -86,22 +68,9 @@ public class WifiList extends Activity implements OnItemClickListener {
 				
 					switch(extraWifiState){
 					case WifiManager.WIFI_STATE_DISABLED:
-						wifiState.Off();
-						wifiButton.setChecked(false);
+					
+						wifiAlertDialog(c);
 						Log.i("INFO", "Broadcast -  Wifi off");
-						break;
-					case WifiManager.WIFI_STATE_DISABLING:
-						toast = Toast.makeText(getApplicationContext(), "Desactivando Wifi.", Toast.LENGTH_SHORT);
-						toast.show();
-						break;
-					case WifiManager.WIFI_STATE_ENABLED:
-						wifiState.On();
-						wifiButton.setChecked(true);
-						Log.i("INFO", "Broadcast -  Wifi on");
-						break;
-					case WifiManager.WIFI_STATE_ENABLING:
-						toast = Toast.makeText(getApplicationContext(), "Activando Wifi.", Toast.LENGTH_SHORT);
-						toast.show();
 						break;
 					case WifiManager.WIFI_STATE_UNKNOWN:
 						Log.i("INFO", "Broadcast -  Wifi desconocido");
@@ -111,16 +80,16 @@ public class WifiList extends Activity implements OnItemClickListener {
 		}, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 
 	}
-
-	public HiloWifi getHiloWifi() {
-		return hiloWifi;
-	}
+//
+//	public HiloWifi getHiloWifi() {
+//		return hiloWifi;
+//	}
 
 	
-	public void setHiloWifi(HiloWifi hiloWifi) {
-		this.hiloWifi = hiloWifi;
-		hiloWifi.start();
-	}
+//	public void setHiloWifi(HiloWifi hiloWifi) {
+//		this.hiloWifi = hiloWifi;
+//		hiloWifi.start();
+//	}
 
 	@Override
 	protected void onPause() {
@@ -149,5 +118,31 @@ public class WifiList extends Activity implements OnItemClickListener {
 		return lista;
 	}
 	
+	public void wifiAlertDialog(Context c){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(c);
+
+		alertDialogBuilder.setTitle("Wifi desactivado");
+
+		// Opciones: encender Wifi o Salir de la aplicación.
+		alertDialogBuilder
+		.setMessage("Es necesario activar el Wifi para usar esta aplicación")
+		.setCancelable(false)
+		.setNegativeButton("Activar",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				wifiManager.setWifiEnabled(true);
+			}
+		})
+		.setPositiveButton("Salir",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				WifiList.this.finish();
+			}
+		});
+		
+		// crear AlertDialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// mostrar
+		alertDialog.show();
+	}
 	
 }

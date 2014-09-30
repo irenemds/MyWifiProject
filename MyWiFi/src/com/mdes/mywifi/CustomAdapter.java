@@ -93,7 +93,7 @@ public class CustomAdapter extends BaseAdapter {
 	/*
 	 * Método para actualizar los valores del ListView
 	 * Recibe la nueva lista, borra la anterior 
-	 * y la cambia pr la nueva
+	 * y la cambia por la nueva
 	 */
 	public void updateWifiList(List<ScanResult> scanRec) {
 	    scanResult.clear();
