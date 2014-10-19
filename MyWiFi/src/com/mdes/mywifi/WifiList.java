@@ -43,20 +43,20 @@ public class WifiList extends Activity implements OnItemClickListener {
 		lista = (ListView) findViewById(R.id.List1);
 //		lista.setOnItemClickListener(this);
 		
+		hiloWifi = new HiloWifi(this);
+		
 //		wifiState = new WifiState(this);
 		
 		//Comprobar estado inicial de Wifi, si esta desactivado mostrar dialogo
 		if (wifiManager.isWifiEnabled() == false)
 		{  
 			wifiAlertDialog(this);
-
-		} 
-
-		// EL wifi está activado, lanzar hilo
-//		hiloWifi = new HiloWifi(this);
-//		hiloWifi.start();
-
-
+		}else{
+		// El wifi está activado, lanzar hilo
+  		hiloWifi.start();
+		}
+		
+		
 		registerReceiver(new BroadcastReceiver() {
 
 			// Receiver para modificar estado ToggleButton
@@ -65,13 +65,20 @@ public class WifiList extends Activity implements OnItemClickListener {
 			public void onReceive(Context c, Intent intent) {
 				
 				int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
-				
+//				c.removeStickyBroadcast(intent);	
 					switch(extraWifiState){
 					case WifiManager.WIFI_STATE_DISABLED:
-					
-						wifiAlertDialog(c);
 						Log.i("INFO", "Broadcast -  Wifi off");
+						hiloWifi.setBucleOff();	
+			  			wifiAlertDialog(c);
 						break;
+						
+					case WifiManager.WIFI_STATE_ENABLED:
+						Log.i("INFO", "Broadcast -  Wifi on, lanza hilo");							
+						hiloWifi = new HiloWifi(WifiList.this);
+						hiloWifi.start();
+						break;	
+						
 					case WifiManager.WIFI_STATE_UNKNOWN:
 						Log.i("INFO", "Broadcast -  Wifi desconocido");
 						break;
