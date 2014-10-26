@@ -69,7 +69,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 						Log.i("INFO", "Broadcast -  Wifi on, lanza hilo");							
 						hiloWifi = new HiloWifi(WifiList.this, levelList, contador);
 						contador++;
-//						hiloWifi.start();
+						hiloWifi.start();
 						break;	
 						
 					case WifiManager.WIFI_STATE_UNKNOWN:
