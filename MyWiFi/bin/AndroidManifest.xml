@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".InfoRed" android:label="@string/title_activity_info_red" >
+        <activity android:name=".NetInfo" android:label="@string/title_activity_net_info" >
             <intent-filter >
-                <action android:name="com.mdes.mywifi.INFORED" />
+                <action android:name="com.mdes.mywifi.NETINFO" />
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>

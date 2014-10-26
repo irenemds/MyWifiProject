@@ -8,7 +8,7 @@
     <string name="title_section3">Section 3</string>
     <string name="main">Lista de redes WiFi</string>
     <string name="title_activity_redwifi">Detalles de AP</string>
-    <string name="title_activity_info_red">Info de AP</string>
+    <string name="title_activity_net_info">Info de AP</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_info_ap">Info AP</string>
 

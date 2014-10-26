@@ -41,12 +41,12 @@ public class CustomAdapter extends BaseAdapter {
 		
 		ViewHolder holder = null;
 		
-		LayoutInflater inflador = (LayoutInflater)contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater)contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		
 		//Si no se ha cargado el layout previamente
 		if (vistaReciclada == null){
-			vistaReciclada = inflador.inflate(R.layout.elemento_lista, null);
+			vistaReciclada = inflater.inflate(R.layout.elemento_lista, null);
 			holder = new ViewHolder();
             holder.level = (TextView) vistaReciclada.findViewById(R.id.level);
             holder.SSID = (TextView) vistaReciclada.findViewById(R.id.SSID);

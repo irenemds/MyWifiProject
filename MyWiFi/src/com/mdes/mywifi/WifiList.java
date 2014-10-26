@@ -1,6 +1,5 @@
 package com.mdes.mywifi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -18,20 +17,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class WifiList extends Activity implements OnItemClickListener {
 
 	private WifiManager wifiManager;
 	public static List<ScanResult> resultWifiList;
-	ArrayList<String> wifiList;
-	ArrayList<String> signalList;
 	private ListView lista;
 	private Intent intent;
-	public CustomAdapter adapter;
 	public HiloWifi hiloWifi;
-//	private WifiState wifiState;
-	private Toast toast;
+	private LevelList levelList;
+	public int contador = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,22 +36,20 @@ public class WifiList extends Activity implements OnItemClickListener {
 		wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 
 		lista = (ListView) findViewById(R.id.List1);
-//		lista.setOnItemClickListener(this);
+		lista.setOnItemClickListener(this);
 		
-		hiloWifi = new HiloWifi(this);
-		
-//		wifiState = new WifiState(this);
-		
+		levelList = new LevelList();
 		//Comprobar estado inicial de Wifi, si esta desactivado mostrar dialogo
 		if (wifiManager.isWifiEnabled() == false)
 		{  
 			wifiAlertDialog(this);
 		}else{
 		// El wifi está activado, lanzar hilo
-  		hiloWifi.start();
+			hiloWifi = new HiloWifi(this, levelList, contador);
+			hiloWifi.start();
+			contador++;
 		}
-		
-		
+			
 		registerReceiver(new BroadcastReceiver() {
 
 			// Receiver para modificar estado ToggleButton
@@ -64,8 +57,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 			@Override
 			public void onReceive(Context c, Intent intent) {
 				
-				int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
-//				c.removeStickyBroadcast(intent);	
+				int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);		
 					switch(extraWifiState){
 					case WifiManager.WIFI_STATE_DISABLED:
 						Log.i("INFO", "Broadcast -  Wifi off");
@@ -75,8 +67,9 @@ public class WifiList extends Activity implements OnItemClickListener {
 						
 					case WifiManager.WIFI_STATE_ENABLED:
 						Log.i("INFO", "Broadcast -  Wifi on, lanza hilo");							
-						hiloWifi = new HiloWifi(WifiList.this);
-						hiloWifi.start();
+						hiloWifi = new HiloWifi(WifiList.this, levelList, contador);
+						contador++;
+//						hiloWifi.start();
 						break;	
 						
 					case WifiManager.WIFI_STATE_UNKNOWN:
@@ -87,33 +80,38 @@ public class WifiList extends Activity implements OnItemClickListener {
 		}, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 
 	}
-//
-//	public HiloWifi getHiloWifi() {
-//		return hiloWifi;
-//	}
-
-	
-//	public void setHiloWifi(HiloWifi hiloWifi) {
-//		this.hiloWifi = hiloWifi;
-//		hiloWifi.start();
-//	}
-
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
+		Log.i("DESCONEXION","onPause");
 		super.onPause();
-		// timer.stop();
+		hiloWifi.setBucleOff();
+		//TODO unregister Receiver
+	}
+	
+	protected void onDestroy() {
+		Log.i("DESCONEXION","onDestroy");
+		super.onDestroy();
+		hiloWifi.setBucleOff();
+		//TODO unregister Receiver
+	}
+	
+	protected void onStop() {
+		Log.i("DESCONEXION","onStop");
+		super.onStop();
+		hiloWifi.setBucleOff();
+		//TODO unregister Receiver
 	}
 
 	@Override
 	public void onItemClick(AdapterView parent, View v, int position, long id) {
-//		Log.i("INFO", "Se ha hecho click en: "
-//				+ resultWifiList.get(position).SSID);
-//		intent = new Intent(this, InfoRed.class);
-//		Log.i("INFO", "Creado intent");
-//		intent.putExtra("Red", resultWifiList.get(position).SSID);
-//		Log.i("INFO", "Creado el Extra");
-//		startActivity(intent);
+		Log.i("INFO", "Se ha hecho click en: "
+				+ resultWifiList.get(position).SSID);
+		intent = new Intent(this, NetInfo.class);
+		Log.i("INFO", "Creado intent");
+		intent.putExtra("Red", resultWifiList.get(position).SSID);
+		hiloWifi.setBucleOff();
+		Log.i("INFO", "Creado el Extra");
+		startActivity(intent);
 
 	}
 
@@ -134,12 +132,12 @@ public class WifiList extends Activity implements OnItemClickListener {
 		alertDialogBuilder
 		.setMessage("Es necesario activar el Wifi para usar esta aplicación")
 		.setCancelable(false)
-		.setNegativeButton("Activar",new DialogInterface.OnClickListener() {
+		.setPositiveButton("Activar",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int id) {
 				wifiManager.setWifiEnabled(true);
 			}
 		})
-		.setPositiveButton("Salir",new DialogInterface.OnClickListener() {
+		.setNegativeButton("Salir",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int id) {
 				WifiList.this.finish();
 			}
@@ -152,4 +150,8 @@ public class WifiList extends Activity implements OnItemClickListener {
 		alertDialog.show();
 	}
 	
+	public void updateValues (List<ScanResult> results, LevelList levels){
+		resultWifiList = results;
+		levelList = levels;
+	}
 }
