@@ -88,20 +88,14 @@ public class WifiList extends Activity implements OnItemClickListener {
 		//TODO unregister Receiver
 	}
 	
-	protected void onDestroy() {
-		Log.i("DESCONEXION","onDestroy");
-		super.onDestroy();
-		hiloWifi.setBucleOff();
-		//TODO unregister Receiver
+	protected void onResume() {
+		Log.i("RECONEXION","OnResume");
+		super.onResume();
+		hiloWifi = new HiloWifi(WifiList.this, levelList, contador);
+		hiloWifi.start();
+		//TODO register Receiver
 	}
 	
-	protected void onStop() {
-		Log.i("DESCONEXION","onStop");
-		super.onStop();
-		hiloWifi.setBucleOff();
-		//TODO unregister Receiver
-	}
-
 	@Override
 	public void onItemClick(AdapterView parent, View v, int position, long id) {
 		Log.i("INFO", "Se ha hecho click en: "
