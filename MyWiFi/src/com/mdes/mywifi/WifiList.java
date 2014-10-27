@@ -107,10 +107,13 @@ public class WifiList extends Activity implements OnItemClickListener {
 		Log.i("INFO", "Se ha hecho click en: "
 				+ resultWifiList.get(position).SSID);
 		intent = new Intent(this, NetInfo.class);
-		Log.i("INFO", "Creado intent");
-		intent.putExtra("Red", resultWifiList.get(position).SSID);
+//		Log.i("INFO", "Creado intent");
+		intent.putExtra("SSID", resultWifiList.get(position).SSID);
+		intent.putExtra("BSSID", resultWifiList.get(position).BSSID);
+		intent.putExtra("CAP", resultWifiList.get(position).capabilities);
+		intent.putExtra("FREQ", resultWifiList.get(position).frequency);
 		hiloWifi.setBucleOff();
-		Log.i("INFO", "Creado el Extra");
+//		Log.i("INFO", "Creado el Extra");
 		startActivity(intent);
 
 	}
