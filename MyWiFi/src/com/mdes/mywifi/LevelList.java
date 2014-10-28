@@ -22,9 +22,9 @@ public class LevelList {
 		
 		if (levelList.containsKey(SSID)){
 			lista = levelList.get(SSID);
-			for (int i = 0; i < lista.size(); i++) {
-				Log.i("VALORES", SSID + lista.get(i));
-			}
+//			for (int i = 0; i < lista.size(); i++) {
+//				Log.i("VALORES", SSID + lista.get(i));
+//			}
 			lista.add(level);
 		}
 		else{

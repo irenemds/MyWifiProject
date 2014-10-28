@@ -93,21 +93,24 @@ public class WifiList extends Activity implements OnItemClickListener {
 		super.onResume();
 		hiloWifi = new HiloWifi(WifiList.this, levelList, contador);
 		hiloWifi.start();
+
 		//TODO register Receiver
 	}
 	
 	@Override
 	public void onItemClick(AdapterView parent, View v, int position, long id) {
+//	Al pulsar sobre un elemento de la lista se abre una nueva actividad en la que se muestra 
+//	información sobre ella.	
 		Log.i("INFO", "Se ha hecho click en: "
 				+ resultWifiList.get(position).SSID);
 		intent = new Intent(this, NetInfo.class);
-//		Log.i("INFO", "Creado intent");
+//	Añadir como extra la información a mostrar.	
 		intent.putExtra("SSID", resultWifiList.get(position).SSID);
 		intent.putExtra("BSSID", resultWifiList.get(position).BSSID);
 		intent.putExtra("CAP", resultWifiList.get(position).capabilities);
 		intent.putExtra("FREQ", resultWifiList.get(position).frequency);
+//  Al cambiar de actividad parar el hilo (Cambiar a mensaje broadcast para no tener que pararlo)
 		hiloWifi.setBucleOff();
-//		Log.i("INFO", "Creado el Extra");
 		startActivity(intent);
 
 	}
