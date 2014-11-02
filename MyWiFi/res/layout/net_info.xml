@@ -24,16 +24,6 @@
         android:src="@drawable/ic_launcher" />
 
     <TextView
-        android:id="@+id/nFREQ"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/nCAP"
-        android:layout_below="@+id/nCAP"
-        android:layout_marginTop="57dp"
-        android:text="Frequency:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
         android:id="@+id/BSSID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,20 +54,49 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
+        android:id="@+id/CAP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/nFREQ"
+        android:layout_toRightOf="@+id/imageView1"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
         android:id="@+id/nCAP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nBSSID"
-        android:layout_marginTop="55dp"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/imageView1"
         android:text="Capabilities:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/CAP"
+        android:id="@+id/nFREQ"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/nFREQ"
+        android:layout_alignLeft="@+id/nCAP"
+        android:layout_below="@+id/nCAP"
+        android:layout_marginTop="36dp"
+        android:text="Frequency:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/nCHAN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/nFREQ"
+        android:layout_below="@+id/nFREQ"
+        android:layout_marginTop="31dp"
+        android:text="Channel:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/CHAN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/nCHAN"
+        android:layout_alignBottom="@+id/nCHAN"
         android:layout_toRightOf="@+id/imageView1"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />

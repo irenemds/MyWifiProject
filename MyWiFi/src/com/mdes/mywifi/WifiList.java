@@ -27,6 +27,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 	private ListView lista;
 	private Intent intent;
 	public HiloWifi hiloWifi;
+	private Wifi wifiClick;
 //	private LevelList levelList;
 	public HashMap<String,Wifi> wifiMap;
 	public static boolean isThread;
@@ -106,12 +107,14 @@ public class WifiList extends Activity implements OnItemClickListener {
 //	información sobre ella.	
 		Log.i("INFO", "Se ha hecho click en: "
 				+ resultWifiList.get(position).SSID);
+		wifiClick = wifiMap.get(resultWifiList.get(position).SSID);
 		intent = new Intent(this, NetInfo.class);
 //	Añadir como extra la información a mostrar.	
-		intent.putExtra("SSID", resultWifiList.get(position).SSID);
-		intent.putExtra("BSSID", resultWifiList.get(position).BSSID);
-		intent.putExtra("CAP", resultWifiList.get(position).capabilities);
-		intent.putExtra("FREQ", resultWifiList.get(position).frequency);
+		intent.putExtra("SSID", wifiClick.getSSID());
+		intent.putExtra("BSSID", wifiClick.getBSSID());
+		intent.putExtra("CAP", wifiClick.getCap());
+		intent.putExtra("FREQ", wifiClick.getFreq());
+		intent.putExtra("CHAN", wifiClick.getChannel());
 //  Al cambiar de actividad parar el hilo (Cambiar a mensaje broadcast para no tener que pararlo)
 		hiloWifi.setBucleOff();
 		startActivity(intent);
