@@ -39,18 +39,10 @@ public class HiloWifi extends Thread{
 						Log.i("INFO","SSID: "+resultWifiList.get(i).SSID);	
 						wifiList.saveLevel(resultWifiList.get(i));
 					}
+					wifiList.updateValues(resultWifiList);
 					Intent i = new Intent();
 					i.setAction("com.mdes.mywifi.timer");
 					wifiList.sendBroadcast(i);
-					wifiList.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							CustomAdapter adapter = new CustomAdapter(wifiList.getApplicationContext(), resultWifiList);
-							wifiList.getLista().setAdapter(adapter);
-					      //adapter.updateWifiList(resultWifiList);
-
-						}});
-				wifiList.updateValues(resultWifiList);
 				}
 				else{Log.i("INFO","No encuentra redes");}		
 

@@ -160,7 +160,8 @@ public void createThread(){
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				Log.i("BROADCAST", "RECIBIDO!");
+				CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
+				getLista().setAdapter(adapter);
 				
 			}
 			
