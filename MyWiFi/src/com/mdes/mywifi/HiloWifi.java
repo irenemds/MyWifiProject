@@ -28,17 +28,11 @@ public class HiloWifi extends Thread{
 		while(bucle){
 			try{
 				try{
-				Log.i("INFO","Comienza hilo");
 				wifiManager.startScan();
 				resultWifiList = wifiManager.getScanResults();
+				wifiList.saveLevel(resultWifiList);
 				if (resultWifiList.size()!=0){
 					Log.i("INFO","Number Of Wifi connections :"+resultWifiList.size());
-					for (int i = 0; i < resultWifiList.size(); i++) {
-						Integer level = resultWifiList.get(i).level;
-						String SSID = resultWifiList.get(i).SSID;
-						Log.i("INFO","SSID: "+resultWifiList.get(i).SSID);	
-						wifiList.saveLevel(resultWifiList.get(i));
-					}
 					wifiList.updateValues(resultWifiList);
 					Intent i = new Intent();
 					i.setAction("com.mdes.mywifi.timer");

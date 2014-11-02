@@ -11,13 +11,8 @@ import android.util.Log;
 
 public class WifiMap {
 
-	public HashMap<String,Wifi> wifiMap;
-	private List<String> SSIDList;
-
-	public WifiMap(){
-		wifiMap = new HashMap<String,Wifi>();
-		SSIDList = new ArrayList<String>();
-	}
+	public static HashMap<String,Wifi> wifiMap = new HashMap<String,Wifi>();
+	private List<String> SSIDList = new ArrayList<String>();
 
 	public void putValue(List<ScanResult> resultWifiList){
 
@@ -27,15 +22,12 @@ public class WifiMap {
 			//Comprobar si la red ya existe en el HashMap
 			//Si no existe
 			if (!wifiMap.containsKey(resultWifiList.get(i).SSID)){
-				Log.i("INFO", resultWifiList.get(i).SSID + " no existía en el HashMap");
 				//Crear nuevo objeto de la clase Wifi con ella
 				Wifi wifi = new Wifi(resultWifiList.get(i));
 				wifiMap.put(resultWifiList.get(i).SSID, wifi);
-				Log.i("INFO", resultWifiList.get(i).SSID + " guardado en el HashMap");
 			}
 			else
 			{				
-				Log.i("INFO", resultWifiList.get(i).SSID + " ya existía en el HashMap");
 				wifiMap.get(resultWifiList.get(i).SSID).saveLevel(resultWifiList.get(i).level);
 
 			}
@@ -43,8 +35,8 @@ public class WifiMap {
 		Iterator it = wifiMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry e = (Map.Entry)it.next();
-			//		System.out.println(e.getKey() + " " + e.getValue());
 			if(!SSIDList.contains(e.getKey())){
+				Log.i("INFO", "La red " + e.getKey() + " ya no está disponible.");
 				wifiMap.get(e.getKey()).saveLevel(0);
 			}
 		}

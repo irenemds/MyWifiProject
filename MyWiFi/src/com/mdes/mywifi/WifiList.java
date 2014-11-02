@@ -28,8 +28,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 	private Intent intent;
 	public HiloWifi hiloWifi;
 	private Wifi wifiClick;
-//	private LevelList levelList;
-	public HashMap<String,Wifi> wifiMap;
+	public static WifiMap wifiMap;
 	public static boolean isThread;
 	
 	
@@ -40,10 +39,11 @@ public class WifiList extends Activity implements OnItemClickListener {
 		setContentView(R.layout.main_menu);
 		wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 
+		wifiMap = new WifiMap();
+		
 		lista = (ListView) findViewById(R.id.List1);
 		lista.setOnItemClickListener(this);
 		
-		wifiMap = new HashMap<String, Wifi>();
 		//Comprobar estado inicial de Wifi, si esta desactivado mostrar dialogo
 		if (wifiManager.isWifiEnabled() == false)
 		{  
@@ -58,14 +58,12 @@ public class WifiList extends Activity implements OnItemClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.i("DESCONEXION","onPause");
-		stopThread();
+//		stopThread();
 		//TODO unregister Receiver
 	}
 	
 	@Override
 	protected void onResume() {
-		Log.i("RECONEXION","OnResume");
 		super.onResume();
 		createThread();
 		registerReceiver(new wifiChangeReceiver(this), new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
@@ -77,7 +75,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 //	información sobre ella.	
 		Log.i("INFO", "Se ha hecho click en: "
 				+ resultWifiList.get(position).SSID);
-		wifiClick = wifiMap.get(resultWifiList.get(position).SSID);
+		wifiClick = wifiMap.getWifi(resultWifiList.get(position).SSID);
 		intent = new Intent(this, NetInfo.class);
 //	Añadir como extra la información a mostrar.	
 		intent.putExtra("SSID", wifiClick.getSSID());
@@ -85,21 +83,14 @@ public class WifiList extends Activity implements OnItemClickListener {
 		intent.putExtra("CAP", wifiClick.getCap());
 		intent.putExtra("FREQ", wifiClick.getFreq());
 		intent.putExtra("CHAN", wifiClick.getChannel());
-//  Al cambiar de actividad parar el hilo (Cambiar a mensaje broadcast para no tener que pararlo)
-		stopThread();
+		intent.putExtra("LEVEL", wifiClick.getLastLevel());
+//		stopThread();
 		startActivity(intent);
-
 	}
 
 	public WifiManager getWifiManager() {
 		return wifiManager;
 	}
-
-	public ListView getLista() {
-		return lista;
-	}
-	
-	
 	
 	public void wifiAlertDialog(Context c){
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(c);
@@ -132,22 +123,8 @@ public class WifiList extends Activity implements OnItemClickListener {
 		resultWifiList = results;
 	}
 	
-public void saveLevel(ScanResult scanResult){
-	//Comprobar si la red ya existe en el HashMap
-	//Si no existe
-	if (!wifiMap.containsKey(scanResult.SSID)){
-		Log.i("INFO", scanResult.SSID + " no existía en el HashMap");
-		//Crear nuevo objeto de la clase Wifi con ella
-		Wifi wifi = new Wifi(scanResult);
-		wifiMap.put(scanResult.SSID, wifi);
-		Log.i("INFO", scanResult.SSID + " guardado en el HashMap");
-	}
-	else
-	{	
-		Log.i("INFO", scanResult.SSID + " ya existía en el HashMap");
-		wifiMap.get(scanResult.SSID).saveLevel(scanResult.level);
-		
-	}
+public void saveLevel(List<ScanResult> resultWifiList){
+	wifiMap.putValue(resultWifiList);
 }
 
 //Función para crear hilo comprobando que no exista uno previo
@@ -161,7 +138,7 @@ public void createThread(){
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
-				getLista().setAdapter(adapter);
+				lista.setAdapter(adapter);
 				
 			}
 			
