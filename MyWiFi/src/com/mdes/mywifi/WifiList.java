@@ -1,6 +1,5 @@
 package com.mdes.mywifi;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +22,7 @@ import android.widget.ListView;
 public class WifiList extends Activity implements OnItemClickListener {
 
 	private WifiManager wifiManager;
+	
 	public static List<ScanResult> resultWifiList;
 	private ListView lista;
 	private Intent intent;
@@ -52,53 +52,23 @@ public class WifiList extends Activity implements OnItemClickListener {
 		// El wifi está activado, lanzar hilo
 			createThread();
 		}
-			
-		registerReceiver(new BroadcastReceiver() {
-
-			// Receiver para modificar estado ToggleButton
-			
-			@Override
-			public void onReceive(Context c, Intent intent) {
-				
-				int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);		
-					switch(extraWifiState){
-					
-					case WifiManager.WIFI_STATE_DISABLING:
-						hiloWifi.setBucleOff();	
-						break;
-						
-					
-					case WifiManager.WIFI_STATE_DISABLED:
-						Log.i("INFO", "Broadcast -  Wifi off");
-			  			wifiAlertDialog(c);
-						break;
-						
-					case WifiManager.WIFI_STATE_ENABLED:
-						Log.i("INFO", "Broadcast -  Wifi on, lanza hilo");							
-						createThread();
-						break;	
-						
-					case WifiManager.WIFI_STATE_UNKNOWN:
-						Log.i("INFO", "Broadcast -  Wifi desconocido");
-						break;
-					}
-			}
-		}, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
-
+		registerReceiver(new wifiChangeReceiver(this), new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 	}
+	
 	@Override
 	protected void onPause() {
-		Log.i("DESCONEXION","onPause");
 		super.onPause();
-		hiloWifi.setBucleOff();
+		Log.i("DESCONEXION","onPause");
+		stopThread();
 		//TODO unregister Receiver
 	}
 	
+	@Override
 	protected void onResume() {
 		Log.i("RECONEXION","OnResume");
 		super.onResume();
 		createThread();
-		//TODO register Receiver
+		registerReceiver(new wifiChangeReceiver(this), new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 	}
 	
 	@Override
@@ -116,7 +86,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 		intent.putExtra("FREQ", wifiClick.getFreq());
 		intent.putExtra("CHAN", wifiClick.getChannel());
 //  Al cambiar de actividad parar el hilo (Cambiar a mensaje broadcast para no tener que pararlo)
-		hiloWifi.setBucleOff();
+		stopThread();
 		startActivity(intent);
 
 	}
@@ -128,6 +98,8 @@ public class WifiList extends Activity implements OnItemClickListener {
 	public ListView getLista() {
 		return lista;
 	}
+	
+	
 	
 	public void wifiAlertDialog(Context c){
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(c);
@@ -185,5 +157,15 @@ public void createThread(){
 		hiloWifi.start();
 		isThread = true;
 	}
+}
+
+public void stopThread(){
+	if (isThread){
+		hiloWifi.setBucleOff();
+		isThread = false;
+	}
+}
+public WifiList getWifiList(){
+	return this;
 }
 }
