@@ -1,5 +1,7 @@
 package com.mdes.mywifi;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -25,8 +27,10 @@ public class WifiList extends Activity implements OnItemClickListener {
 	private ListView lista;
 	private Intent intent;
 	public HiloWifi hiloWifi;
-	private LevelList levelList;
-	public int contador = 1;
+//	private LevelList levelList;
+	public HashMap<String,Wifi> wifiMap;
+	public static boolean isThread;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +42,14 @@ public class WifiList extends Activity implements OnItemClickListener {
 		lista = (ListView) findViewById(R.id.List1);
 		lista.setOnItemClickListener(this);
 		
-		levelList = new LevelList();
+		wifiMap = new HashMap<String, Wifi>();
 		//Comprobar estado inicial de Wifi, si esta desactivado mostrar dialogo
 		if (wifiManager.isWifiEnabled() == false)
 		{  
 			wifiAlertDialog(this);
 		}else{
 		// El wifi está activado, lanzar hilo
-			hiloWifi = new HiloWifi(this, levelList, contador);
-			hiloWifi.start();
-			contador++;
+			createThread();
 		}
 			
 		registerReceiver(new BroadcastReceiver() {
@@ -59,17 +61,20 @@ public class WifiList extends Activity implements OnItemClickListener {
 				
 				int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);		
 					switch(extraWifiState){
+					
+					case WifiManager.WIFI_STATE_DISABLING:
+						hiloWifi.setBucleOff();	
+						break;
+						
+					
 					case WifiManager.WIFI_STATE_DISABLED:
 						Log.i("INFO", "Broadcast -  Wifi off");
-						hiloWifi.setBucleOff();	
 			  			wifiAlertDialog(c);
 						break;
 						
 					case WifiManager.WIFI_STATE_ENABLED:
 						Log.i("INFO", "Broadcast -  Wifi on, lanza hilo");							
-						hiloWifi = new HiloWifi(WifiList.this, levelList, contador);
-						contador++;
-						hiloWifi.start();
+						createThread();
 						break;	
 						
 					case WifiManager.WIFI_STATE_UNKNOWN:
@@ -91,9 +96,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 	protected void onResume() {
 		Log.i("RECONEXION","OnResume");
 		super.onResume();
-		hiloWifi = new HiloWifi(WifiList.this, levelList, contador);
-		hiloWifi.start();
-
+		createThread();
 		//TODO register Receiver
 	}
 	
@@ -150,8 +153,34 @@ public class WifiList extends Activity implements OnItemClickListener {
 		alertDialog.show();
 	}
 	
-	public void updateValues (List<ScanResult> results, LevelList levels){
+	public void updateValues (List<ScanResult> results){
 		resultWifiList = results;
-		levelList = levels;
 	}
+	
+public void saveLevel(ScanResult scanResult){
+	//Comprobar si la red ya existe en el HashMap
+	//Si no existe
+	if (!wifiMap.containsKey(scanResult.SSID)){
+		Log.i("INFO", scanResult.SSID + " no existía en el HashMap");
+		//Crear nuevo objeto de la clase Wifi con ella
+		Wifi wifi = new Wifi(scanResult);
+		wifiMap.put(scanResult.SSID, wifi);
+		Log.i("INFO", scanResult.SSID + " guardado en el HashMap");
+	}
+	else
+	{	
+		Log.i("INFO", scanResult.SSID + " ya existía en el HashMap");
+		wifiMap.get(scanResult.SSID).saveLevel(scanResult.level);
+		
+	}
+}
+
+//Función para crear hilo comprobando que no exista uno previo
+public void createThread(){
+	if (!isThread){
+		hiloWifi = new HiloWifi(this);
+		hiloWifi.start();
+		isThread = true;
+	}
+}
 }

@@ -12,24 +12,22 @@ public class HiloWifi extends Thread{
 	private WifiManager  wifiManager;
 	private WifiList wifiList;
 	private List<ScanResult> resultWifiList;
-	public LevelList levelList;
+//	public LevelList levelList;
 	public String SSID;
 	public int level;
-	public int contador;
+//	public int contador;
 	
-	public HiloWifi(WifiList wifiList, LevelList levelList, int contador){
+	public HiloWifi(WifiList wifiList){
 		this.wifiList = wifiList;
 		wifiManager = this.wifiList.getWifiManager();
-		this.levelList = levelList;
 		bucle = true;
-		this.contador = contador;
 	}
 	
 	public void run(){		
 		while(bucle){
 			try{
 				try{
-				Log.i("INFO","Comienza hilo"+ contador );
+				Log.i("INFO","Comienza hilo");
 				wifiManager.startScan();
 				resultWifiList = wifiManager.getScanResults();
 				if (resultWifiList.size()!=0){
@@ -37,8 +35,9 @@ public class HiloWifi extends Thread{
 					for (int i = 0; i < resultWifiList.size(); i++) {
 						Integer level = resultWifiList.get(i).level;
 						String SSID = resultWifiList.get(i).SSID;
-						levelList.saveLevel(level , SSID);
-//						Log.i("INFO","SSID: "+resultWifiList.get(i).SSID);
+						Log.i("INFO","SSID: "+resultWifiList.get(i).SSID);	
+						wifiList.saveLevel(resultWifiList.get(i));
+
 					}
 					wifiList.runOnUiThread(new Runnable() {
 						@Override
@@ -48,7 +47,7 @@ public class HiloWifi extends Thread{
 					      //adapter.updateWifiList(resultWifiList);
 
 						}});
-				wifiList.updateValues(resultWifiList, levelList);
+				wifiList.updateValues(resultWifiList);
 				}
 				else{Log.i("INFO","No encuentra redes");}		
 
@@ -57,7 +56,7 @@ public class HiloWifi extends Thread{
 			}catch(NullPointerException e){
 				e.printStackTrace();
 			}
-			sleep(5000);
+			sleep(10000);
 			}catch(InterruptedException e){
 				e.printStackTrace();
 				Log.e("INFO", "Error en el hilo");}
@@ -67,7 +66,7 @@ public class HiloWifi extends Thread{
 	
 	public void setBucleOff(){
 		bucle = false;
-		
+		WifiList.isThread = false;
 		Log.i("INFO","fuera del hilo (bucle)");
 	}
 

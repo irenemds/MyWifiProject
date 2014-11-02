@@ -30,7 +30,7 @@
         android:layout_alignLeft="@+id/nCAP"
         android:layout_below="@+id/nCAP"
         android:layout_marginTop="57dp"
-        android:text="Cap:"
+        android:text="Frequency:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -70,7 +70,7 @@
         android:layout_below="@+id/nBSSID"
         android:layout_marginTop="55dp"
         android:layout_toLeftOf="@+id/imageView1"
-        android:text="Freq:"
+        android:text="Capabilities:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
