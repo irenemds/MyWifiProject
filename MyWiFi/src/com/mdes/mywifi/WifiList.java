@@ -156,6 +156,15 @@ public void createThread(){
 		hiloWifi = new HiloWifi(this);
 		hiloWifi.start();
 		isThread = true;
+		registerReceiver(new BroadcastReceiver(){
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Log.i("BROADCAST", "RECIBIDO!");
+				
+			}
+			
+		}, new IntentFilter("com.mdes.mywifi.timer"));
 	}
 }
 

@@ -2,6 +2,7 @@ package com.mdes.mywifi;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -37,8 +38,10 @@ public class HiloWifi extends Thread{
 						String SSID = resultWifiList.get(i).SSID;
 						Log.i("INFO","SSID: "+resultWifiList.get(i).SSID);	
 						wifiList.saveLevel(resultWifiList.get(i));
-
 					}
+					Intent i = new Intent();
+					i.setAction("com.mdes.mywifi.timer");
+					wifiList.sendBroadcast(i);
 					wifiList.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
