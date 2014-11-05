@@ -1,7 +1,6 @@
 package com.mdes.mywifi;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.net.wifi.ScanResult;
 import android.util.SparseIntArray;
@@ -13,7 +12,6 @@ public class Wifi {
 	private int freq;
 	private String cap;
 	private SparseIntArray levels;
-//	private List<long> timeStamps;
 	private int channel;
 
 	
@@ -25,7 +23,7 @@ public Wifi(ScanResult scanResult){
 		cap = scanResult.capabilities;
 		channel = (freq-2407)/5;
 		levels = new SparseIntArray();
-		saveLevel(scanResult.level);
+		createList(scanResult.level);
 	}
 	
 	public String getSSID() {
@@ -82,13 +80,14 @@ public Wifi(ScanResult scanResult){
 	}
 
 	
-//	public void createList (int level){
-//		if (contador != 0){
-//			for (int i = 0; i < contador; i++) {
-//				levels.append(i, 0);
-//			}
-//		}
-//	}
+	public void createList (int level){
+		if (contador != 0){
+			for (int i = 0; i < contador; i++) {
+				levels.append(i, 0);
+			}
+		}
+		saveLevel(level);
+	}
 	
 	public void saveLevel(int level){
 		levels.append(contador, level);	
