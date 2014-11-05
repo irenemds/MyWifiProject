@@ -8,44 +8,46 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 public class HiloWifi extends Thread{
-	
+
 	private static boolean bucle;
 	private WifiManager  wifiManager;
 	private WifiList wifiList;
 	private List<ScanResult> resultWifiList;
-//	public LevelList levelList;
+	//	public LevelList levelList;
 	public String SSID;
 	public int level;
-//	public int contador;
-	
+	//	public int contador;
+
 	public HiloWifi(WifiList wifiList){
 		this.wifiList = wifiList;
 		wifiManager = this.wifiList.getWifiManager();
 		bucle = true;
 	}
-	
-	public void run(){		
+
+	public void run(){
+		Wifi.contador = 1;
 		while(bucle){
 			try{
 				try{
-				wifiManager.startScan();
-				resultWifiList = wifiManager.getScanResults();
-				wifiList.saveLevel(resultWifiList);
-				if (resultWifiList.size()!=0){
-					Log.i("INFO","Number Of Wifi connections :"+resultWifiList.size());
-					wifiList.updateValues(resultWifiList);
-					Intent i = new Intent();
-					i.setAction("com.mdes.mywifi.timer");
-					wifiList.sendBroadcast(i);
+					wifiManager.startScan();
+					resultWifiList = wifiManager.getScanResults();
+					wifiList.saveLevel(resultWifiList);
+					if (resultWifiList.size()!=0){
+						Log.i("INFO","Number Of Wifi connections :"+resultWifiList.size());
+						wifiList.updateValues(resultWifiList);
+						Intent i = new Intent();
+						i.setAction("com.mdes.mywifi.timer");
+						wifiList.sendBroadcast(i);
+					}
+					else{Log.i("INFO","No encuentra redes");}		
+
+
+
+				}catch(NullPointerException e){
+					e.printStackTrace();
 				}
-				else{Log.i("INFO","No encuentra redes");}		
-
-
-
-			}catch(NullPointerException e){
-				e.printStackTrace();
-			}
-			sleep(10000);
+				Wifi.contador++;
+				sleep(10000);
 			}catch(InterruptedException e){
 				e.printStackTrace();
 				Log.e("INFO", "Error en el hilo");}
