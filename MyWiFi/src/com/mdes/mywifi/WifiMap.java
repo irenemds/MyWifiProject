@@ -13,7 +13,8 @@ public class WifiMap {
 
 	public static HashMap<String,Wifi> wifiMap = new HashMap<String,Wifi>();
 	private List<String> SSIDList = new ArrayList<String>();
-
+	public static List<String> representableList = new ArrayList<String>();	
+	
 	public void putValue(List<ScanResult> resultWifiList){
 
 		for (int i = 0; i < resultWifiList.size(); i++) {
@@ -45,6 +46,24 @@ public class WifiMap {
 	
 	public Wifi getWifi(String SSID){
 		return wifiMap.get(SSID);
+	}
+	
+	public String[] getKeys(){
+		return (String[]) wifiMap.keySet().toArray();
+		
+	}
+	
+	public void getRepresentableKey(){
+		Iterator it = wifiMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry e = (Map.Entry)it.next();
+			if(wifiMap.get(e.getKey()).isRepresentable()){
+				representableList.add((String) e.getKey());
+			}
+		}
+		
+
+		
 	}
 
 

@@ -13,6 +13,7 @@ public class Wifi {
 	private String cap;
 	private SparseIntArray levels;
 	private int channel;
+	private boolean representable;
 
 	
 public Wifi(ScanResult scanResult){
@@ -24,6 +25,7 @@ public Wifi(ScanResult scanResult){
 		channel = (freq-2407)/5;
 		levels = new SparseIntArray();
 		createList(scanResult.level);
+		representable = true;
 	}
 	
 	public String getSSID() {
@@ -36,6 +38,10 @@ public Wifi(ScanResult scanResult){
 
 	public int getFreq() {
 		return freq;
+	}
+
+	public boolean isRepresentable() {
+		return representable;
 	}
 
 	public String getCap() {

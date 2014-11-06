@@ -1,6 +1,5 @@
 package com.mdes.mywifi;
 
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -15,8 +14,10 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class WifiList extends Activity implements OnItemClickListener {
@@ -30,17 +31,17 @@ public class WifiList extends Activity implements OnItemClickListener {
 	private Wifi wifiClick;
 	public static WifiMap wifiMap;
 	public static boolean isThread;
-	
+	private Button lineGraph;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i("INFO", "Comienza ejecución");
+		Log.i("INFO", "Comienza WifiList");
 		setContentView(R.layout.main_menu);
 		wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 
 		wifiMap = new WifiMap();
-		
+		lineGraph = (Button) findViewById(R.id.lineGraph);
 		lista = (ListView) findViewById(R.id.List1);
 		lista.setOnItemClickListener(this);
 		
@@ -53,6 +54,17 @@ public class WifiList extends Activity implements OnItemClickListener {
 			createThread();
 		}
 		registerReceiver(new wifiChangeReceiver(this), new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+		lineGraph.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+		    	LevelGraph line = new LevelGraph();
+		    	Intent lineIntent = line.getIntent(WifiList.this);
+		        startActivity(lineIntent);
+			}
+			
+		});
 	}
 	
 	@Override
@@ -79,11 +91,11 @@ public class WifiList extends Activity implements OnItemClickListener {
 		intent = new Intent(this, NetInfo.class);
 //	Añadir como extra la información a mostrar.	
 		intent.putExtra("SSID", wifiClick.getSSID());
-		intent.putExtra("BSSID", wifiClick.getBSSID());
-		intent.putExtra("CAP", wifiClick.getCap());
-		intent.putExtra("FREQ", wifiClick.getFreq());
-		intent.putExtra("CHAN", wifiClick.getChannel());
-		intent.putExtra("LEVEL", wifiClick.getLastLevel());
+//		intent.putExtra("BSSID", wifiClick.getBSSID());
+//		intent.putExtra("CAP", wifiClick.getCap());
+//		intent.putExtra("FREQ", wifiClick.getFreq());
+//		intent.putExtra("CHAN", wifiClick.getChannel());
+//		intent.putExtra("LEVEL", wifiClick.getLastLevel());
 //		stopThread();
 		startActivity(intent);
 	}
@@ -139,6 +151,7 @@ public void createThread(){
 			public void onReceive(Context context, Intent intent) {
 				CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
 				lista.setAdapter(adapter);
+				wifiMap.getRepresentableKey();
 				
 			}
 			
