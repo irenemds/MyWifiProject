@@ -66,4 +66,7 @@ public class WifiMap {
 				representableArray[i] = representableList.get(i);
 		}
 	}
+	
+
+
 }

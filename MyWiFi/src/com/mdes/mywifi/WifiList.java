@@ -59,9 +59,10 @@ public class WifiList extends Activity implements OnItemClickListener {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-		    	LevelGraph line = new LevelGraph();
-		    	Intent lineIntent = line.getIntent(WifiList.this);
-		        startActivity(lineIntent);
+//		    	DynamicGraphActivity dyn = new DynamicGraphActivity();
+//		    	Intent intent = dyn.getIntent(WifiList.this);
+				intent = new Intent(WifiList.this, DynamicGraphActivity.class);
+		        startActivity(intent);
 			}
 			
 		});
@@ -152,7 +153,6 @@ public void createThread(){
 				CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
 				lista.setAdapter(adapter);
 				wifiMap.getRepresentableKey();
-				
 			}
 			
 		}, new IntentFilter("com.mdes.mywifi.timer"));

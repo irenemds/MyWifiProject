@@ -22,7 +22,7 @@ public class HiloWifi extends Thread{
 		this.wifiList = wifiList;
 		wifiManager = this.wifiList.getWifiManager();
 		bucle = true;
-	}
+		MultipleGraph multipleGraph = new MultipleGraph();}
 
 	public void run(){
 		Wifi.contador = 1;
@@ -47,7 +47,7 @@ public class HiloWifi extends Thread{
 					e.printStackTrace();
 				}
 				Wifi.contador++;
-				sleep(10000);
+				sleep(4000);
 			}catch(InterruptedException e){
 				e.printStackTrace();
 				Log.e("INFO", "Error en el hilo");}
