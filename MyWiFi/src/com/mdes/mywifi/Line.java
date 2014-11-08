@@ -16,6 +16,7 @@ public class Line {
 	private GraphicalView view;
 	private TimeSeries dataset; 
 	private XYSeriesRenderer renderer = new XYSeriesRenderer();
+	private int[] colors = {Color.MAGENTA, Color.BLACK, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW};
 	
 	public Line(String wifi)
 	{
@@ -23,14 +24,10 @@ public class Line {
 		MultipleGraph.mDataset.addSeries(dataset);
 		
 		
-		renderer.setColor(Color.MAGENTA);
+		
 		renderer.setPointStyle(PointStyle.SQUARE);
 		renderer.setFillPoints(true);
-		
-		// Enable Zoom
-		MultipleGraph.mRenderer.setZoomButtonsVisible(true);
-//		mRenderer.setXTitle("Day #");
-		MultipleGraph.mRenderer.setYTitle("Potencia [dBm]");
+		renderer.setLineWidth(10);
 		
 		// Add single renderer to multiple renderer
 		MultipleGraph.mRenderer.addSeriesRenderer(renderer);	
@@ -40,5 +37,8 @@ public class Line {
 	{
 		dataset.add(p.getX(), p.getY());
 	}
-	
+
+//	public void setColor(){
+//		renderer.setColor(colors[contador]);
+//	}
 }

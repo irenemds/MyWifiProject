@@ -34,8 +34,15 @@
             </intent-filter>
         </activity>
         
+                <activity android:name=".DynamicGraphActivity" android:label="@string/title_activity_level_graph" >
+            <intent-filter >
+                <action android:name="com.mdes.mywifi.DYNAMICGRAPHACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        
         <activity android:name="org.achartengine.GraphicalActivity" />
-         
+                
     </application>
 
 

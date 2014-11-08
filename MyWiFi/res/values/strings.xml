@@ -9,6 +9,7 @@
     <string name="main">Lista de redes WiFi</string>
     <string name="title_activity_redwifi">Detalles de AP</string>
     <string name="title_activity_net_info">Info de AP</string>
+    <string name="title_activity_level_graph">Gráfica de potencias</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_info_ap">Info AP</string>
 
