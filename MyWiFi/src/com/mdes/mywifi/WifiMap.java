@@ -39,7 +39,7 @@ public class WifiMap {
 			Map.Entry e = (Map.Entry)it.next();
 			if(!SSIDList.contains(e.getKey())){
 				Log.i("INFO", "La red " + e.getKey() + " ya no está disponible.");
-				wifiMap.get(e.getKey()).saveLevel(0);
+				wifiMap.get(e.getKey()).saveLevel(-100);
 			}
 		}
 
