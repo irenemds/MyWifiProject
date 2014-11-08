@@ -25,7 +25,7 @@ public Wifi(ScanResult scanResult){
 		freq = scanResult.frequency;
 		cap = scanResult.capabilities;
 		channel = (freq-2407)/5;
-		line = new Line(this);
+		line = new Line(SSID);
 		levels = new SparseIntArray();
 		createList(scanResult.level);
 		representable = true;
