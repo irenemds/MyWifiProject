@@ -14,7 +14,9 @@ public class Wifi {
 	private SparseIntArray levels;
 	private int channel;
 	private boolean representable;
-
+	private int lastLevel;
+	private Line line;
+	
 	
 public Wifi(ScanResult scanResult){
 		
@@ -23,9 +25,11 @@ public Wifi(ScanResult scanResult){
 		freq = scanResult.frequency;
 		cap = scanResult.capabilities;
 		channel = (freq-2407)/5;
+		line = new Line(this);
 		levels = new SparseIntArray();
 		createList(scanResult.level);
 		representable = true;
+		
 	}
 	
 	public String getSSID() {
@@ -96,9 +100,16 @@ public Wifi(ScanResult scanResult){
 	}
 	
 	public void saveLevel(int level){
-		levels.append(contador, level);	
+		levels.append(contador, level);
+		//Cada vez que se guarda un nuevo nivel se crea punto y se añade a la liea de la red
+		Point p = new Point(contador, level);
+		line.addNewPoints(p);
 	}
 	
+	public Line getLine() {
+		return line;
+	}
+
 	public ArrayList<Integer> getXValues(){
 		ArrayList<Integer> xValues = new ArrayList<Integer>();
 		
@@ -117,5 +128,10 @@ public Wifi(ScanResult scanResult){
 		}
 		
 		return yValues;
+	}
+
+	public Point getDataFromReceiver(int x)
+	{
+		return new Point(x, levels.get(levels.size()-1));
 	}
 }
