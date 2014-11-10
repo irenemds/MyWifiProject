@@ -14,6 +14,7 @@ import android.graphics.Color;
 public class Line {
 
 	private GraphicalView view;
+	public static int lineNumber;
 	private TimeSeries dataset; 
 	private XYSeriesRenderer renderer = new XYSeriesRenderer();
 	private int[] colors = {Color.MAGENTA, Color.BLACK, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW};
@@ -23,11 +24,10 @@ public class Line {
 		dataset = new TimeSeries(wifi); 
 		MultipleGraph.mDataset.addSeries(dataset);
 		
-		
-		
+		setColor();
 		renderer.setPointStyle(PointStyle.SQUARE);
 		renderer.setFillPoints(true);
-		renderer.setLineWidth(10);
+		renderer.setLineWidth(6);
 		
 		// Add single renderer to multiple renderer
 		MultipleGraph.mRenderer.addSeriesRenderer(renderer);	
@@ -38,7 +38,10 @@ public class Line {
 		dataset.add(p.getX(), p.getY());
 	}
 
-//	public void setColor(){
-//		renderer.setColor(colors[contador]);
-//	}
+	public void setColor(){
+		if(lineNumber > colors.length-1){
+			lineNumber = lineNumber-colors.length;
+		}
+		renderer.setColor(colors[lineNumber]);
+	}
 }

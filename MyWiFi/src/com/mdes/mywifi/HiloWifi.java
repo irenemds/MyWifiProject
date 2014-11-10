@@ -26,6 +26,7 @@ public class HiloWifi extends Thread{
 
 	public void run(){
 		Wifi.contador = 1;
+		Line.lineNumber = 0;
 		while(bucle){
 			try{
 				try{
