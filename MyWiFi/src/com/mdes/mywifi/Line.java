@@ -23,7 +23,7 @@ public class Line {
 	{
 		dataset = new TimeSeries(wifi); 
 		MultipleGraph.mDataset.addSeries(dataset);
-		
+		lineNumber++;
 		setColor();
 		renderer.setPointStyle(PointStyle.SQUARE);
 		renderer.setFillPoints(true);

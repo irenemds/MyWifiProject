@@ -131,12 +131,14 @@ public class WifiList extends Activity implements OnItemClickListener {
 	}
 	
 public void saveLevel(){
-	wifiMap.putValue(resultWifiList);
+	if (wifiManager.isWifiEnabled()==true){
+		wifiMap.putValue(resultWifiList);
+	}else{
+		wifiMap.putZeros();
+	}
+	
 }
 
-public void saveZeros(){
-	wifiMap.putValue(resultWifiList);
-}
 
 //Función para crear hilo comprobando que no exista uno previo
 public void createThread(){

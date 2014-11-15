@@ -33,7 +33,6 @@ public class WifiMap {
 			else
 			{				
 				wifiMap.get(resultWifiList.get(i).SSID).saveLevel(resultWifiList.get(i).level);
-
 			}
 		}
 		Iterator it = wifiMap.entrySet().iterator();
@@ -47,6 +46,14 @@ public class WifiMap {
 
 	}
 
+	public void putZeros(){
+		Iterator it = wifiMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry e = (Map.Entry)it.next();
+			wifiMap.get(e.getKey()).saveLevel(-100);
+		}
+	}
+	
 	public Wifi getWifi(String SSID){
 		return wifiMap.get(SSID);
 	}

@@ -37,7 +37,6 @@ public class HiloWifi extends Thread{
 						if (resultWifiList.size()!=0){
 							Log.i("INFO","Number Of Wifi connections :"+resultWifiList.size());
 							wifiList.updateValues(resultWifiList);
-							wifiList.saveLevel();
 							Intent i = new Intent();
 							i.setAction("com.mdes.mywifi.timer");
 							wifiList.sendBroadcast(i);
@@ -46,7 +45,7 @@ public class HiloWifi extends Thread{
 					}
 					else{Log.e("INFO","Wifi Apagado");}
 					//Guardar ceros en las redes que no encuentre
-					wifiList.saveZeros();
+					wifiList.saveLevel();
 				}catch(NullPointerException e){
 					e.printStackTrace();
 				}
