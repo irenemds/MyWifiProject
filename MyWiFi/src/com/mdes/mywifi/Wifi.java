@@ -109,6 +109,10 @@ public Wifi(ScanResult scanResult){
 	public Line getLine() {
 		return line;
 	}
+	
+	public void setRepresentable (boolean x){
+		representable = x;
+	}
 
 	public ArrayList<Integer> getXValues(){
 		ArrayList<Integer> xValues = new ArrayList<Integer>();

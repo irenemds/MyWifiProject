@@ -13,9 +13,9 @@ public class WifiMap {
 
 	public static HashMap<String,Wifi> wifiMap = new HashMap<String,Wifi>();
 	private List<String> SSIDList = new ArrayList<String>();
-	private List<String> representableList = new ArrayList<String>();	
+	private static List<String> representableList = new ArrayList<String>();	
 	public static String[] representableArray;
-	
+	public static int[] channelAP;
 	public void putValue(List<ScanResult> resultWifiList){
 		
 		SSIDList = new ArrayList<String>();
@@ -33,6 +33,7 @@ public class WifiMap {
 			else
 			{				
 				wifiMap.get(resultWifiList.get(i).SSID).saveLevel(resultWifiList.get(i).level);
+				wifiMap.get(resultWifiList.get(i).SSID).setRepresentable(true);
 			}
 		}
 		Iterator it = wifiMap.entrySet().iterator();
@@ -41,6 +42,7 @@ public class WifiMap {
 			if(!SSIDList.contains(e.getKey())){
 				Log.i("ITERATOR", "La red " + e.getKey() + " ya no está disponible.");
 				wifiMap.get(e.getKey()).saveLevel(-100);
+				wifiMap.get(e.getKey()).setRepresentable(false);
 			}
 		}
 
@@ -51,23 +53,21 @@ public class WifiMap {
 		while (it.hasNext()) {
 			Map.Entry e = (Map.Entry)it.next();
 			wifiMap.get(e.getKey()).saveLevel(-100);
+			wifiMap.get(e.getKey()).setRepresentable(false);
 		}
 	}
 	
 	public Wifi getWifi(String SSID){
 		return wifiMap.get(SSID);
 	}
-	
-	public String[] getKeys(){
-		return (String[]) wifiMap.keySet().toArray();
 		
-	}
-	
-	public void getRepresentableKey(){
+	public static void getRepresentableKey(){
 		Iterator it = wifiMap.entrySet().iterator();
 		while (it.hasNext()) {
+
 			Map.Entry e = (Map.Entry)it.next();
 			if(wifiMap.get(e.getKey()).isRepresentable()){
+				Log.i("INFO","miro: "+ wifiMap.get(e.getKey()).getSSID());
 				representableList.add((String) e.getKey());
 			}
 			representableArray = new String[representableList.size()-1];
@@ -76,6 +76,17 @@ public class WifiMap {
 		}
 	}
 	
+	public static int[] getChannelAP(){
+		int [] channelAP = new int[11];
+		getRepresentableKey();
+		
+		for( int i = 0; i<representableArray.length; i++){
+			int channel = wifiMap.get(representableArray[i]).getChannel();
+			channelAP[channel-1]++; 			
+		}
+		
+		return channelAP;
+	}
 
 
 }

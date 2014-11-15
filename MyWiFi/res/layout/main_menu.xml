@@ -1,19 +1,34 @@
-<LinearLayout
-    android:id ="@+id/LL01"
-    android:orientation = "vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LL01"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_width="wrap_content" >
+    android:orientation="vertical" >
 
-        <ListView
-            android:id="@+id/List1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+    <ListView
+        android:id="@+id/List1"
+        android:layout_width="wrap_content"
+        android:layout_height="408dp" />
+
+    <LinearLayout
+   		android:orientation="horizontal"
+        android:id="@+id/LL02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
         <Button
             android:id="@+id/lineGraph"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="lineGraphHandler"
+            android:text="Line Graph" />
+        
+        <Button
+            android:id="@+id/PieGraph"
             android:layout_width="fill_parent"
-            android:text="Line Graph"/>
-  
+            android:layout_height="wrap_content"
+            android:onClick="pieGraphHandler"
+            android:text="Pie Graph" />
+        
+    </LinearLayout>
+
 </LinearLayout>

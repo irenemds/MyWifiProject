@@ -32,6 +32,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 	public static WifiMap wifiMap;
 	public static boolean isThread;
 	private Button lineGraph;
+	private Button PieGraph;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 
 		wifiMap = new WifiMap();
 		lineGraph = (Button) findViewById(R.id.lineGraph);
+		PieGraph = (Button) findViewById(R.id.PieGraph);
 		lista = (ListView) findViewById(R.id.List1);
 		lista.setOnItemClickListener(this);
 		
@@ -65,7 +67,8 @@ public class WifiList extends Activity implements OnItemClickListener {
 		        startActivity(intent);
 			}
 			
-		});
+		});	
+		
 	}
 	
 	@Override
@@ -98,7 +101,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 	public WifiManager getWifiManager() {
 		return wifiManager;
 	}
-	
+
 	public void wifiAlertDialog(Context c){
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(c);
 
@@ -118,54 +121,61 @@ public class WifiList extends Activity implements OnItemClickListener {
 				WifiList.this.finish();
 			}
 		});
-		
+
 		// crear AlertDialog
 		AlertDialog alertDialog = alertDialogBuilder.create();
 
 		// mostrar
 		alertDialog.show();
 	}
-	
+
 	public void updateValues (List<ScanResult> results){
 		resultWifiList = results;
 	}
-	
-public void saveLevel(){
-	if (wifiManager.isWifiEnabled()==true){
-		wifiMap.putValue(resultWifiList);
-	}else{
-		wifiMap.putZeros();
+
+	public void saveLevel(){
+		if (wifiManager.isWifiEnabled()==true){
+			wifiMap.putValue(resultWifiList);
+		}else{
+			wifiMap.putZeros();
+		}
+
 	}
-	
-}
 
 
-//Función para crear hilo comprobando que no exista uno previo
-public void createThread(){
-	if (!isThread){
-		hiloWifi = new HiloWifi(this);
-		hiloWifi.start();
-		isThread = true;
-		registerReceiver(new BroadcastReceiver(){
+	//Función para crear hilo comprobando que no exista uno previo
+	public void createThread(){
+		if (!isThread){
+			hiloWifi = new HiloWifi(this);
+			hiloWifi.start();
+			isThread = true;
+			registerReceiver(new BroadcastReceiver(){
 
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
-				lista.setAdapter(adapter);
-				wifiMap.getRepresentableKey();
-			}
-			
-		}, new IntentFilter("com.mdes.mywifi.timer"));
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
+					lista.setAdapter(adapter);
+					wifiMap.getRepresentableKey();
+				}
+
+			}, new IntentFilter("com.mdes.mywifi.timer"));
+		}
 	}
-}
 
-public void stopThread(){
-	if (isThread){
-		hiloWifi.setBucleOff();
-		isThread = false;
+	public void stopThread(){
+		if (isThread){
+			hiloWifi.setBucleOff();
+			isThread = false;
+		}
 	}
-}
-public WifiList getWifiList(){
-	return this;
-}
+	public WifiList getWifiList(){
+		return this;
+	}
+
+	public void pieGraphHandler (View view)
+	{
+		intent = new Intent(WifiList.this, PieGraphActivity.class);
+        startActivity(intent);
+	}
+
 }
