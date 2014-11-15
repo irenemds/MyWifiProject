@@ -29,27 +29,26 @@ public class HiloWifi extends Thread{
 		Wifi.contador = 1;
 		Line.lineNumber = 0;
 		while(bucle){
-//			try{
+			try{
 				try{
-					if (wifiManager.isWifiEnabled() == true){
+					if (wifiManager.isWifiEnabled()){
 						wifiManager.startScan();
 						resultWifiList = wifiManager.getScanResults();
 						if (resultWifiList.size()!=0){
-							Log.i("INFO","Number Of Wifi connections :"+resultWifiList.size());
+							Log.i("HILO","Number Of Wifi connections :"+resultWifiList.size());
 							wifiList.updateValues(resultWifiList);
-//							WifiMap.getChannelAP();
 							Intent i = new Intent();
 							i.setAction("com.mdes.mywifi.timer");
 							wifiList.sendBroadcast(i);
 						}
-						else{Log.i("INFO","No encuentra redes");}		
+						else{Log.i("HILO","No encuentra redes");}		
 					}
-					else{Log.e("INFO","Wifi Apagado");}
+					else{Log.e("HILO","Wifi Apagado");}
 					//Guardar ceros en las redes que no encuentre
 					wifiList.saveLevel();
-//				}catch(NullPointerException e){
-//					e.printStackTrace();
-//				}
+				}catch(NullPointerException e){
+					e.printStackTrace();
+				}
 				//TODO Comprobar ceros
 				Wifi.contador++;
 				sleep(4000);
