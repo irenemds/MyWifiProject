@@ -92,12 +92,6 @@ public class WifiList extends Activity implements OnItemClickListener {
 		intent = new Intent(this, NetInfo.class);
 //	Añadir como extra la información a mostrar.	
 		intent.putExtra("SSID", wifiClick.getSSID());
-//		intent.putExtra("BSSID", wifiClick.getBSSID());
-//		intent.putExtra("CAP", wifiClick.getCap());
-//		intent.putExtra("FREQ", wifiClick.getFreq());
-//		intent.putExtra("CHAN", wifiClick.getChannel());
-//		intent.putExtra("LEVEL", wifiClick.getLastLevel());
-//		stopThread();
 		startActivity(intent);
 	}
 
@@ -136,7 +130,11 @@ public class WifiList extends Activity implements OnItemClickListener {
 		resultWifiList = results;
 	}
 	
-public void saveLevel(List<ScanResult> resultWifiList){
+public void saveLevel(){
+	wifiMap.putValue(resultWifiList);
+}
+
+public void saveZeros(){
 	wifiMap.putValue(resultWifiList);
 }
 

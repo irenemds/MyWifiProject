@@ -21,6 +21,7 @@ public class HiloWifi extends Thread{
 	public HiloWifi(WifiList wifiList){
 		this.wifiList = wifiList;
 		wifiManager = this.wifiList.getWifiManager();
+		//La variabe bucle sol será false cuando lo indique alguna de las actividades
 		bucle = true;
 		MultipleGraph multipleGraph = new MultipleGraph();}
 
@@ -30,23 +31,26 @@ public class HiloWifi extends Thread{
 		while(bucle){
 			try{
 				try{
-					wifiManager.startScan();
-					resultWifiList = wifiManager.getScanResults();
-					wifiList.saveLevel(resultWifiList);
-					if (resultWifiList.size()!=0){
-						Log.i("INFO","Number Of Wifi connections :"+resultWifiList.size());
-						wifiList.updateValues(resultWifiList);
-						Intent i = new Intent();
-						i.setAction("com.mdes.mywifi.timer");
-						wifiList.sendBroadcast(i);
+					if (wifiManager.isWifiEnabled() == true){
+						wifiManager.startScan();
+						resultWifiList = wifiManager.getScanResults();
+						if (resultWifiList.size()!=0){
+							Log.i("INFO","Number Of Wifi connections :"+resultWifiList.size());
+							wifiList.updateValues(resultWifiList);
+							wifiList.saveLevel();
+							Intent i = new Intent();
+							i.setAction("com.mdes.mywifi.timer");
+							wifiList.sendBroadcast(i);
+						}
+						else{Log.i("INFO","No encuentra redes");}		
 					}
-					else{Log.i("INFO","No encuentra redes");}		
-
-
-
+					else{Log.e("INFO","Wifi Apagado");}
+					//Guardar ceros en las redes que no encuentre
+					wifiList.saveZeros();
 				}catch(NullPointerException e){
 					e.printStackTrace();
 				}
+				//TODO Comprobar ceros
 				Wifi.contador++;
 				sleep(4000);
 			}catch(InterruptedException e){

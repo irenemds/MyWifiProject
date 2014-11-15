@@ -39,8 +39,9 @@ public class Line {
 	}
 
 	public void setColor(){
-		if(lineNumber > colors.length-1){
-			lineNumber = lineNumber-colors.length;
+		int lineNumberAux = lineNumber;
+		if(lineNumberAux > colors.length-1){
+			lineNumberAux = lineNumber-colors.length;
 		}
 		renderer.setColor(colors[lineNumber]);
 	}

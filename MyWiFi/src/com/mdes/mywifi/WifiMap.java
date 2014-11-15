@@ -17,7 +17,9 @@ public class WifiMap {
 	public static String[] representableArray;
 	
 	public void putValue(List<ScanResult> resultWifiList){
-
+		
+		SSIDList = new ArrayList<String>();
+		
 		for (int i = 0; i < resultWifiList.size(); i++) {
 			SSIDList.add(resultWifiList.get(i).SSID);
 
@@ -38,13 +40,13 @@ public class WifiMap {
 		while (it.hasNext()) {
 			Map.Entry e = (Map.Entry)it.next();
 			if(!SSIDList.contains(e.getKey())){
-				Log.i("INFO", "La red " + e.getKey() + " ya no está disponible.");
+				Log.i("ITERATOR", "La red " + e.getKey() + " ya no está disponible.");
 				wifiMap.get(e.getKey()).saveLevel(-100);
 			}
 		}
 
 	}
-	
+
 	public Wifi getWifi(String SSID){
 		return wifiMap.get(SSID);
 	}
