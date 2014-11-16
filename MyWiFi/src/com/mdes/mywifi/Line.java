@@ -8,6 +8,8 @@ import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import com.mdes.mywifi.chart.MultipleGraph;
+
 import android.content.Context;
 import android.graphics.Color;
 
@@ -17,7 +19,7 @@ public class Line {
 	public static int lineNumber;
 	private TimeSeries dataset; 
 	private XYSeriesRenderer renderer = new XYSeriesRenderer();
-	private int[] colors = {Color.MAGENTA, Color.BLACK, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW};
+	private int[] colors = {Color.MAGENTA, Color.WHITE, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW};
 	
 	public Line(String wifi)
 	{
@@ -25,10 +27,13 @@ public class Line {
 		MultipleGraph.mDataset.addSeries(dataset);
 		lineNumber++;
 		setColor();
-		renderer.setPointStyle(PointStyle.SQUARE);
 		renderer.setFillPoints(true);
-		renderer.setLineWidth(6);
-		
+		renderer.setLineWidth(4);
+		renderer.setPointStyle(PointStyle.CIRCLE);
+		renderer.setFillPoints(true);
+		renderer.setDisplayChartValues(true);
+		renderer.setDisplayChartValuesDistance(10);
+
 		// Add single renderer to multiple renderer
 		MultipleGraph.mRenderer.addSeriesRenderer(renderer);	
 	}
@@ -43,6 +48,6 @@ public class Line {
 		if(lineNumberAux > colors.length-1){
 			lineNumberAux = lineNumber-colors.length;
 		}
-		renderer.setColor(colors[lineNumber]);
+		renderer.setColor(colors[lineNumber-1]);
 	}
 }

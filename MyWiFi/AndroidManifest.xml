@@ -44,7 +44,7 @@
                 android:value="com.mdes.mywifi.WifiList" />
         </activity>
         <activity
-            android:name=".DynamicGraphActivity"
+            android:name="com.mdes.mywifi.chart.DynamicGraphActivity"
             android:label="@string/title_activity_level_graph"
             android:parentActivityName="com.mdes.mywifi.WifiList" >
 
@@ -60,8 +60,8 @@
             </intent-filter>
         </activity>
         
-                <activity
-            android:name=".PieGraphActivity"
+                 <activity
+            android:name="com.mdes.mywifi.chart.PieGraphActivity"
             android:label="@string/title_activity_level_graph"
             android:parentActivityName="com.mdes.mywifi.WifiList" >
 
@@ -71,7 +71,7 @@
                 android:value="com.mdes.mywifi.WifiList" />
 
             <intent-filter>
-                <action android:name="com.mdes.mywifi.PIEGRAPHACTIVITY" />
+                <action android:name="com.mdes.mywifi.DYNAMICGRAPHACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

@@ -2,6 +2,8 @@ package com.mdes.mywifi;
 
 import java.util.List;
 
+import com.mdes.mywifi.chart.MultipleGraph;
+
 import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;

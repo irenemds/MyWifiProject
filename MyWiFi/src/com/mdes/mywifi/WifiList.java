@@ -2,6 +2,9 @@ package com.mdes.mywifi;
 
 import java.util.List;
 
+import com.mdes.mywifi.chart.DynamicGraphActivity;
+import com.mdes.mywifi.chart.PieGraphActivity;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
