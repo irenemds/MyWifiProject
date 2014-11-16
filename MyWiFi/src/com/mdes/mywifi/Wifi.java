@@ -1,5 +1,6 @@
 package com.mdes.mywifi;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import android.net.wifi.ScanResult;
@@ -16,7 +17,8 @@ public class Wifi {
 	private boolean representable;
 	private int lastLevel;
 	private Line line;
-	
+	private Timestamp firstSeen;
+	private Timestamp lastSeen;
 	
 public Wifi(ScanResult scanResult){
 		
@@ -29,7 +31,9 @@ public Wifi(ScanResult scanResult){
 		levels = new SparseIntArray();
 		createList(scanResult.level);
 		representable = true;
-		
+		java.util.Date date= new java.util.Date();
+		firstSeen = new Timestamp(date.getTime());
+		lastSeen = firstSeen;
 	}
 	
 	public String getSSID() {
@@ -101,6 +105,15 @@ public Wifi(ScanResult scanResult){
 	
 	public void saveLevel(int level){
 		levels.append(contador, level);
+		//Modificar lastSeen
+		if( level != -100){
+			java.util.Date date= new java.util.Date();
+			lastSeen = new Timestamp(date.getTime());
+			//Modificar firstSeen si el valor anterior era -100 (no encontrado)
+			if(levels.get(contador-1)==-100){
+				firstSeen = lastSeen;
+			}
+		}
 		//Cada vez que se guarda un nuevo nivel se crea punto y se añade a la liea de la red
 		Point p = new Point(contador, level);
 		line.addNewPoints(p);
