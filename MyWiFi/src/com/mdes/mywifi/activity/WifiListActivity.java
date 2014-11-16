@@ -1,7 +1,15 @@
-package com.mdes.mywifi;
+package com.mdes.mywifi.activity;
 
 import java.util.List;
 
+import com.mdes.mywifi.CustomAdapter;
+import com.mdes.mywifi.HiloWifi;
+import com.mdes.mywifi.R;
+import com.mdes.mywifi.Wifi;
+import com.mdes.mywifi.WifiChangeReceiver;
+import com.mdes.mywifi.WifiMap;
+import com.mdes.mywifi.R.id;
+import com.mdes.mywifi.R.layout;
 import com.mdes.mywifi.chart.DynamicGraphActivity;
 import com.mdes.mywifi.chart.PieGraphActivity;
 
@@ -23,7 +31,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class WifiList extends Activity implements OnItemClickListener {
+public class WifiListActivity extends Activity implements OnItemClickListener {
 
 	public static WifiManager wifiManager;
 	
@@ -67,7 +75,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 				// TODO Auto-generated method stub
 //		    	DynamicGraphActivity dyn = new DynamicGraphActivity();
 //		    	Intent intent = dyn.getIntent(WifiList.this);
-				intent = new Intent(WifiList.this, DynamicGraphActivity.class);
+				intent = new Intent(WifiListActivity.this, DynamicGraphActivity.class);
 		        startActivity(intent);
 			}
 			
@@ -95,7 +103,7 @@ public class WifiList extends Activity implements OnItemClickListener {
 		Log.i("INFO", "Se ha hecho click en: "
 				+ resultWifiList.get(position).SSID);
 		wifiClick = wifiMap.getWifi(resultWifiList.get(position).SSID);
-		intent = new Intent(this, NetInfo.class);
+		intent = new Intent(this, NetInfoActivity.class);
 //	Añadir como extra la información a mostrar.	
 		intent.putExtra("SSID", wifiClick.getSSID());
 		startActivity(intent);
@@ -146,13 +154,13 @@ public class WifiList extends Activity implements OnItemClickListener {
 			isThread = false;
 		}
 	}
-	public WifiList getWifiList(){
+	public WifiListActivity getWifiList(){
 		return this;
 	}
 
 	public void pieGraphHandler (View view)
 	{
-		intent = new Intent(WifiList.this, PieGraphActivity.class);
+		intent = new Intent(WifiListActivity.this, PieGraphActivity.class);
         startActivity(intent);
 	}
 

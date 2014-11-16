@@ -1,7 +1,12 @@
-package com.mdes.mywifi;
+package com.mdes.mywifi.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mdes.mywifi.R;
+import com.mdes.mywifi.Wifi;
+import com.mdes.mywifi.R.id;
+import com.mdes.mywifi.R.layout;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -13,7 +18,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class NetInfo extends Activity {
+public class NetInfoActivity extends Activity {
 	
 	private Wifi wifi;
 	private TextView SSID;
@@ -37,7 +42,7 @@ public class NetInfo extends Activity {
 		LEVEL = (TextView) findViewById(R.id.LEVEL);
 		
 		Bundle extras = getIntent().getExtras();
-		wifi = WifiList.wifiMap.getWifi(extras.getString("SSID"));
+		wifi = WifiListActivity.wifiMap.getWifi(extras.getString("SSID"));
 		
 		SSID.setText(wifi.getSSID());
 		BSSID.setText(wifi.getBSSID());

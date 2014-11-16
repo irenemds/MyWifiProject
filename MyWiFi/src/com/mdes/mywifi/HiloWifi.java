@@ -2,6 +2,7 @@ package com.mdes.mywifi;
 
 import java.util.List;
 
+import com.mdes.mywifi.activity.WifiListActivity;
 import com.mdes.mywifi.chart.MultipleGraph;
 
 import android.content.Intent;
@@ -13,14 +14,14 @@ public class HiloWifi extends Thread{
 
 	private static boolean bucle;
 	private WifiManager  wifiManager;
-	private WifiList wifiList;
+	private WifiListActivity wifiList;
 	private List<ScanResult> resultWifiList;
 	//	public LevelList levelList;
 	public String SSID;
 	public int level;
 	//	public int contador;
 
-	public HiloWifi(WifiList wifiList){
+	public HiloWifi(WifiListActivity wifiList){
 		this.wifiList = wifiList;
 		wifiManager = this.wifiList.getWifiManager();
 		//La variabe bucle sol será false cuando lo indique alguna de las actividades
@@ -63,7 +64,7 @@ public class HiloWifi extends Thread{
 	
 	public void setBucleOff(){
 		bucle = false;
-		WifiList.isThread = false;
+		WifiListActivity.isThread = false;
 		Log.i("INFO","fuera del hilo (bucle)");
 	}
 
