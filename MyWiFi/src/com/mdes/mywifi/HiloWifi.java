@@ -2,24 +2,26 @@ package com.mdes.mywifi;
 
 import java.util.List;
 
-import com.mdes.mywifi.activity.WifiListActivity;
-import com.mdes.mywifi.chart.MultipleGraph;
-
 import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
+import com.mdes.mywifi.activity.WifiListActivity;
+import com.mdes.mywifi.chart.MultipleGraph;
+
 public class HiloWifi extends Thread{
+	
+	public static int contador;
 
 	private static boolean bucle;
 	private WifiManager  wifiManager;
 	private WifiListActivity wifiList;
 	private List<ScanResult> resultWifiList;
-	//	public LevelList levelList;
 	public String SSID;
 	public int level;
-	//	public int contador;
+	
+	public static CurrentAP currentAP;
 
 	public HiloWifi(WifiListActivity wifiList){
 		this.wifiList = wifiList;
@@ -29,13 +31,14 @@ public class HiloWifi extends Thread{
 		MultipleGraph multipleGraph = new MultipleGraph();}
 
 	public void run(){
-		Wifi.contador = 1;
+		contador = 1;
 		Line.lineNumber = 0;
 		while(bucle){
 			try{
 				try{
 					if (wifiManager.isWifiEnabled()){
 						wifiManager.startScan();
+						currentAP = new CurrentAP();
 						resultWifiList = wifiManager.getScanResults();
 						if (resultWifiList.size()!=0){
 							Log.i("HILO","Number Of Wifi connections :"+resultWifiList.size());
@@ -53,7 +56,7 @@ public class HiloWifi extends Thread{
 					e.printStackTrace();
 				}
 				//TODO Comprobar ceros
-				Wifi.contador++;
+				contador++;
 				sleep(4000);
 			}catch(InterruptedException e){
 				e.printStackTrace();

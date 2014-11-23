@@ -17,9 +17,9 @@ public class WifiMap {
 	public static String[] representableArray;
 	public static int[] channelAP;
 	public void putValue(List<ScanResult> resultWifiList){
-		
+
 		SSIDList = new ArrayList<String>();
-		
+
 		for (int i = 0; i < resultWifiList.size(); i++) {
 			SSIDList.add(resultWifiList.get(i).SSID);
 
@@ -56,11 +56,11 @@ public class WifiMap {
 			wifiMap.get(e.getKey()).setRepresentable(false);
 		}
 	}
-	
-	public Wifi getWifi(String SSID){
+
+	public static Wifi getWifi(String SSID){
 		return wifiMap.get(SSID);
 	}
-		
+
 	public static void getRepresentableKey(){
 		Iterator it = wifiMap.entrySet().iterator();
 		while (it.hasNext()) {
@@ -75,18 +75,46 @@ public class WifiMap {
 				representableArray[i] = representableList.get(i);
 		}
 	}
-	
+
 	public static int[] getChannelAP(){
 		int [] channelAP = new int[11];
 		getRepresentableKey();
-		
+
 		for( int i = 0; i<representableArray.length; i++){
 			int channel = wifiMap.get(representableArray[i]).getChannel();
 			channelAP[channel-1]++; 			
 		}
-		
+
 		return channelAP;
 	}
 
+	public static int getMaxLevel(){
+		Iterator it = wifiMap.entrySet().iterator();
+		int max = -120;
+		while (it.hasNext()) {
+
+			Map.Entry e = (Map.Entry)it.next();
+			if(wifiMap.get(e.getKey()).getLastLevel() > max){
+				max = wifiMap.get(e.getKey()).getLastLevel();
+			}
+
+		}
+		return max;
+	}
+
+
+	public static int getMinLevel(){
+		Iterator it = wifiMap.entrySet().iterator();
+		int min = 100;
+		while (it.hasNext()) {
+
+			Map.Entry e = (Map.Entry)it.next();
+			if(wifiMap.get(e.getKey()).getLastLevel() < min){
+				min = wifiMap.get(e.getKey()).getLastLevel();
+			}
+
+		}
+		return min;
+	}
 
 }

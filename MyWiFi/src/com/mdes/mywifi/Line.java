@@ -8,6 +8,7 @@ import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import com.mdes.mywifi.chart.LinkSpeedGraphActivity;
 import com.mdes.mywifi.chart.MultipleGraph;
 
 import android.content.Context;
@@ -37,6 +38,23 @@ public class Line {
 		// Add single renderer to multiple renderer
 		MultipleGraph.mRenderer.addSeriesRenderer(renderer);	
 	}
+
+	public Line()
+	{
+		dataset = new TimeSeries(HiloWifi.currentAP.getSSID()); 
+		LinkSpeedGraphActivity.mDataset.addSeries(dataset);
+		setColor();
+		renderer.setFillPoints(true);
+		renderer.setLineWidth(4);
+		renderer.setPointStyle(PointStyle.CIRCLE);
+		renderer.setFillPoints(true);
+		renderer.setDisplayChartValues(true);
+		renderer.setDisplayChartValuesDistance(10);
+
+		// Add single renderer to multiple renderer
+		MultipleGraph.mRenderer.addSeriesRenderer(renderer);	
+	}
+	
 	
 	public void addNewPoints(Point p)
 	{

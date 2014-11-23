@@ -3,11 +3,13 @@ package com.mdes.mywifi;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import android.graphics.Color;
 import android.net.wifi.ScanResult;
 import android.util.SparseIntArray;
 
 public class Wifi {
-	public static int contador;
+	private int aux;
+//	public static int contador;
 	private String SSID;
 	private String BSSID;
 	private int freq;
@@ -19,6 +21,8 @@ public class Wifi {
 	private Line line;
 	private Timestamp firstSeen;
 	private Timestamp lastSeen;
+	private int  color;
+	
 	
 public Wifi(ScanResult scanResult){
 		
@@ -34,6 +38,8 @@ public Wifi(ScanResult scanResult){
 		java.util.Date date= new java.util.Date();
 		firstSeen = new Timestamp(date.getTime());
 		lastSeen = firstSeen;
+		color = calculateColor();
+		aux++;
 	}
 	
 	public String getSSID() {
@@ -95,8 +101,8 @@ public Wifi(ScanResult scanResult){
 
 	
 	public void createList (int level){
-		if (contador != 0){
-			for (int i = 0; i < contador; i++) {
+		if (HiloWifi.contador != 0){
+			for (int i = 0; i < HiloWifi.contador; i++) {
 				levels.append(i, 0);
 			}
 		}
@@ -104,18 +110,18 @@ public Wifi(ScanResult scanResult){
 	}
 	
 	public void saveLevel(int level){
-		levels.append(contador, level);
+		levels.append(HiloWifi.contador, level);
 		//Modificar lastSeen
-		if( level != -100){
+		if( level != -120){
 			java.util.Date date= new java.util.Date();
 			lastSeen = new Timestamp(date.getTime());
-			//Modificar firstSeen si el valor anterior era -100 (no encontrado)
-			if(levels.get(contador-1)==-100){
+			//Modificar firstSeen si el valor anterior era -120 (no encontrado)
+			if(levels.get(HiloWifi.contador-1)==-120){
 				firstSeen = lastSeen;
 			}
 		}
 		//Cada vez que se guarda un nuevo nivel se crea punto y se añade a la liea de la red
-		Point p = new Point(contador, level);
+		Point p = new Point(HiloWifi.contador, level);
 		line.addNewPoints(p);
 	}
 	
@@ -151,4 +157,21 @@ public Wifi(ScanResult scanResult){
 	{
 		return new Point(x, levels.get(levels.size()-1));
 	}
+	
+	public int calculateColor(){
+		int[] colors = {Color.BLUE, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.WHITE, Color.RED};
+		if(aux > colors.length-1){
+			aux = aux-colors.length;
+		}
+		return colors[aux];
+	}
+
+	public int getColor() {
+		return color;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
+	}
+	
 }

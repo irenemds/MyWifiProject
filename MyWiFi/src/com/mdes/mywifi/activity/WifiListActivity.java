@@ -6,7 +6,7 @@ import com.mdes.mywifi.CustomAdapter;
 import com.mdes.mywifi.HiloWifi;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
-import com.mdes.mywifi.WifiChangeReceiver;
+import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.R.id;
 import com.mdes.mywifi.R.layout;
