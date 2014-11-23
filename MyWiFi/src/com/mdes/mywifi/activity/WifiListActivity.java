@@ -2,15 +2,19 @@ package com.mdes.mywifi.activity;
 
 import java.util.List;
 
+import org.achartengine.ChartFactory;
+
 import com.mdes.mywifi.CustomAdapter;
 import com.mdes.mywifi.HiloWifi;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
+import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
 import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.R.id;
 import com.mdes.mywifi.R.layout;
 import com.mdes.mywifi.chart.DynamicGraphActivity;
+import com.mdes.mywifi.chart.FrequencyGraphActivity;
 import com.mdes.mywifi.chart.PieGraphActivity;
 
 import android.app.Activity;
@@ -34,7 +38,7 @@ import android.widget.ListView;
 public class WifiListActivity extends Activity implements OnItemClickListener {
 
 	public static WifiManager wifiManager;
-	
+
 	public static List<ScanResult> resultWifiList;
 	private ListView lista;
 	private Intent intent;
@@ -44,8 +48,11 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 	public static boolean isThread;
 	private Button lineGraph;
 	private Button PieGraph;
-	private WifiChangeReceiver wifiReceiver; 
-	
+	private WifiChangeReceiver wifiReceiver = new WifiChangeReceiver(); 
+
+	private BroadcastReceiver currentActivityReceiver;
+	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,53 +65,57 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 		PieGraph = (Button) findViewById(R.id.PieGraph);
 		lista = (ListView) findViewById(R.id.List1);
 		lista.setOnItemClickListener(this);
-		wifiReceiver = new WifiChangeReceiver();
-		//Comprobar estado inicial de Wifi, si esta desactivado mostrar dialogo
-		if (wifiManager.isWifiEnabled() == false)
-		{  
-			wifiReceiver.wifiAlertDialog(this);
-		}
-		// El wifi está activado, lanzar hilo
+		currentActivityReceiver = new BroadcastReceiver(){
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
+				lista.setAdapter(adapter);
+				wifiMap.getRepresentable();
+			}
+		};
+
 		createThread();
-		
-		registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+
 		lineGraph.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-//		    	DynamicGraphActivity dyn = new DynamicGraphActivity();
-//		    	Intent intent = dyn.getIntent(WifiList.this);
 				intent = new Intent(WifiListActivity.this, DynamicGraphActivity.class);
-		        startActivity(intent);
+				startActivity(intent);
 			}
-			
+
 		});	
-		
+
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		//TODO unregister Receiver
-		unregisterReceiver(wifiReceiver);
+		unregisterReceivers();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+		registerReceivers();
 	}
-	
+
 	@Override
 	public void onItemClick(AdapterView parent, View v, int position, long id) {
-//	Al pulsar sobre un elemento de la lista se abre una nueva actividad en la que se muestra 
-//	información sobre ella.	
+		//	Al pulsar sobre un elemento de la lista se abre una nueva actividad en la que se muestra 
+		//	información sobre ella.	
 		Log.i("INFO", "Se ha hecho click en: "
 				+ resultWifiList.get(position).SSID);
 		wifiClick = wifiMap.getWifi(resultWifiList.get(position).SSID);
-		intent = new Intent(this, NetInfoActivity.class);
-//	Añadir como extra la información a mostrar.	
+		if(resultWifiList.get(position).SSID.equals(HiloWifi.currentAP.getSSID())){
+			intent = new Intent(this, CurrentAPActivity.class);
+		}
+		else
+		{
+			intent = new Intent(this, NetInfoActivity.class);			
+		}
+		//	Añadir como extra la información a mostrar.	
 		intent.putExtra("SSID", wifiClick.getSSID());
 		startActivity(intent);
 	}
@@ -113,14 +124,14 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 		return wifiManager;
 	}
 
-	
+
 
 	public void updateValues (List<ScanResult> results){
 		resultWifiList = results;
 	}
 
 	public void saveLevel(){
-		if (wifiManager.isWifiEnabled()==true){
+		if (wifiManager.isWifiEnabled()==true && resultWifiList != null){
 			wifiMap.putValue(resultWifiList);
 		}else{
 			wifiMap.putZeros();
@@ -135,16 +146,6 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 			hiloWifi = new HiloWifi(this);
 			hiloWifi.start();
 			isThread = true;
-			registerReceiver(new BroadcastReceiver(){
-
-				@Override
-				public void onReceive(Context context, Intent intent) {
-					CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
-					lista.setAdapter(adapter);
-					wifiMap.getRepresentableKey();
-				}
-
-			}, new IntentFilter("com.mdes.mywifi.timer"));
 		}
 	}
 
@@ -161,7 +162,26 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 	public void pieGraphHandler (View view)
 	{
 		intent = new Intent(WifiListActivity.this, PieGraphActivity.class);
-        startActivity(intent);
+		startActivity(intent);
+	}
+
+	public void frecGraphHandler (View view)
+	{
+		intent = new Intent(WifiListActivity.this, FrequencyGraphActivity.class);
+		startActivity(intent);
+	}
+	
+	private void registerReceivers(){
+		registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+		registerReceiver(currentActivityReceiver, new IntentFilter("com.mdes.mywifi.timer"));
+		registerReceiver(wifiNotFoundReceiver, new IntentFilter("com.mdes.mywifi.wifinotfound"));
+		registerReceiver(wifiNotFoundReceiver, new IntentFilter("com.mdes.mywifi.wififound"));
+	}
+
+	private void unregisterReceivers(){
+		unregisterReceiver(wifiReceiver);
+		unregisterReceiver(wifiNotFoundReceiver);
+		unregisterReceiver(currentActivityReceiver);
 	}
 
 }

@@ -29,6 +29,13 @@
             android:onClick="pieGraphHandler"
             android:text="Pie Graph" />
         
+        <Button
+            android:id="@+id/FrecGraph"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="frecGraphHandler"
+            android:text="Freq" />
+        
     </LinearLayout>
 
 </LinearLayout>

@@ -22,6 +22,7 @@ public class Wifi {
 	private Timestamp firstSeen;
 	private Timestamp lastSeen;
 	private int  color;
+	private BandWidthLine bwl;
 	
 	
 public Wifi(ScanResult scanResult){
@@ -40,6 +41,7 @@ public Wifi(ScanResult scanResult){
 		lastSeen = firstSeen;
 		color = calculateColor();
 		aux++;
+		bwl = new BandWidthLine(this);
 	}
 	
 	public String getSSID() {
@@ -74,32 +76,6 @@ public Wifi(ScanResult scanResult){
 		return channel;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((SSID == null) ? 0 : SSID.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Wifi other = (Wifi) obj;
-		if (SSID == null) {
-			if (other.SSID != null)
-				return false;
-		} else if (!SSID.equals(other.SSID))
-			return false;
-		return true;
-	}
-
-	
 	public void createList (int level){
 		if (HiloWifi.contador != 0){
 			for (int i = 0; i < HiloWifi.contador; i++) {
@@ -119,6 +95,7 @@ public Wifi(ScanResult scanResult){
 			if(levels.get(HiloWifi.contador-1)==-120){
 				firstSeen = lastSeen;
 			}
+			bwl = new BandWidthLine(this);
 		}
 		//Cada vez que se guarda un nuevo nivel se crea punto y se añade a la liea de la red
 		Point p = new Point(HiloWifi.contador, level);

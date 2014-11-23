@@ -8,6 +8,7 @@ import java.util.Map;
 
 import android.net.wifi.ScanResult;
 import android.util.Log;
+import android.util.SparseIntArray;
 
 public class WifiMap {
 
@@ -61,10 +62,10 @@ public class WifiMap {
 		return wifiMap.get(SSID);
 	}
 
-	public static void getRepresentableKey(){
+	public static void getRepresentable(){
 		Iterator it = wifiMap.entrySet().iterator();
+		representableList = new ArrayList<String>();	
 		while (it.hasNext()) {
-
 			Map.Entry e = (Map.Entry)it.next();
 			if(wifiMap.get(e.getKey()).isRepresentable()){
 				Log.i("INFO","miro: "+ wifiMap.get(e.getKey()).getSSID());
@@ -78,7 +79,7 @@ public class WifiMap {
 
 	public static int[] getChannelAP(){
 		int [] channelAP = new int[11];
-		getRepresentableKey();
+		getRepresentable();
 
 		for( int i = 0; i<representableArray.length; i++){
 			int channel = wifiMap.get(representableArray[i]).getChannel();
@@ -115,6 +116,16 @@ public class WifiMap {
 
 		}
 		return min;
+	}
+	
+	public static String getCSV(String SSID){
+		SparseIntArray levels = wifiMap.get(SSID).getLevels();
+		String csv = Integer.toString(levels.get(0));
+		for(int i = 1; i<levels.size(); i++){
+			csv = csv +", " + levels.get(i);
+		}
+		return csv;
+		
 	}
 
 }

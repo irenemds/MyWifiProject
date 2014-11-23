@@ -52,7 +52,7 @@ public class Line {
 		renderer.setDisplayChartValuesDistance(10);
 
 		// Add single renderer to multiple renderer
-		MultipleGraph.mRenderer.addSeriesRenderer(renderer);	
+		LinkSpeedGraphActivity.mRenderer.addSeriesRenderer(renderer);	
 	}
 	
 	
@@ -66,6 +66,6 @@ public class Line {
 		if(lineNumberAux > colors.length-1){
 			lineNumberAux = lineNumber-colors.length;
 		}
-		renderer.setColor(colors[lineNumber-1]);
+		renderer.setColor(colors[lineNumber]);
 	}
 }
