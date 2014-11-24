@@ -1,6 +1,7 @@
 package com.mdes.mywifi;
 
 import android.net.wifi.ScanResult;
+import android.util.Log;
 import android.util.SparseIntArray;
 
 public class Wifi {
@@ -67,7 +68,7 @@ public class Wifi {
 	public void createList (int level){
 		if (contador != 0){
 			for (int i = 0; i < contador; i++) {
-				levels.append(i, 0);
+				levels.append(i, -120);
 			}
 		}
 		saveLevel(level);
@@ -103,6 +104,26 @@ public class Wifi {
 		this.color = color;
 	}
 
-
+	public int getMaxLevel(){
+		int max = -120;
+		for(int i = 0 ; i < levels.size() ; i++){
+			if (levels.get(i)>max){
+				max = levels.get(i);
+			}
+		}
+		Log.i("INFO", "Máximo: " + max);
+		return max;
+	}
+	
+	public int getMinLevel(){
+		int min = 0;
+		for(int i = 0 ; i < levels.size() ; i++){
+			if (levels.get(i)<min && levels.get(i) != -120){
+				min = levels.get(i);
+			}
+		}
+		Log.i("INFO", "Mínimo: " + min);
+		return min;
+	}
 
 }

@@ -29,6 +29,8 @@ import com.mdes.mywifi.Wifi;
 import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
+import com.mdes.mywifi.chart.DialGraphActivity;
+import com.mdes.mywifi.chart.DynamicGraphActivity;
 
 /**
  * En esta actividad se muestra información del punto de acceso seleccionado
@@ -133,10 +135,20 @@ public class NetInfoActivity extends Activity {
 				return true;
 
 			case R.id.ayuda:
+				Log.i("INFO","CLIIIIIIIIIIIIIIIIIIIIIIIICK");
 				setResult(Activity.RESULT_CANCELED);
 				helpDialog = new HelpDialog(this);
 				return true;
 
+				
+			case R.id.medidor:
+				Log.i("INFO","CLIIIIIIIIIIIIIIIIIIIIIIIICK");
+				setResult(Activity.RESULT_OK);
+				Intent intent = new Intent(NetInfoActivity.this, DialGraphActivity.class);
+				intent.putExtra("SSID", wifi.getSSID());
+				startActivity(intent);
+				return true;
+				
 			default:
 				return super.onOptionsItemSelected(item);
 			}
