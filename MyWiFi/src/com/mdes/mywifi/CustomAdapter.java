@@ -1,8 +1,10 @@
 package com.mdes.mywifi;
 
 import java.util.List;
-import com.mdes.mywifi.R;
+
+import android.R.color;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.wifi.ScanResult;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,51 +18,55 @@ public class CustomAdapter extends BaseAdapter {
 	Context contexto;
 	List<ScanResult> scanResult;
 	int[] signals = new int[]{
-	        R.drawable.signal1,
-	        R.drawable.signal2,
-	        R.drawable.signal3,
-	        R.drawable.signal4,
-	        R.drawable.signal5
-	    };
-	
-	
+			R.drawable.signal1,
+			R.drawable.signal2,
+			R.drawable.signal3,
+			R.drawable.signal4,
+			R.drawable.signal5
+	};
+
+
 	public CustomAdapter (Context contexto, List<ScanResult> scanResult){
 		this.contexto = contexto;
 		this.scanResult = scanResult;
 	}
-	
 
-    private class ViewHolder {
-        ImageView barraNivel;
-        TextView SSID;
-        TextView level;
-    }
+
+	private class ViewHolder {
+		ImageView barraNivel;
+		TextView SSID;
+		TextView level;
+	}
 
 	public View getView (int posicion, View vistaReciclada, ViewGroup padre){
-		
-		ViewHolder holder = null;
-		
-		LayoutInflater inflater = (LayoutInflater)contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		try{
+			ViewHolder holder = null;
 
-		
-		//Si no se ha cargado el layout previamente
-		if (vistaReciclada == null){
-			vistaReciclada = inflater.inflate(R.layout.elemento_lista, null);
-			holder = new ViewHolder();
-            holder.level = (TextView) vistaReciclada.findViewById(R.id.level);
-            holder.SSID = (TextView) vistaReciclada.findViewById(R.id.SSID);
-            holder.barraNivel = (ImageView) vistaReciclada.findViewById(R.id.barraNivel);
-            vistaReciclada.setTag(holder);
-        }
-        else {
-            holder = (ViewHolder) vistaReciclada.getTag();
-        }
-		
-		ScanResult result = (ScanResult) getItem(posicion);
+			LayoutInflater inflater = (LayoutInflater)contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
+			//Si no se ha cargado el layout previamente
+			if (vistaReciclada == null){
+				vistaReciclada = inflater.inflate(R.layout.elemento_lista, null);
+				holder = new ViewHolder();
+				holder.level = (TextView) vistaReciclada.findViewById(R.id.level);
+				holder.SSID = (TextView) vistaReciclada.findViewById(R.id.SSID);
+				holder.barraNivel = (ImageView) vistaReciclada.findViewById(R.id.barraNivel);
+				vistaReciclada.setTag(holder);
+			}
+			else {
+				holder = (ViewHolder) vistaReciclada.getTag();
+			}
+
+			ScanResult result = (ScanResult) getItem(posicion);
 
 			holder.level.setText(Integer.toString(result.level)+" dBm");
 			holder.SSID.setText(result.SSID); 
-			//	Diferentes imágenes de prueba en función del nivel de señal
+			if (result.SSID == HiloWifi.currentAP.getSSID()){
+				holder.level.setTypeface(null, Typeface.BOLD);
+				holder.SSID.setTypeface(null, Typeface.BOLD);
+			}
+			//	Diferentes imágenes en función del nivel de señal
 			if(result.level <=0 && result.level >-30){
 				holder.barraNivel.setImageResource(R.drawable.signal5);}
 			else if(result.level <=-30 && result.level >-50){
@@ -72,14 +78,22 @@ public class CustomAdapter extends BaseAdapter {
 			if(result.level <=-80){
 				holder.barraNivel.setImageResource(R.drawable.signal1);
 			}
-		
+
+			if(posicion % 2 == 0){
+				vistaReciclada.setBackgroundColor(color.darker_gray);
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			LogManager lm = new LogManager(e);
+		}
+
 		return vistaReciclada;
-		
 	}
-	
+
 	public int getCount() {
-        return scanResult.size();
-     }
+		return scanResult.size();
+	}
 	public Object getItem(int posicion) {
 		return scanResult.get(posicion);
 	}
@@ -87,17 +101,4 @@ public class CustomAdapter extends BaseAdapter {
 	public long getItemId(int posicion) {
 		return scanResult.indexOf(getItem(posicion));
 	}
-	
-	
-	/*
-	 * Método para actualizar los valores del ListView
-	 * Recibe la nueva lista, borra la anterior 
-	 * y la cambia por la nueva
-	 */
-	public void updateWifiList(List<ScanResult> scanRec) {
-	    scanResult.clear();
-	    scanResult.addAll(scanRec);
-	    this.notifyDataSetChanged();
-	}
-	
 }
