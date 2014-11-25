@@ -88,11 +88,16 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 
 				@Override
 				public void onReceive(Context context, Intent intent) {
+					try{
 					getScrollPosition();
 					CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
 					lista.setAdapter(adapter);
 					WifiMap.getRepresentableKey();
 					setScrollPosition();
+					}catch (NullPointerException e){
+						e.printStackTrace();
+						LogManager lm = new LogManager(e);
+					}
 				}
 
 			};

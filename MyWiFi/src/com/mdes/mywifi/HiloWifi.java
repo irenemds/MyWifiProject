@@ -105,7 +105,6 @@ public class HiloWifi extends Thread{
                 LogManager lm = new LogManager(e);
                 e.printStackTrace();
             }
-            //TODO Comprobar ceros
             Wifi.contador++;
             try {
                 sleep(500);

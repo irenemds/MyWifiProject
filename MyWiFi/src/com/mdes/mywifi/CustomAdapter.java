@@ -91,7 +91,7 @@ public class CustomAdapter extends BaseAdapter {
 		return vistaReciclada;
 	}
 
-	public int getCount() {
+	public int getCount() throws NullPointerException {
 		return scanResult.size();
 	}
 	public Object getItem(int posicion) {
