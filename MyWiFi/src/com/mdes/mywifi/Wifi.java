@@ -75,13 +75,17 @@ public class Wifi {
 	}
 
 	public void saveLevel(int level){
-		levels.append(contador, level);
+		//Gestión de repetidores, guardarlo una única vez, sólo el mayor valor de potencia
+		if(levels.get(contador) == 0 || levels.get(contador) < level ){	
+			levels.append(contador, level);
+		}
 		//Cada vez que se guarda un nuevo nivel se crea punto y se añade a la linea de la red
-		Point p = new Point(contador, level);
+		Point p = new Point(contador, levels.get(contador));
 		line.addNewPoints(p);
 		if (representable){
 			bwLine = new BandWidthLine(this);
 		}
+		
 	}
 
 	public void setRepresentable (boolean x){
