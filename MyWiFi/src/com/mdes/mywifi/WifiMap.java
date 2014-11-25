@@ -25,7 +25,7 @@ public class WifiMap {
 	public static HashMap<String,Wifi> wifiMap = new HashMap<String,Wifi>();
 	//Lista de SSID de las redes disponibles.
 	private static List<String> SSIDList = new ArrayList<String>();
-	private static List<String> representableList = new ArrayList<String>();	
+	public static List<String> representableList = new ArrayList<String>();	
 	public static String[] representableArray;
 	private static int aux = 0;
 

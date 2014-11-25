@@ -69,8 +69,8 @@ public class DialGraphActivity extends Activity  {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				setUp();
-//				view = ChartFactory.getDialChartView(DialGraphActivity.this, category, renderer);		
-//				setContentView(view);
+				view = ChartFactory.getDialChartView(DialGraphActivity.this, category, renderer);		
+				setContentView(view);
 				view.repaint();
 			}
 
