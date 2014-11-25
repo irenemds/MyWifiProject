@@ -62,7 +62,7 @@ public class HiloWifi extends Thread{
         Wifi.contador = 1;
  
         while(bucle){
-            //          try{
+                      try{
             try{
                 //Si el wifi está conectado realiza el escaneo
                 if (wifiManager.isWifiEnabled()){
@@ -112,10 +112,10 @@ public class HiloWifi extends Thread{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            //          }catch(Exception e){
-            //              e.printStackTrace();
-            //              LogManager lm = new LogManager(e);
-            //              Log.e("INFO", "Error en el hilo");}
+                      }catch(Exception e){
+                          e.printStackTrace();
+                          LogManager lm = new LogManager(e);
+                          Log.e("INFO", "Error en el hilo");}
         }
  
     }

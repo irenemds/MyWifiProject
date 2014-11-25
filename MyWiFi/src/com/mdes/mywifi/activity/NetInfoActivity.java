@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,7 +31,6 @@ import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
 import com.mdes.mywifi.chart.DialGraphActivity;
-import com.mdes.mywifi.chart.DynamicGraphActivity;
 
 /**
  * En esta actividad se muestra información del punto de acceso seleccionado
@@ -74,7 +74,7 @@ public class NetInfoActivity extends Activity {
 			BSSID = (TextView) findViewById(R.id.BSSID);
 			CHAN = (TextView) findViewById(R.id.CHAN);
 			LEVEL = (TextView) findViewById(R.id.LEVEL);
-			IMAGE = (LinearLayout) findViewById(R.id.container);
+//			IMAGE = (ImageView) findViewById(R.id.container);
 			
 			//Recibe SSID como extra, a partir de él consigue toda la información.
 			Bundle extras = getIntent().getExtras();
@@ -142,7 +142,6 @@ public class NetInfoActivity extends Activity {
 
 				
 			case R.id.medidor:
-				Log.i("INFO","CLIIIIIIIIIIIIIIIIIIIIIIIICK");
 				setResult(Activity.RESULT_OK);
 				Intent intent = new Intent(NetInfoActivity.this, DialGraphActivity.class);
 				intent.putExtra("SSID", wifi.getSSID());

@@ -101,6 +101,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.mdes.mywifi.chart.DialGraphActivity"
+            android:label="@string/title_activity_level_graph"
+            android:parentActivityName="com.mdes.mywifi.activity.NetInfoActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mdes.mywifi.NetInfoActivity" />
+
+            <intent-filter>
+                <action android:name="com.mdes.mywifi.LINKSPEEDGRAPHACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.mdes.mywifi.chart.PieGraphActivity"
             android:label="@string/title_activity_level_graph"
             android:parentActivityName="com.mdes.mywifi.activity.WifiListActivity" >

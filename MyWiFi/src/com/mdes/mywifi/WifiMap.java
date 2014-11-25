@@ -50,6 +50,7 @@ public class WifiMap {
 					Wifi wifi = new Wifi(resultWifiList.get(i));
 					wifiMap.put(resultWifiList.get(i).SSID, wifi);
 					wifiMap.get(resultWifiList.get(i).SSID).setColor(calculateColor());
+					aux++;
 				}
 				//Si existe guardar el último valor de potencia obtenido.
 				else
@@ -183,7 +184,7 @@ public class WifiMap {
 		if(aux > colors.length-1){
 			aux = aux-colors.length*aux/colors.length;
 		}	
-		aux++;
+//		aux++;
 		return colors[aux];
 	}
 }
