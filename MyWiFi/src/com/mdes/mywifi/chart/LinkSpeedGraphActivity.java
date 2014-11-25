@@ -50,7 +50,7 @@ public class LinkSpeedGraphActivity extends Activity{
 			mRenderer.setChartTitle("Velocidad de enlace");
 			mRenderer.setLegendTextSize(30);
 			mRenderer.setYTitle("Velocidad [Mbps]");
-			mRenderer.setLegendTextSize(15);
+			mRenderer.setLegendTextSize(20);
 			mRenderer.setMargins(new int[] { 50, 40, 10, 30 });
 			mRenderer.setPointSize(5);
 
