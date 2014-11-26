@@ -22,7 +22,7 @@ public class CurrentAP {
 	private String IPString;
 
 	public void updateAP(WifiInfo wifiInfo){
-		if(HiloWifi.currentAP != null || SSID.equals(" ")){
+		if(HiloWifi.currentAP != null){
 			if (!SSID.equals(wifiInfo.getSSID())){
 				SSID = wifiInfo.getSSID();
 				MAC = wifiInfo.getMacAddress();

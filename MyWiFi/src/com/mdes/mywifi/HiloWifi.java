@@ -1,16 +1,18 @@
 package com.mdes.mywifi;
  
 import java.util.List;
- 
+
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
- 
+
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
-import android.net.wifi.WifiInfo;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiManager;
 import android.util.Log;
- 
+
 import com.mdes.mywifi.activity.WifiListActivity;
 import com.mdes.mywifi.chart.FrequencyGraphActivity;
 import com.mdes.mywifi.chart.MultipleGraph;
@@ -38,6 +40,8 @@ public class HiloWifi extends Thread{
     public static boolean isThread = false;
      
     public static CurrentAP currentAP = new CurrentAP();
+    
+    SupplicantState supState; 
  
     /**
      * HiloWifi, inicializa el hilo, dándole valor a sus principales atributos
@@ -68,7 +72,9 @@ public class HiloWifi extends Thread{
                 if (wifiManager.isWifiEnabled()){
                     wifiManager.startScan();
                     //Comprueba si está conectado a alguna red
-                    if(wifiManager.getConnectionInfo() != null){
+                    supState = wifiManager.getConnectionInfo().getSupplicantState();
+                    Log.e("INFO", supState.toString());
+                    if( supState.toString().equals("ASSOCIATED") || supState.toString().equals("COMPLETED") ){
                         currentAP.updateAP(wifiManager.getConnectionInfo()); 
                     }
  

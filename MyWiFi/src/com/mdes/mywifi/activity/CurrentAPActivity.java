@@ -93,20 +93,23 @@ public class CurrentAPActivity extends Activity {
 
 				@Override
 				public void onReceive(Context context, Intent intent) {
-					if(HiloWifi.currentAP != null && wifi != null){
-						if(HiloWifi.currentAP.getBSSID().equals(wifi.getBSSID())){
-							LEVEL.setText(Integer.toString(WifiMap.getWifi(wifi.getSSID()).getLastLevel()));
-							velocidad.setText(Integer.toString(HiloWifi.currentAP.getLastLinkSpeed())+" Mbps");
-						}else{
-							Intent mainIntent = new Intent().setClass(
-									CurrentAPActivity.this, WifiListActivity.class);
-							//						unregisterReceiver(wifiReceiver);
-							startActivity(mainIntent);
-							finish();
+					try{
+						if(HiloWifi.currentAP != null && wifi != null){
+							if(HiloWifi.currentAP.getBSSID().equals(wifi.getBSSID())){
+								LEVEL.setText(Integer.toString(WifiMap.getWifi(wifi.getSSID()).getLastLevel()));
+								velocidad.setText(Integer.toString(HiloWifi.currentAP.getLastLinkSpeed())+" Mbps");
+							}else{
+								Intent mainIntent = new Intent().setClass(
+										CurrentAPActivity.this, WifiListActivity.class);
+								//						unregisterReceiver(wifiReceiver);
+								startActivity(mainIntent);
+								finish();
+							}
 						}
+					}catch (Exception e) {
+						Log.e("Conexion AP", "Se ha perdido conexión actual.");
 					}
 				}
-
 			};
 		}catch(Exception e){
 			e.printStackTrace();
