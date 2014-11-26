@@ -64,7 +64,7 @@ public class Line {
 				int aux = lineNumberAux/colors.length;
 				lineNumberAux = lineNumber-colors.length*aux;
 			}
-			renderer.setColor(colors[lineNumberAux-1]);
+			renderer.setColor(colors[lineNumberAux]);
 		}catch (Exception e){
 			e.printStackTrace();
 			LogManager lm = new LogManager(e);

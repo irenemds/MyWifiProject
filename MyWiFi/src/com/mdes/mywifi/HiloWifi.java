@@ -41,7 +41,7 @@ public class HiloWifi extends Thread{
      
     public static CurrentAP currentAP = new CurrentAP();
     
-    SupplicantState supState; 
+    public static SupplicantState supState; 
  
     /**
      * HiloWifi, inicializa el hilo, dándole valor a sus principales atributos
