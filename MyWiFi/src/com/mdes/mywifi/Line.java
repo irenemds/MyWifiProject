@@ -29,6 +29,7 @@ public class Line {
 		renderer.setPointStyle(PointStyle.CIRCLE);
 		renderer.setFillPoints(true);
 		renderer.setDisplayChartValues(true);
+		renderer.setChartValuesTextSize(15);
 		renderer.setDisplayChartValuesDistance(10);
 
 		// Add single renderer to multiple renderer
@@ -45,6 +46,7 @@ public class Line {
 		renderer.setPointStyle(PointStyle.CIRCLE);
 		renderer.setFillPoints(true);
 		renderer.setDisplayChartValues(true);
+		renderer.setChartValuesTextSize(15);
 		renderer.setDisplayChartValuesDistance(10);
 		LinkSpeedGraphActivity.mRenderer.addSeriesRenderer(renderer);	
 	}
