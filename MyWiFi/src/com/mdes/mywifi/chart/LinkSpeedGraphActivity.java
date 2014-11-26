@@ -16,9 +16,11 @@ import android.os.Bundle;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
+import com.mdes.mywifi.HiloWifi;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
+import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
 
@@ -36,7 +38,7 @@ public class LinkSpeedGraphActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		try{
-			
+
 			registerReceivers();
 
 			mRenderer.setClickEnabled(false);
@@ -61,14 +63,20 @@ public class LinkSpeedGraphActivity extends Activity{
 
 				@Override
 				public void onReceive(Context context, Intent intent) {
-					LinkSpeedGraphActivity.mRenderer.setYAxisMax(100);
-					LinkSpeedGraphActivity.mRenderer.setYAxisMin(0);
-					if(Wifi.contador > 15){
-						LinkSpeedGraphActivity.mRenderer.setXAxisMax(Wifi.contador);
-						LinkSpeedGraphActivity.mRenderer.setXAxisMin(Wifi.contador-15);
-					}			
-					view.repaint();
-				}
+					Bundle extras = getIntent().getExtras();
+					if(HiloWifi.currentAP.getSSID().equals(extras.getString("SSID"))){
+						LinkSpeedGraphActivity.mRenderer.setYAxisMax(100);
+						LinkSpeedGraphActivity.mRenderer.setYAxisMin(0);
+						if(Wifi.contador > 15){
+							LinkSpeedGraphActivity.mRenderer.setXAxisMax(Wifi.contador);
+							LinkSpeedGraphActivity.mRenderer.setXAxisMin(Wifi.contador-15);
+						}			
+						view.repaint();
+					}
+
+					else{
+						finish();
+					}}
 			};
 		}catch (Exception e){
 			e.printStackTrace();

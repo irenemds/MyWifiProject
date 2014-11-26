@@ -47,24 +47,24 @@ public class NetInfoActivity extends Activity {
 	private TextView CHAN;
 	private TextView LEVEL;
 	private LinearLayout IMAGE;
-//	
-//	private LevelDialGraph levelDialGraph;
-	
+	//	
+	//	private LevelDialGraph levelDialGraph;
+
 	ActionBar actionBar = null;
 	private HelpDialog helpDialog;
-	
+
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiChangeReceiver wifiReceiver = new WifiChangeReceiver();
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
-	
+
 	private GraphicalView mChartView;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		try{
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.net_info);
-			
+
 			actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(false);
 
@@ -74,8 +74,8 @@ public class NetInfoActivity extends Activity {
 			BSSID = (TextView) findViewById(R.id.BSSID);
 			CHAN = (TextView) findViewById(R.id.CHAN);
 			LEVEL = (TextView) findViewById(R.id.LEVEL);
-//			IMAGE = (ImageView) findViewById(R.id.container);
-			
+			//			IMAGE = (ImageView) findViewById(R.id.container);
+
 			//Recibe SSID como extra, a partir de él consigue toda la información.
 			Bundle extras = getIntent().getExtras();
 			wifi = WifiMap.getWifi(extras.getString("SSID"));
@@ -90,8 +90,12 @@ public class NetInfoActivity extends Activity {
 
 				@Override
 				public void onReceive(Context context, Intent intent) {
-					LEVEL.setText(Integer.toString(wifi.getLastLevel()));
-//					IMAGE.addView(levelDialGraph.execute(getApplicationContext()));
+					if(wifi.isRepresentable()){
+						LEVEL.setText(Integer.toString(wifi.getLastLevel()));
+					}
+					else{
+						finish();
+					}
 				}
 
 			};
@@ -101,9 +105,9 @@ public class NetInfoActivity extends Activity {
 			LogManager lm = new LogManager(e);
 		}		
 	}
-	
+
 	/*	---------- Menu ----------- */
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -140,14 +144,14 @@ public class NetInfoActivity extends Activity {
 				helpDialog = new HelpDialog(this);
 				return true;
 
-				
+
 			case R.id.medidor:
 				setResult(Activity.RESULT_OK);
 				Intent intent = new Intent(NetInfoActivity.this, DialGraphActivity.class);
 				intent.putExtra("SSID", wifi.getSSID());
 				startActivity(intent);
 				return true;
-				
+
 			default:
 				return super.onOptionsItemSelected(item);
 			}
@@ -157,7 +161,7 @@ public class NetInfoActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -168,15 +172,15 @@ public class NetInfoActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		registerReceivers();
-//		if (mChartView == null) {
-//		    LinearLayout layout = (LinearLayout) findViewById(R.id.chart);
-//		    mChartView = levelDialGraph.execute(this);
-//		    layout.addView(mChartView, new LayoutParams
-//		(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-//		    ...
-//		  } else {
-//		    mChartView.repaint();
-//		  }
+		//		if (mChartView == null) {
+		//		    LinearLayout layout = (LinearLayout) findViewById(R.id.chart);
+		//		    mChartView = levelDialGraph.execute(this);
+		//		    layout.addView(mChartView, new LayoutParams
+		//		(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		//		    ...
+		//		  } else {
+		//		    mChartView.repaint();
+		//		  }
 	}
 
 	private void registerReceivers(){

@@ -47,40 +47,44 @@ public class DialGraphActivity extends Activity  {
 	private CategorySeries category;
 	private DialRenderer renderer;
 	private SimpleSeriesRenderer r;
-	
+
 	private WifiChangeReceiver wifiReceiver = new WifiChangeReceiver();
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
 
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.xy_chart);
 
 		registerReceivers();
-		
+
 		Bundle extras = getIntent().getExtras();
 		wifi = WifiMap.getWifi(extras.getString("SSID"));
 
 		setUp();
-		
+
 		currentActivityReceiver = new BroadcastReceiver(){
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				setUp();
-				view = ChartFactory.getDialChartView(DialGraphActivity.this, category, renderer);		
-				setContentView(view);
-				view.repaint();
+				if (wifi.isRepresentable()){
+					setUp();
+					view = ChartFactory.getDialChartView(DialGraphActivity.this, category, renderer);		
+					setContentView(view);
+					view.repaint();
+				}else{
+					finish();
+				}
 			}
 
 		};
 		registerReceivers();
-		
+
 		view = ChartFactory.getDialChartView(this, category, renderer);		
 		setContentView(view);
 	}
-	
+
 	private void registerReceivers(){
 		registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 		registerReceiver(currentActivityReceiver, new IntentFilter("com.mdes.mywifi.timer"));
@@ -93,9 +97,9 @@ public class DialGraphActivity extends Activity  {
 		unregisterReceiver(wifiNotFoundReceiver);
 		unregisterReceiver(currentActivityReceiver);
 	}
-	
+
 	private void setUp(){
-		
+
 		category = new CategorySeries(wifi.getSSID());
 		category.add("Actual", wifi.getLastLevel());
 		category.add("Mínimo", wifi.getMinLevel());

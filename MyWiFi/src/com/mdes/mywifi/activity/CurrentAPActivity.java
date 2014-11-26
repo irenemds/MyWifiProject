@@ -94,6 +94,7 @@ public class CurrentAPActivity extends Activity {
 				@Override
 				public void onReceive(Context context, Intent intent) {
 					try{
+						
 						if(HiloWifi.currentAP != null && wifi != null){
 							if(HiloWifi.currentAP.getBSSID().equals(wifi.getBSSID())){
 								LEVEL.setText(Integer.toString(WifiMap.getWifi(wifi.getSSID()).getLastLevel()));
@@ -184,6 +185,7 @@ public class CurrentAPActivity extends Activity {
 	public void graphHandler (View view)
 	{
 		Intent intent = new Intent(CurrentAPActivity.this, LinkSpeedGraphActivity.class);
+		intent.putExtra("SSID", wifi.getSSID());
 		startActivity(intent);
 	}
 

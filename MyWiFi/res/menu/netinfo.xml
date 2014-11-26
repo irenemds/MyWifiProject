@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.at_aplicaciones.NewNoteActivity" >
+
+    <item
+        android:id="@+id/guardar"
+        android:orderInCategory="100"
+        android:title="Guardar"/>
+     <item
+        android:id="@+id/ayuda"
+        android:orderInCategory="100"
+        android:title="Ayuda"/>
+     
+     <item
+        android:id="@+id/medidor"
+        android:orderInCategory="100"
+        android:title="Medidor de Potencia"/>
+
+</menu>
