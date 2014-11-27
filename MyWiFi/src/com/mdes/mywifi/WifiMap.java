@@ -2,9 +2,11 @@ package com.mdes.mywifi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import android.graphics.Color;
 import android.net.wifi.ScanResult;
@@ -42,7 +44,7 @@ public class WifiMap {
 
 			for (int i = 0; i < resultWifiList.size(); i++) {
 				SSIDList.add(resultWifiList.get(i).SSID);
-
+				
 				//Comprobar si la red ya existe en el HashMap
 				//Si no existe
 				if (!wifiMap.containsKey(resultWifiList.get(i).SSID)){
@@ -56,6 +58,7 @@ public class WifiMap {
 				else
 				{				
 					wifiMap.get(resultWifiList.get(i).SSID).saveLevel(resultWifiList.get(i).level);
+					wifiMap.get(resultWifiList.get(i).SSID).setAntennas(1);
 					wifiMap.get(resultWifiList.get(i).SSID).setRepresentable(true);
 				}
 			}
@@ -65,8 +68,8 @@ public class WifiMap {
 			while (it.hasNext()) {
 				Map.Entry e = (Map.Entry)it.next();
 				if(!SSIDList.contains(e.getKey())){
-					//				Log.i("ITERATOR", "La red " + e.getKey() + " ya no está disponible.");
 					wifiMap.get(e.getKey()).saveLevel(-120);
+					wifiMap.get(e.getKey()).setAntennas(0);
 					wifiMap.get(e.getKey()).setRepresentable(false);
 				}
 			}
@@ -190,5 +193,22 @@ public class WifiMap {
 		}	
 //		aux++;
 		return colors[aux];
+	}
+	/**
+	 * Actualiza el valor del parámetro antennas de la clase Wifi
+	 * @param SSIDList lista de SSID de las redes encontradas en el último escaneo
+	 */
+	public void setAllAntennaNumber(List<String> SSIDList)
+	{ 
+	  final Set<String> antennaList = new HashSet(); 
+	  final Set<String> set1 = new HashSet();
+
+	  for (String AP : SSIDList)
+	  {
+	   if (!set1.add(AP))
+	   {
+	    wifiMap.get(AP).addAntennas();
+	   }
+	  }
 	}
 }

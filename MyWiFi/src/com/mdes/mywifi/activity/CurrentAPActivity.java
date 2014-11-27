@@ -50,7 +50,7 @@ public class CurrentAPActivity extends Activity {
 	private TextView MAC;
 	private TextView velocidad;
 	private TextView IP;
-
+	private TextView ANT;
 	private CurrentAP currentAP;
 	private BroadcastReceiver currentApReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
@@ -76,6 +76,7 @@ public class CurrentAPActivity extends Activity {
 			velocidad = (TextView) findViewById(R.id.velocidad);
 			IP = (TextView) findViewById(R.id.IP);
 			IMAGE = (ImageView) findViewById(R.id.container);
+			ANT = (TextView) findViewById(R.id.ANT);
 
 			currentAP = HiloWifi.currentAP;
 			Bundle extras = getIntent().getExtras();
@@ -90,7 +91,7 @@ public class CurrentAPActivity extends Activity {
 			MAC.setText(currentAP.getMAC());
 			IP.setText(currentAP.getIPString());
 			IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
-
+			ANT.setText(Integer.toString(wifi.getAntennas()));
 
 			currentApReceiver = new BroadcastReceiver(){
 
@@ -103,6 +104,7 @@ public class CurrentAPActivity extends Activity {
 								IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
 								LEVEL.setText(Integer.toString(WifiMap.getWifi(wifi.getSSID()).getLastLevel()));
 								velocidad.setText(Integer.toString(HiloWifi.currentAP.getLastLinkSpeed())+" Mbps");
+								ANT.setText(Integer.toString(wifi.getAntennas()));
 							}else{
 								Intent mainIntent = new Intent().setClass(
 										CurrentAPActivity.this, WifiListActivity.class);

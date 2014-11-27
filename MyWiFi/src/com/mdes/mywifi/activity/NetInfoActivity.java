@@ -45,6 +45,7 @@ public class NetInfoActivity extends Activity {
 	private TextView CAP;
 	private TextView FREQ;
 	private TextView BSSID;
+	private TextView ANT;
 	private TextView CHAN;
 	private TextView LEVEL;
 	private ImageView IMAGE;
@@ -75,7 +76,7 @@ public class NetInfoActivity extends Activity {
 			CHAN = (TextView) findViewById(R.id.CHAN);
 			LEVEL = (TextView) findViewById(R.id.LEVEL);
 			IMAGE = (ImageView) findViewById(R.id.container);
-
+			ANT = (TextView) findViewById(R.id.ANT);
 			//Recibe SSID como extra, a partir de él consigue toda la información.
 			Bundle extras = getIntent().getExtras();
 			wifi = WifiMap.getWifi(extras.getString("SSID"));
@@ -86,6 +87,7 @@ public class NetInfoActivity extends Activity {
 			FREQ.setText(Integer.toString(wifi.getFreq())+ " MHz");
 			CHAN.setText(Integer.toString(wifi.getChannel()));
 			IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
+			ANT.setText(Integer.toString(wifi.getAntennas()));
 			//BroadCastReceiver para manejar evento de tiempo,mostrar valores actualizados.
 			currentActivityReceiver = new BroadcastReceiver(){
 
@@ -94,6 +96,7 @@ public class NetInfoActivity extends Activity {
 					if(wifi.isRepresentable()){
 						LEVEL.setText(Integer.toString(wifi.getLastLevel()));
 						IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
+						ANT.setText(Integer.toString(wifi.getAntennas()));
 					}
 					else{
 						finish();

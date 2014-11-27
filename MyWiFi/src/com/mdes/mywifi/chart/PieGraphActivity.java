@@ -95,9 +95,9 @@ public class PieGraphActivity extends Activity {
 			for (int i = 0; i<values.length; i++) {
 				Log.i("INFO","LONG "+ i);
 				if(values[i] > 0){
-					
-					Log.i("INFO","VALOR "+ Integer.toString(i+1) + ": "+values[i]);
-					series.add("Canal " + i+1, values[i]);
+					int canal = i+1;
+//					Log.i("INFO","VALOR "+ Integer.toString(i+1) + ": "+values[i]);
+					series.add("Canal " + canal, values[i]);
 					SimpleSeriesRenderer r = new SimpleSeriesRenderer();
 					r.setColor(colors[i]);
 					renderer.addSeriesRenderer(r);

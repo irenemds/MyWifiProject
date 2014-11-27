@@ -17,7 +17,7 @@ public class Wifi {
 	private Line line;
 	private BandWidthLine bwLine;
 	private int color;
-
+	private int antennas;
 
 	public Wifi(ScanResult scanResult){
 
@@ -31,6 +31,7 @@ public class Wifi {
 		createList(scanResult.level);
 		representable = true;
 		bwLine = new BandWidthLine(this);
+		antennas = 1;
 	}
 
 	public String getSSID() {
@@ -86,6 +87,18 @@ public class Wifi {
 			bwLine = new BandWidthLine(this);
 		}
 		
+	}
+
+	public int getAntennas() {
+		return antennas;
+	}
+
+	public void setAntennas(int antennas) {
+		this.antennas = antennas;
+	}
+	
+	public void addAntennas() {
+		antennas++;
 	}
 
 	public void setRepresentable (boolean x){
