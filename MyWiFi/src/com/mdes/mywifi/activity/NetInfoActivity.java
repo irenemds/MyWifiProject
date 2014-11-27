@@ -27,6 +27,7 @@ import com.mdes.mywifi.HelpDialog;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
+import com.mdes.mywifi.WifiLevelImage;
 import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
@@ -46,9 +47,8 @@ public class NetInfoActivity extends Activity {
 	private TextView BSSID;
 	private TextView CHAN;
 	private TextView LEVEL;
-	private LinearLayout IMAGE;
-	//	
-	//	private LevelDialGraph levelDialGraph;
+	private ImageView IMAGE;
+
 
 	ActionBar actionBar = null;
 	private HelpDialog helpDialog;
@@ -74,7 +74,7 @@ public class NetInfoActivity extends Activity {
 			BSSID = (TextView) findViewById(R.id.BSSID);
 			CHAN = (TextView) findViewById(R.id.CHAN);
 			LEVEL = (TextView) findViewById(R.id.LEVEL);
-			//			IMAGE = (ImageView) findViewById(R.id.container);
+			IMAGE = (ImageView) findViewById(R.id.container);
 
 			//Recibe SSID como extra, a partir de él consigue toda la información.
 			Bundle extras = getIntent().getExtras();
@@ -85,6 +85,7 @@ public class NetInfoActivity extends Activity {
 			CAP.setText(wifi.getCap());
 			FREQ.setText(Integer.toString(wifi.getFreq())+ " MHz");
 			CHAN.setText(Integer.toString(wifi.getChannel()));
+			IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
 			//BroadCastReceiver para manejar evento de tiempo,mostrar valores actualizados.
 			currentActivityReceiver = new BroadcastReceiver(){
 
@@ -92,6 +93,7 @@ public class NetInfoActivity extends Activity {
 				public void onReceive(Context context, Intent intent) {
 					if(wifi.isRepresentable()){
 						LEVEL.setText(Integer.toString(wifi.getLastLevel()));
+						IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
 					}
 					else{
 						finish();
@@ -139,7 +141,6 @@ public class NetInfoActivity extends Activity {
 				return true;
 
 			case R.id.ayuda:
-				Log.i("INFO","CLIIIIIIIIIIIIIIIIIIIIIIIICK");
 				setResult(Activity.RESULT_CANCELED);
 				String text = "Se muestra la información principal de la red seleccionada";
 				helpDialog = new HelpDialog(this, text);

@@ -73,7 +73,6 @@ public class HiloWifi extends Thread{
                     wifiManager.startScan();
                     //Comprueba si está conectado a alguna red
                     supState = wifiManager.getConnectionInfo().getSupplicantState();
-                    Log.e("INFO", supState.toString());
                     if( supState.toString().equals("ASSOCIATED") || supState.toString().equals("COMPLETED")
                     		&& wifiManager.getConnectionInfo().getSSID() != null){
                         currentAP.updateAP(wifiManager.getConnectionInfo()); 

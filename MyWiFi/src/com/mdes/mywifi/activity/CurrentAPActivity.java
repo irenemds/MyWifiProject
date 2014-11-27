@@ -27,6 +27,7 @@ import com.mdes.mywifi.HiloWifi;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
+import com.mdes.mywifi.WifiLevelImage;
 import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
@@ -42,7 +43,7 @@ public class CurrentAPActivity extends Activity {
 	private TextView BSSID;
 	private TextView CHAN;
 	private TextView LEVEL;
-	private ImageView level;
+	private ImageView IMAGE;
 	ActionBar actionBar = null;
 	private HelpDialog helpDialog;
 	private WifiChangeReceiver wifiReceiver = new WifiChangeReceiver();
@@ -74,6 +75,7 @@ public class CurrentAPActivity extends Activity {
 			MAC = (TextView) findViewById(R.id.MAC);
 			velocidad = (TextView) findViewById(R.id.velocidad);
 			IP = (TextView) findViewById(R.id.IP);
+			IMAGE = (ImageView) findViewById(R.id.container);
 
 			currentAP = HiloWifi.currentAP;
 			Bundle extras = getIntent().getExtras();
@@ -87,6 +89,7 @@ public class CurrentAPActivity extends Activity {
 			CHAN.setText(Integer.toString(wifi.getChannel()));
 			MAC.setText(currentAP.getMAC());
 			IP.setText(currentAP.getIPString());
+			IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
 
 
 			currentApReceiver = new BroadcastReceiver(){
@@ -97,6 +100,7 @@ public class CurrentAPActivity extends Activity {
 						
 						if(HiloWifi.currentAP != null && wifi != null){
 							if(HiloWifi.currentAP.getBSSID().equals(wifi.getBSSID())){
+								IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
 								LEVEL.setText(Integer.toString(WifiMap.getWifi(wifi.getSSID()).getLastLevel()));
 								velocidad.setText(Integer.toString(HiloWifi.currentAP.getLastLinkSpeed())+" Mbps");
 							}else{
