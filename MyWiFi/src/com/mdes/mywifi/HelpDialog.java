@@ -5,7 +5,7 @@ import android.content.Context;
 
 public class HelpDialog {
 
-	public HelpDialog(Context c){
+	public HelpDialog(Context c, String text){
 
 		try{
 
@@ -13,7 +13,7 @@ public class HelpDialog {
 			alertDialogBuilder.setTitle("Ayuda");
 
 			alertDialogBuilder
-			.setMessage("TEXTO")
+			.setMessage(text)
 			.setCancelable(true);
 
 			// crear AlertDialog

@@ -141,7 +141,8 @@ public class NetInfoActivity extends Activity {
 			case R.id.ayuda:
 				Log.i("INFO","CLIIIIIIIIIIIIIIIIIIIIIIIICK");
 				setResult(Activity.RESULT_CANCELED);
-				helpDialog = new HelpDialog(this);
+				String text = "Se muestra la información principal de la red seleccionada";
+				helpDialog = new HelpDialog(this, text);
 				return true;
 
 

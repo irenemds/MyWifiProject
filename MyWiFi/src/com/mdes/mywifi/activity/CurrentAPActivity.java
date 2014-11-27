@@ -151,7 +151,7 @@ public class CurrentAPActivity extends Activity {
 
 			case R.id.ayuda:
 				setResult(Activity.RESULT_CANCELED);
-				helpDialog = new HelpDialog(this);
+				helpDialog = new HelpDialog(this,"HOLA");
 				return true;
 
 			case R.id.medidor:

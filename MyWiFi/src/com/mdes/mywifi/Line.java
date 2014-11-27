@@ -32,7 +32,6 @@ public class Line {
 		renderer.setChartValuesTextSize(15);
 		renderer.setDisplayChartValuesDistance(10);
 
-		// Add single renderer to multiple renderer
 		MultipleGraph.mRenderer.addSeriesRenderer(renderer);	
 	}
 
