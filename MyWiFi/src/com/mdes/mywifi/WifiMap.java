@@ -75,7 +75,7 @@ public class WifiMap {
 			LogManager lm = new LogManager(e);
 		}
 	}
-
+	
 	/**
 	 * Esta función guarda -120 en todas las redes del HashMap,
 	 * para demostrar que no se ha encontrado ninguna de ellas.
@@ -100,17 +100,18 @@ public class WifiMap {
 	@SuppressWarnings("rawtypes")
 	public static void getRepresentableKey(){
 
-		representableList = new ArrayList<String>();
-		Iterator it = wifiMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry e = (Map.Entry)it.next();
-			if(wifiMap.get(e.getKey()).isRepresentable()){
-				representableList.add((String) e.getKey());
-			}}
-		representableArray = new String[representableList.size()];
-		for( int i = 0; i < representableArray.length; i++){
-			representableArray[i] = representableList.get(i);
-		}
+			representableList = new ArrayList<String>();
+			Iterator it = wifiMap.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry e = (Map.Entry)it.next();
+				if(wifiMap.get(e.getKey()).isRepresentable()){
+					representableList.add((String) e.getKey());
+					Log.i("INFO"," "+ (String) e.getKey());
+				}}
+			representableArray = new String[representableList.size()];
+			for( int i = 0; i < representableArray.length; i++){
+				representableArray[i] = representableList.get(i);
+			}
 	}
 
 	/**
@@ -125,8 +126,9 @@ public class WifiMap {
 
 		for( int i = 0; i<representableArray.length; i++){
 			int channel = wifiMap.get(representableArray[i]).getChannel();
+			Log.i("INFO", " "+ channel);
 			if (channel <= 11){
-				channelAP[channel-1]++;
+			channelAP[channel-1]++;
 			}
 		}
 		return channelAP;
@@ -158,7 +160,7 @@ public class WifiMap {
 		}
 		return i;
 	}
-
+	
 	/**
 	 * Esta función obtiene el mínimo nivel de potencia de los obtenidos 
 	 * en el último escaneo.
@@ -186,7 +188,7 @@ public class WifiMap {
 		if(aux > colors.length-1){
 			aux = aux-colors.length*aux/colors.length;
 		}	
-		//		aux++;
+//		aux++;
 		return colors[aux];
 	}
 }
