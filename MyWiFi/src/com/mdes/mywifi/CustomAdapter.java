@@ -13,7 +13,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
+/**
+ * Esta clase implementa el adaptador customizado empleado para
+ * representar cada una de las redes wifi en la lista inicial.
+ *
+ */
 public class CustomAdapter extends BaseAdapter {
 	Context contexto;
 	List<ScanResult> scanResult;

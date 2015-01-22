@@ -211,16 +211,15 @@
                 android:layout_marginLeft="25dp"
                 android:text="TextView" />
         </LinearLayout>
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/button1"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout1"
-        android:layout_alignParentLeft="true"
-        android:onClick="graphHandler"
-        android:text="Button" />
+        <Button
+            android:id="@+id/button1"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="graphHandler"
+            android:text="Button" />
+
+    </LinearLayout>
 
 </RelativeLayout>

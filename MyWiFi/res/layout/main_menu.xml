@@ -17,24 +17,24 @@
 
         <Button
             android:id="@+id/lineGraph"
-            android:layout_width="fill_parent"
+            android:layout_width="108dp"
             android:layout_height="wrap_content"
             android:onClick="lineGraphHandler"
-            android:text="Line Graph" />
+            android:text="Potencia" />
         
         <Button
             android:id="@+id/PieGraph"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="pieGraphHandler"
-            android:text="Pie Graph" />
+            android:text="Canales" />
         
         <Button
             android:id="@+id/FrecGraph"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="frecGraphHandler"
-            android:text="Freq" />
+            android:text="Frecuencia" />
         
     </LinearLayout>
 

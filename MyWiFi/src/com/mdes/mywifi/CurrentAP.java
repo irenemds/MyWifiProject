@@ -9,7 +9,11 @@ import android.net.wifi.WifiInfo;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.util.SparseIntArray;
-
+/**
+ * Esta clase almacena la información de la red a la que está conectado el 
+ * dispositivo en cada escaneo.
+ *
+ */
 public class CurrentAP {
 
 	private String SSID = " ";
@@ -21,22 +25,32 @@ public class CurrentAP {
 	private int IP;
 	private String IPString;
 
+	/**
+	 * Esta función es la encargada de actualizar la información 
+	 * del punto de acceso
+	 * @param WifiInfo Información de la red wifi
+	 */
 	public void updateAP(WifiInfo wifiInfo){
+		//Comprueba si el dispositivo está conectado a alguna red
 		if(HiloWifi.currentAP != null){
+			//Comprueba si está conectado al mismo punto de acceso que 
+			//el que ya tenía almacenado, si es distinto actualiza
 			if (!SSID.equals(wifiInfo.getSSID())){
 				SSID = wifiInfo.getSSID();
 				MAC = wifiInfo.getMacAddress();
 				BSSID = wifiInfo.getBSSID();
 				IP = wifiInfo.getIpAddress();
 				formatIP();
+				//Se resetea la línea de valores de velocidad de enlace
 				line = new Line();
 				createList(lastLinkSpeed);
 			}
 			lastLinkSpeed = wifiInfo.getLinkSpeed();
 			saveSpeedValue(lastLinkSpeed);
 		}
+		//Si no hay ningun punto de acceso conectado vacia todo
 		else{
-			Log.e("INFO","NO ESTAMOS CONECTADOS A NADA");
+			Log.e("INFO","No está conectado a ningún AP");
 			SSID = " ";
 			MAC = " ";
 			BSSID = " ";
@@ -47,12 +61,20 @@ public class CurrentAP {
 		}
 	}
 
-
+	/**
+	 * Devuelve la IP en formato String, legible para el usuario 
+	 * 
+	 */
 	public String getIPString() {
 		return IPString;
 	}
 
-
+	/**
+	 * Esta función crea la lista de valores de velocidad de enlace, 
+	 * rellenando os valores de escaneos anteriores a 0 ya que
+	 * no estaba conectado al punto de acceso
+	 * @param speed velocidad detectada en el escaneo en el que se crea la lista
+	 */
 	public void createList (int speed){
 		linkSpeedList = new SparseIntArray();
 
@@ -62,7 +84,12 @@ public class CurrentAP {
 			}
 		}
 	}
-
+	
+	/**
+	 * Esta función almacena en la lista de valores de velocidad de enlace
+	 * el valor detectado en el último escaneo 
+	 * @param level velocidad detectada en el último escaneo
+	 */
 	public void saveSpeedValue(int level){
 		linkSpeedList.append(Wifi.contador, level);
 		//Cada vez que se guarda un nuevo nivel se crea punto y se añade a la liea de la red
@@ -129,7 +156,10 @@ public class CurrentAP {
 	public void setIP(int iP) {
 		IP = IP;
 	}
-	
+	/**
+	 * Esta función formatea el valor de la IP obtenido mediante 
+	 * WifiInfo a un String legible por el usuario
+	 */
 	private void formatIP(){
 		// Convertir de little-endian en big-endian si hiciera falta
 	    if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {

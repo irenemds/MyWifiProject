@@ -10,7 +10,7 @@ import com.mdes.mywifi.chart.FrequencyGraphActivity;
 /**
  * Esta clase se emplea para crear las líneas que se representarán en
  * la gráfica de frecuencia.
- * Crean un pulso de 20 MHz de ancho.
+ * Crean un pulso de 20 MHz de ancho, lo que equivale a ocupar dos canales.
  *
  */
 public class BandWidthLine {
