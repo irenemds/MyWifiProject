@@ -4,6 +4,11 @@ import android.net.wifi.ScanResult;
 import android.util.Log;
 import android.util.SparseIntArray;
 
+/**
+ * 
+ * @author Usuario1
+ *
+ */
 public class Wifi {
 	public static int contador;
 	private String SSID;
@@ -18,6 +23,7 @@ public class Wifi {
 	private BandWidthLine bwLine;
 	private int color;
 	private int antennas;
+	private boolean security;
 
 	public Wifi(ScanResult scanResult){
 
@@ -25,6 +31,7 @@ public class Wifi {
 		BSSID = scanResult.BSSID;
 		freq = scanResult.frequency;
 		cap = scanResult.capabilities;
+		Log.i("SEG", "La red "+ SSID + ": "+ cap);
 		channel = (freq-2407)/5;
 		line = new Line(this);
 		levels = new SparseIntArray();
@@ -32,6 +39,10 @@ public class Wifi {
 		representable = true;
 		bwLine = new BandWidthLine(this);
 		antennas = 1;
+		if (cap.contains("WPA")||cap.contains("WEP")){
+			security = true;
+			Log.i("SEG", "La red "+ SSID + " tiene seguridad "+ cap);
+		}
 	}
 
 	public String getSSID() {
