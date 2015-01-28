@@ -126,7 +126,7 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 		//	Al pulsar sobre un elemento de la lista se abre una nueva actividad en la que se muestra 
 		//	información sobre ella.	
 		wifiClick = WifiMap.getWifi(resultWifiList.get(position).SSID);
-		//Si la red seleccionada es aquella a la que el móvil está conectada, se abre una
+/*		//Si la red seleccionada es aquella a la que el móvil está conectada, se abre una
 		//actividad distinta.
 		if(!resultWifiList.get(position).SSID.equals(HiloWifi.currentAP.getSSID()))
 		{
@@ -137,6 +137,8 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 			intent = new Intent(this, CurrentAPActivity.class);
 		}
 		//	Envía consigo el SSID de la red seleccionada.	
+		 */
+		intent = new Intent(this, NetInfoActivity.class);
 		intent.putExtra("SSID", wifiClick.getSSID());
 		startActivity(intent);
 	}

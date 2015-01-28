@@ -109,7 +109,6 @@ public class WifiMap {
 				Map.Entry e = (Map.Entry)it.next();
 				if(wifiMap.get(e.getKey()).isRepresentable()){
 					representableList.add((String) e.getKey());
-					Log.i("INFO"," "+ (String) e.getKey());
 				}}
 			representableArray = new String[representableList.size()];
 			for( int i = 0; i < representableArray.length; i++){

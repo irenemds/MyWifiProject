@@ -212,7 +212,7 @@ public class NetInfoActivity extends Activity {
 	
 	public void getInfo(){
 		String[] values;
-		if (wifi.getSSID() == HiloWifi.currentAP.getSSID())
+		if (wifi.getSSID().equals(HiloWifi.currentAP.getSSID()))
 		{
 	        values = new String[] { "BSSID: "+ wifi.getBSSID(), 
 	                "Frecuencia: " +Integer.toString(wifi.getFreq())+ " MHz",
