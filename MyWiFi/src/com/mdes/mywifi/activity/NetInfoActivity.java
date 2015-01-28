@@ -19,11 +19,16 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mdes.mywifi.CustomAdapter;
 import com.mdes.mywifi.HelpDialog;
+import com.mdes.mywifi.HiloWifi;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
@@ -32,6 +37,7 @@ import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
 import com.mdes.mywifi.chart.DialGraphActivity;
+import com.mdes.mywifi.chart.LinkSpeedGraphActivity;
 
 /**
  * En esta actividad se muestra información del punto de acceso seleccionado
@@ -40,15 +46,13 @@ import com.mdes.mywifi.chart.DialGraphActivity;
  */
 public class NetInfoActivity extends Activity {
 
+	private ListView lista;
+	
 	private Wifi wifi;
 	private TextView SSID;
-	private TextView CAP;
-	private TextView FREQ;
-	private TextView BSSID;
-	private TextView ANT;
-	private TextView CHAN;
-	private TextView LEVEL;
 	private ImageView IMAGE;
+	private Button buttonp;
+	private Button buttonv;
 
 
 	ActionBar actionBar = null;
@@ -59,7 +63,13 @@ public class NetInfoActivity extends Activity {
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
 
 	private GraphicalView mChartView;
-
+	
+	private String[] infoText;
+	private String[] descText;
+	
+	private int index;
+	private int offset;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		try{
@@ -68,35 +78,37 @@ public class NetInfoActivity extends Activity {
 
 			actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(false);
+			infoText = new String[1];
+			descText = new String[1];
 
-			SSID = (TextView) findViewById(R.id.SSID);
-			CAP = (TextView) findViewById(R.id.CAP);
-			FREQ = (TextView) findViewById(R.id.FREQ);
-			BSSID = (TextView) findViewById(R.id.BSSID);
-			CHAN = (TextView) findViewById(R.id.CHAN);
-			LEVEL = (TextView) findViewById(R.id.LEVEL);
 			IMAGE = (ImageView) findViewById(R.id.container);
-			ANT = (TextView) findViewById(R.id.ANT);
-			//Recibe SSID como extra, a partir de él consigue toda la información.
+		    lista = (ListView) findViewById(R.id.List2);
+		    SSID = (TextView) findViewById(R.id.SSID);
+		    buttonp = (Button) findViewById(R.id.buttonp);
+		    buttonv = (Button) findViewById(R.id.buttonv);
+		
 			Bundle extras = getIntent().getExtras();
 			wifi = WifiMap.getWifi(extras.getString("SSID"));
-
+			  
 			SSID.setText(wifi.getSSID());
-			BSSID.setText(wifi.getBSSID());
-			CAP.setText(wifi.getCap());
-			FREQ.setText(Integer.toString(wifi.getFreq())+ " MHz");
-			CHAN.setText(Integer.toString(wifi.getChannel()));
 			IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
-			ANT.setText(Integer.toString(wifi.getAntennas()));
+			getInfo();
+			
 			//BroadCastReceiver para manejar evento de tiempo,mostrar valores actualizados.
 			currentActivityReceiver = new BroadcastReceiver(){
 
 				@Override
 				public void onReceive(Context context, Intent intent) {
-					if(wifi.isRepresentable()){
-						LEVEL.setText(Integer.toString(wifi.getLastLevel()));
+					if(wifi.isRepresentable()){			
 						IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
-						ANT.setText(Integer.toString(wifi.getAntennas()));
+						try{
+							getScrollPosition();
+							getInfo();
+							setScrollPosition();
+							}catch (NullPointerException e){
+								e.printStackTrace();
+								LogManager lm = new LogManager(e);
+							}
 					}
 					else{
 						finish();
@@ -149,14 +161,6 @@ public class NetInfoActivity extends Activity {
 				helpDialog = new HelpDialog(this, text);
 				return true;
 
-
-			case R.id.medidor:
-				setResult(Activity.RESULT_OK);
-				Intent intent = new Intent(NetInfoActivity.this, DialGraphActivity.class);
-				intent.putExtra("SSID", wifi.getSSID());
-				startActivity(intent);
-				return true;
-
 			default:
 				return super.onOptionsItemSelected(item);
 			}
@@ -177,15 +181,6 @@ public class NetInfoActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		registerReceivers();
-		//		if (mChartView == null) {
-		//		    LinearLayout layout = (LinearLayout) findViewById(R.id.chart);
-		//		    mChartView = levelDialGraph.execute(this);
-		//		    layout.addView(mChartView, new LayoutParams
-		//		(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		//		    ...
-		//		  } else {
-		//		    mChartView.repaint();
-		//		  }
 	}
 
 	private void registerReceivers(){
@@ -199,6 +194,60 @@ public class NetInfoActivity extends Activity {
 		unregisterReceiver(wifiReceiver);
 		unregisterReceiver(wifiNotFoundReceiver);
 		unregisterReceiver(currentActivityReceiver);
+	}
+	
+	public void graphHandler (View view)
+	{
+		Intent intent = new Intent(NetInfoActivity.this, LinkSpeedGraphActivity.class);
+		intent.putExtra("SSID", wifi.getSSID());
+		startActivity(intent);
+	}
+
+	public void potenciometro (View view)
+	{
+		Intent intent = new Intent(NetInfoActivity.this, DialGraphActivity.class);
+		intent.putExtra("SSID", wifi.getSSID());
+		startActivity(intent);
+	}
+	
+	public void getInfo(){
+		String[] values;
+		if (wifi.getSSID() == HiloWifi.currentAP.getSSID())
+		{
+	        values = new String[] { "BSSID: "+ wifi.getBSSID(), 
+	                "Frecuencia: " +Integer.toString(wifi.getFreq())+ " MHz",
+	                "Canal: " + Integer.toString(wifi.getChannel()),
+	                "Número de repetidores: " + Integer.toString(wifi.getAntennas()), 
+	                "Propiedades: " + wifi.getCap(),
+	                "MAC: " + HiloWifi.currentAP.getMAC(),
+	                "IP: " + HiloWifi.currentAP.getIPString()            
+	               };
+	        buttonv.setEnabled(true);
+		}
+		else{
+	        values = new String[] { "BSSID: "+ wifi.getBSSID(), 
+	                "Frecuencia: " +Integer.toString(wifi.getFreq())+ " MHz",
+	                "Canal: " + Integer.toString(wifi.getChannel()),
+	                "Número de repetidores: " + Integer.toString(wifi.getAntennas()), 
+	                "Propiedades: " + wifi.getCap(),
+	                "MAC: - - - - - ",
+	                "IP: - - - - - "
+	               };	
+	        buttonv.setEnabled(false);
+		}
+		lista.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, android.R.id.text1, values));
+	}
+	//Guarda en las variables index y offset los valores necesarios
+	//para reestablecer la posición del scroll.
+	private void getScrollPosition(){
+		index = lista.getFirstVisiblePosition();	//primera posición visible (puede estar cortada)
+		View v = lista.getChildAt(0);
+		offset = (v == null) ? 0 : v.getTop();		//offset respecto a dicha posición
+	}
+
+	//Establece la posición del scroll con los valores conseguidos
+	private void setScrollPosition(){
+		lista.setSelectionFromTop(index, offset);	
 	}
 
 }
