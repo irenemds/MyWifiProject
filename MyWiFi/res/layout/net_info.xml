@@ -17,6 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/container"
         android:layout_centerHorizontal="true"
+        android:textColor="@android:color/darker_gray"
+        android:textStyle="bold" 
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
@@ -41,7 +43,7 @@
             android:id="@+id/buttonp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.38"
+            android:layout_weight="1.17"
             android:onClick="potenciometro"
             android:text="Potenciómetro" >
 

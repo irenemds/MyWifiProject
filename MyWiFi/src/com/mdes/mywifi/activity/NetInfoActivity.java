@@ -13,6 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mdes.mywifi.CustomAdapter;
 import com.mdes.mywifi.HelpDialog;
 import com.mdes.mywifi.HiloWifi;
 import com.mdes.mywifi.LogManager;
