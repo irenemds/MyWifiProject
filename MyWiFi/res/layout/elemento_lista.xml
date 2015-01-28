@@ -25,13 +25,21 @@
         android:singleLine="true"
         android:textSize="12sp" />
 
-    <ImageView
-        android:id="@+id/barraNivel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"
-        android:src="@drawable/ic_launcher" />
+        <ImageView
+            android:id="@+id/barraNivel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/seguridad"
+            android:layout_toRightOf="@+id/barraNivel"
+            android:src="@drawable/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/seguridad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/barraNivel"
+            android:src="@drawable/ic_launcher" />
     
 </RelativeLayout>

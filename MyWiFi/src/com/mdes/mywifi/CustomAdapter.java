@@ -2,7 +2,6 @@ package com.mdes.mywifi;
 
 import java.util.List;
 
-import android.R.color;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -31,6 +30,7 @@ public class CustomAdapter extends BaseAdapter {
 
 	private class ViewHolder {
 		ImageView barraNivel;
+		ImageView security;
 		TextView SSID;
 		TextView level;
 	}
@@ -49,6 +49,7 @@ public class CustomAdapter extends BaseAdapter {
 				holder.level = (TextView) vistaReciclada.findViewById(R.id.level);
 				holder.SSID = (TextView) vistaReciclada.findViewById(R.id.SSID);
 				holder.barraNivel = (ImageView) vistaReciclada.findViewById(R.id.barraNivel);
+				holder.security = (ImageView) vistaReciclada.findViewById(R.id.seguridad);
 				vistaReciclada.setTag(holder);
 			}
 			else {
@@ -70,23 +71,10 @@ public class CustomAdapter extends BaseAdapter {
 			}
 			
 			holder.barraNivel.setImageResource(WifiLevelImage.getWifiLevelImage(result.level));
-			
-//			//	Diferentes imágenes en función del nivel de señal
-//			if(result.level <=0 && result.level >-30){
-//				holder.barraNivel.setImageResource(R.drawable.signal5);}
-//			else if(result.level <=-30 && result.level >-50){
-//				holder.barraNivel.setImageResource(R.drawable.signal4);}
-//			else if(result.level <=-50 && result.level >-70){
-//				holder.barraNivel.setImageResource(R.drawable.signal3);}
-//			else if(result.level <=-70 && result.level >-80){
-//				holder.barraNivel.setImageResource(R.drawable.signal2);}
-//			if(result.level <=-80){
-//				holder.barraNivel.setImageResource(R.drawable.signal1);
+			holder.security.setImageResource(WifiSecurityImage.getWifiSecurityImage(result.SSID));
+//			if(posicion % 2 == 0){
+//				vistaReciclada.setBackgroundColor(color.darker_gray);
 //			}
-
-			if(posicion % 2 == 0){
-				vistaReciclada.setBackgroundColor(color.darker_gray);
-			}
 			
 		}catch(Exception e){
 			e.printStackTrace();

@@ -41,12 +41,18 @@ public class Wifi {
 		antennas = 1;
 		if (cap.contains("WPA")||cap.contains("WEP")){
 			security = true;
-			Log.i("SEG", "La red "+ SSID + " tiene seguridad "+ cap);
+		}
+		else{
+			Log.i("SEG", "La red "+ SSID + " no tiene seguridad ");
 		}
 	}
 
 	public String getSSID() {
 		return SSID;
+	}
+
+	public boolean isSecurity() {
+		return security;
 	}
 
 	public String getBSSID() {
