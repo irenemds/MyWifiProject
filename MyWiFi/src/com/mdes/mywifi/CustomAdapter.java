@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.R.color;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.wifi.ScanResult;
 import android.view.LayoutInflater;
@@ -57,6 +58,11 @@ public class CustomAdapter extends BaseAdapter {
 			ScanResult result = (ScanResult) getItem(posicion);
 
 			holder.level.setText(Integer.toString(result.level)+" dBm");
+			if (result.SSID.equals(HiloWifi.currentAP.getSSID()))
+			{
+				holder.SSID.setTypeface(Typeface.DEFAULT_BOLD);
+				holder.SSID.setTextColor(Color.parseColor("#009C8F"));
+			}
 			holder.SSID.setText(result.SSID); 
 			if (result.SSID == HiloWifi.currentAP.getSSID()){
 				holder.level.setTypeface(null, Typeface.BOLD);
