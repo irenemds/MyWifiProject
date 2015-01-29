@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
@@ -32,8 +34,11 @@ public class DynamicGraphActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		try{
 			super.onCreate(savedInstanceState);
+			
+			//Quitar título de la actividad y pantalla completa
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			
 			setContentView(R.layout.xy_chart);
-
 			
 			graphReceiver = new BroadcastReceiver(){
 				@Override

@@ -30,6 +30,8 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
@@ -55,6 +57,10 @@ public class DialGraphActivity extends Activity  {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		
+		//Quitar título de la actividad y pantalla completa
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		setContentView(R.layout.xy_chart);
 
 		registerReceivers();

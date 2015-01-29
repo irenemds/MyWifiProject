@@ -55,7 +55,6 @@ public class CurrentAP {
 		}
 		//Si no hay ningun punto de acceso conectado vacia todo
 		else{
-			Log.e("INFO","No está conectado a ningún AP");
 			SSID = " ";
 			MAC = " ";
 			BSSID = " ";

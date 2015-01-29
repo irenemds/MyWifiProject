@@ -16,6 +16,8 @@ import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
@@ -41,7 +43,12 @@ public class PieGraphActivity extends Activity {
 		try{ 
 			registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 			super.onCreate(savedInstanceState);
+			
+			//Quitar título de la actividad y pantalla completa
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 			setContentView(R.layout.xy_chart);
+			
 			layout = (LinearLayout) findViewById(R.id.chart);
 			getValues();
 			renderer.setChartTitle("Redes por canal");

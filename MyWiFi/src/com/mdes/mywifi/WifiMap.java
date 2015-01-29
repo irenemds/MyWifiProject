@@ -118,9 +118,8 @@ public class WifiMap {
 
 		for( int i = 0; i<representableArray.length; i++){
 			int channel = wifiMap.get(representableArray[i]).getChannel();
-			Log.i("INFO", " "+ channel);
 			if (channel <= 11){
-			channelAP[channel-1]++;
+				channelAP[channel-1]++;
 			}
 		}
 		return channelAP;

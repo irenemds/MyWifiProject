@@ -13,6 +13,8 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.WifiMap;
@@ -30,9 +32,6 @@ public class FrequencyGraphActivity extends Activity {
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
 
-
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//		try{
@@ -40,7 +39,12 @@ public class FrequencyGraphActivity extends Activity {
 		rendererSetUp();
 
 		super.onCreate(savedInstanceState);
+		
+		//Quitar título de la actividad y pantalla completa
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		setContentView(R.layout.xy_chart);
+		
 		view = ChartFactory.getLineChartView(this, FrequencyGraphActivity.mDataset, FrequencyGraphActivity.mRenderer);		
 		setContentView(view);
 		currentActivityReceiver = new BroadcastReceiver(){
