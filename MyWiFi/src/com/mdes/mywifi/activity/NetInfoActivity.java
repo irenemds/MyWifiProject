@@ -90,7 +90,9 @@ public class NetInfoActivity extends Activity {
 		    buttonv = (Button) findViewById(R.id.buttonv);
 		
 			Bundle extras = getIntent().getExtras();
-			wifi = WifiMap.getWifi(extras.getString("SSID"));
+			Log.i("BSSID", "recibo" + extras.getString("BSSID"));
+			wifi = WifiMap.wifiMap.get(extras.getString("BSSID"));
+//					WifiMap.getWifi(extras.getString("SSID"));
 			  
 			SSID.setText(wifi.getSSID());
 			IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
@@ -147,7 +149,7 @@ public class NetInfoActivity extends Activity {
 				try {
 					filewriter = new FileWriter(file);
 					BufferedWriter out = new BufferedWriter(filewriter);
-					out.write(WifiMap.getCSV(wifi.getSSID()));
+					out.write(WifiMap.getCSV(wifi.getBSSID()));
 					out.close();
 				} catch (IOException e) {
 					LogManager lm = new LogManager(e);
@@ -201,20 +203,20 @@ public class NetInfoActivity extends Activity {
 	public void graphHandler (View view)
 	{
 		Intent intent = new Intent(NetInfoActivity.this, LinkSpeedGraphActivity.class);
-		intent.putExtra("SSID", wifi.getSSID());
+		intent.putExtra("BSSID", wifi.getBSSID());
 		startActivity(intent);
 	}
 
 	public void potenciometro (View view)
 	{
 		Intent intent = new Intent(NetInfoActivity.this, DialGraphActivity.class);
-		intent.putExtra("SSID", wifi.getSSID());
+		intent.putExtra("BSSID", wifi.getBSSID());
 		startActivity(intent);
 	}
 	
 	public void getInfo(){
 		String[] values;
-		if (wifi.getSSID().equals(HiloWifi.currentAP.getSSID()))
+		if (wifi.getBSSID().equals(HiloWifi.currentAP.getBSSID()))
 		{
 	        values = new String[] { "BSSID: "+ wifi.getBSSID(), 
 	                "Frecuencia: " +Integer.toString(wifi.getFreq())+ " MHz",

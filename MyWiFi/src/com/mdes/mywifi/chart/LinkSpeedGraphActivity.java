@@ -69,7 +69,7 @@ public class LinkSpeedGraphActivity extends Activity{
 				@Override
 				public void onReceive(Context context, Intent intent) {
 					Bundle extras = getIntent().getExtras();
-					if(HiloWifi.currentAP.getSSID().equals(extras.getString("SSID"))){
+					if(HiloWifi.currentAP.getBSSID().equals(extras.getString("BSSID"))){
 						LinkSpeedGraphActivity.mRenderer.setYAxisMax(100);
 						LinkSpeedGraphActivity.mRenderer.setYAxisMin(0);
 						if(Wifi.contador > 15){

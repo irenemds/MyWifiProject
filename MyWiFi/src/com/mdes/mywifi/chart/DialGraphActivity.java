@@ -66,7 +66,7 @@ public class DialGraphActivity extends Activity  {
 		registerReceivers();
 
 		Bundle extras = getIntent().getExtras();
-		wifi = WifiMap.getWifi(extras.getString("SSID"));
+		wifi = WifiMap.wifiMap.get(extras.getString("BSSID"));
 
 		setUp();
 

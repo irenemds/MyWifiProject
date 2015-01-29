@@ -71,7 +71,7 @@ public class CustomAdapter extends BaseAdapter {
 			}
 			
 			holder.barraNivel.setImageResource(WifiLevelImage.getWifiLevelImage(result.level));
-			holder.security.setImageResource(WifiSecurityImage.getWifiSecurityImage(result.SSID));
+			holder.security.setImageResource(WifiSecurityImage.getWifiSecurityImage(result.BSSID));
 //			if(posicion % 2 == 0){
 //				vistaReciclada.setBackgroundColor(color.darker_gray);
 //			}

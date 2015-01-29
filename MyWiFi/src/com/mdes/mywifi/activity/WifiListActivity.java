@@ -10,8 +10,8 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -67,15 +67,13 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 
 			super.onCreate(savedInstanceState);
 
-			//Quitar título de la actividad
-//			requestWindowFeature(Window.FEATURE_NO_TITLE);
-			
+			//Activar pantalla completa			
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			
 			//Asigna el layout a visualizar
 			setContentView(R.layout.main_menu);
 			
-			
+			//Inicia servicio controlador de Wifi
 			wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 			
 			//Se inicia el hilo, este será el que realice los escaneos periódicos
@@ -134,21 +132,11 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 	public void onItemClick(AdapterView parent, View v, int position, long id) {
 		//	Al pulsar sobre un elemento de la lista se abre una nueva actividad en la que se muestra 
 		//	información sobre ella.	
-		wifiClick = WifiMap.getWifi(resultWifiList.get(position).SSID);
-/*		//Si la red seleccionada es aquella a la que el móvil está conectada, se abre una
-		//actividad distinta.
-		if(!resultWifiList.get(position).SSID.equals(HiloWifi.currentAP.getSSID()))
-		{
-			intent = new Intent(this, NetInfoActivity.class);
-		}
-		else
-		{
-			intent = new Intent(this, CurrentAPActivity.class);
-		}
-		//	Envía consigo el SSID de la red seleccionada.	
-		 */
+		wifiClick = WifiMap.wifiMap.get(resultWifiList.get(position).BSSID);
+
 		intent = new Intent(this, NetInfoActivity.class);
-		intent.putExtra("SSID", wifiClick.getSSID());
+		intent.putExtra("BSSID", resultWifiList.get(position).BSSID);
+		Log.i("BSSID","METO EXTRA BSSID"+resultWifiList.get(position).BSSID);
 		startActivity(intent);
 	}
 

@@ -31,7 +31,6 @@ public class Wifi {
 		BSSID = scanResult.BSSID;
 		freq = scanResult.frequency;
 		cap = scanResult.capabilities;
-		Log.i("SEG", "La red "+ SSID + ": "+ cap);
 		channel = (freq-2407)/5;
 		line = new Line(this);
 		levels = new SparseIntArray();
@@ -41,9 +40,6 @@ public class Wifi {
 		antennas = 1;
 		if (cap.contains("WPA")||cap.contains("WEP")){
 			security = true;
-		}
-		else{
-			Log.i("SEG", "La red "+ SSID + " no tiene seguridad ");
 		}
 	}
 

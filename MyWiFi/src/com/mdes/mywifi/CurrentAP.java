@@ -35,7 +35,7 @@ public class CurrentAP {
 		if(HiloWifi.currentAP != null){
 			//Comprueba si está conectado al mismo punto de acceso que 
 			//el que ya tenía almacenado, si es distinto actualiza
-			if (!SSID.equals(wifiInfo.getSSID())){
+			if (!BSSID.equals(wifiInfo.getBSSID())){
 				SSID = wifiInfo.getSSID();
 				MAC = wifiInfo.getMacAddress();
 				BSSID = wifiInfo.getBSSID();
