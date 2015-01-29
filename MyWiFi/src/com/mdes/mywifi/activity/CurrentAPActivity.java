@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,10 +61,15 @@ public class CurrentAPActivity extends Activity {
 		try{
 			registerReceivers();
 			super.onCreate(savedInstanceState);
+			
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			
 			setContentView(R.layout.currentapinfo);
-			registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+			
+//			registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+			
 			actionBar = getActionBar();
-			actionBar.setDisplayHomeAsUpEnabled(false);
+			actionBar.setDisplayHomeAsUpEnabled(true);
 
 			SSID = (TextView) findViewById(R.id.SSID);
 			CAP = (TextView) findViewById(R.id.CAP);

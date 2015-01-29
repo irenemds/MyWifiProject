@@ -93,6 +93,7 @@ public class Wifi {
 	}
 	
 	public void updateAP (ScanResult scanResult){
+		antennas++;
 		freq = scanResult.frequency;
 		cap = scanResult.capabilities;
 		saveLevel(scanResult.level);
@@ -120,10 +121,6 @@ public class Wifi {
 
 	public void setAntennas(int antennas) {
 		this.antennas = antennas;
-	}
-	
-	public void addAntennas() {
-		antennas++;
 	}
 
 	public void setRepresentable (boolean x){

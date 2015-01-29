@@ -58,7 +58,7 @@ public class WifiMap {
 				else
 				{				
 					wifiMap.get(resultWifiList.get(i).SSID).updateAP(resultWifiList.get(i));
-					wifiMap.get(resultWifiList.get(i).SSID).addAntennas();
+//					wifiMap.get(resultWifiList.get(i).SSID).setAntennas(1);
 					wifiMap.get(resultWifiList.get(i).SSID).setRepresentable(true);
 				}
 			}
@@ -77,18 +77,11 @@ public class WifiMap {
 		}
 	}
 	
-	/**
-	 * Esta función guarda -120 en todas las redes del HashMap,
-	 * para demostrar que no se ha encontrado ninguna de ellas.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static void putZeros(){
-		Iterator it = wifiMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry e = (Map.Entry)it.next();
-			wifiMap.get(e.getKey()).setRepresentable(false);
-		}
+	
+	public static void reset(){
+		wifiMap = new HashMap<String,Wifi>();
 	}
+	
 
 	public static Wifi getWifi(String SSID){
 		return wifiMap.get(SSID);
@@ -194,17 +187,25 @@ public class WifiMap {
 	 * Actualiza el valor del parámetro antennas de la clase Wifi
 	 * @param SSIDList lista de SSID de las redes encontradas en el último escaneo
 	 */
-	public void setAllAntennaNumber(List<String> SSIDList)
-	{ 
-	  final Set<String> antennaList = new HashSet(); 
-	  final Set<String> set1 = new HashSet();
-
-	  for (String AP : SSIDList)
-	  {
-	   if (!set1.add(AP))
-	   {
-	    wifiMap.get(AP).addAntennas();
-	   }
-	  }
+//	public void setAllAntennaNumber(List<String> SSIDList)
+//	{ 
+//	  final Set<String> antennaList = new HashSet(); 
+//	  final Set<String> set1 = new HashSet();
+//
+//	  for (String AP : SSIDList)
+//	  {
+//	   if (!set1.add(AP))
+//	   {
+//	    wifiMap.get(AP).addAntennas();
+//	   }
+//	  }
+//	}
+	
+	private void resetAntennas(){
+		Iterator it = wifiMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry e = (Map.Entry)it.next();
+			wifiMap.get(e.getKey()).setAntennas(0);
+		}
 	}
 }

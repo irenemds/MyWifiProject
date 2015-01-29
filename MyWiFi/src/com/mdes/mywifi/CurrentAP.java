@@ -45,6 +45,11 @@ public class CurrentAP {
 				line = new Line();
 				createList(lastLinkSpeed);
 			}
+			//Vuelve a poner la IP por si acaso quedó en null
+			else{
+				IP = wifiInfo.getIpAddress();
+				formatIP();
+			}
 			lastLinkSpeed = wifiInfo.getLinkSpeed();
 			saveSpeedValue(lastLinkSpeed);
 		}
@@ -153,8 +158,8 @@ public class CurrentAP {
 	}
 
 
-	public void setIP(int iP) {
-		IP = IP;
+	public void setIP(int IP) {
+		this.IP = IP;
 	}
 	/**
 	 * Esta función formatea el valor de la IP obtenido mediante 

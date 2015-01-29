@@ -11,6 +11,8 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -64,8 +66,15 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 		try{
 
 			super.onCreate(savedInstanceState);
+
+			//Quitar título de la actividad
+//			requestWindowFeature(Window.FEATURE_NO_TITLE);
+			
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			
 			//Asigna el layout a visualizar
 			setContentView(R.layout.main_menu);
+			
 			
 			wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 			
@@ -162,7 +171,7 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 		if (wifiManager.isWifiEnabled()==true && resultWifiList != null){
 			WifiMap.putValue(resultWifiList);
 		}else{
-			WifiMap.putZeros();
+			WifiMap.reset();
 		}
 
 	}

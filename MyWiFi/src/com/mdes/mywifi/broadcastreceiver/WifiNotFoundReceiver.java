@@ -3,6 +3,7 @@ package com.mdes.mywifi.broadcastreceiver;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.R.id;
 import com.mdes.mywifi.R.layout;
+import com.mdes.mywifi.WifiMap;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -29,6 +30,9 @@ public class WifiNotFoundReceiver extends BroadcastReceiver {
 		if(!intent.getBooleanExtra("WifiFound", false)&& !isDialog){
 
 			Log.i("INFO","No hay redes");
+			
+			WifiMap.reset();
+			
 			dialog = new Dialog(c);
 
 			dialog.setContentView(R.layout.no_wifi_layout);

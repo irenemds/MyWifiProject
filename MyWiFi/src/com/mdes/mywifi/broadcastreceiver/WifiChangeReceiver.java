@@ -3,6 +3,7 @@ package com.mdes.mywifi.broadcastreceiver;
 
 import com.mdes.mywifi.CurrentAP;
 import com.mdes.mywifi.HiloWifi;
+import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.activity.WifiListActivity;
 
 import android.app.AlertDialog;
@@ -32,6 +33,7 @@ public class WifiChangeReceiver extends BroadcastReceiver {
 		//Si está desactivado muestra un diálogo	
 		case WifiManager.WIFI_STATE_DISABLED:
 			Log.i("INFO", "Broadcast -  Wifi off");
+			WifiMap.reset();
 			wifiAlertDialog(c);
 			break;
 		//Si se activa el contenido es sólo para informar

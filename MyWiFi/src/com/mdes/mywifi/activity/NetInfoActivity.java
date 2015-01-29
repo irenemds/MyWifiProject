@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -74,12 +75,13 @@ public class NetInfoActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		try{
 			super.onCreate(savedInstanceState);
+			
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			
 			setContentView(R.layout.net_info);
 
 			actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(false);
-			infoText = new String[1];
-			descText = new String[1];
 
 			IMAGE = (ImageView) findViewById(R.id.container);
 		    lista = (ListView) findViewById(R.id.List2);

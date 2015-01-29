@@ -24,7 +24,7 @@
     <ListView
         android:id="@+id/List2"
         android:layout_width="wrap_content"
-        android:layout_height="408dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/LinearLayout02"
         android:layout_alignParentLeft="false"
         android:layout_alignParentRight="false"
@@ -35,13 +35,14 @@
     <LinearLayout
         android:id="@+id/LinearLayout02"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_alignParentBottom="true" >
 
         <Button
             android:id="@+id/buttonp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_weight="1.17"
             android:onClick="potenciometro"
             android:text="Potenciómetro" >
@@ -52,9 +53,11 @@
             android:id="@+id/buttonv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_weight="1.92"
             android:onClick="graphHandler"
             android:text="V. enlace" >
+
         </Button>
     </LinearLayout>
 
