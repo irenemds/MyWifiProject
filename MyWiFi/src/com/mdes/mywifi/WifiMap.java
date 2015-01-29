@@ -57,7 +57,7 @@ public class WifiMap {
 				//Si existe guardar el último valor de potencia obtenido.
 				else
 				{				
-					wifiMap.get(resultWifiList.get(i).SSID).saveLevel(resultWifiList.get(i).level);
+					wifiMap.get(resultWifiList.get(i).SSID).updateAP(resultWifiList.get(i));
 					wifiMap.get(resultWifiList.get(i).SSID).setAntennas(1);
 					wifiMap.get(resultWifiList.get(i).SSID).setRepresentable(true);
 				}
@@ -68,8 +68,6 @@ public class WifiMap {
 			while (it.hasNext()) {
 				Map.Entry e = (Map.Entry)it.next();
 				if(!SSIDList.contains(e.getKey())){
-					wifiMap.get(e.getKey()).saveLevel(-120);
-					wifiMap.get(e.getKey()).setAntennas(0);
 					wifiMap.get(e.getKey()).setRepresentable(false);
 				}
 			}
@@ -88,7 +86,6 @@ public class WifiMap {
 		Iterator it = wifiMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry e = (Map.Entry)it.next();
-			wifiMap.get(e.getKey()).saveLevel(-120);
 			wifiMap.get(e.getKey()).setRepresentable(false);
 		}
 	}

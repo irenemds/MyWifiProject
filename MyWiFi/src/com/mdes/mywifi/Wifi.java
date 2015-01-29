@@ -91,8 +91,16 @@ public class Wifi {
 		}
 		saveLevel(level);
 	}
+	
+	public void updateAP (ScanResult scanResult){
+		freq = scanResult.frequency;
+		cap = scanResult.capabilities;
+		saveLevel(scanResult.level);
+		channel = (freq-2407)/5;
+		
+	}
 
-	public void saveLevel(int level){
+	private void saveLevel(int level){
 		//Gestión de repetidores, guardarlo una única vez, sólo el mayor valor de potencia
 		if(levels.get(contador) == 0 || levels.get(contador) < level ){	
 			levels.append(contador, level);
@@ -120,6 +128,10 @@ public class Wifi {
 
 	public void setRepresentable (boolean x){
 		representable = x;
+		if (!x){
+		saveLevel(-120);
+		antennas = 0;
+		}
 	}
 
 	public String getAPCSV(){
