@@ -58,7 +58,7 @@ public class WifiMap {
 				else
 				{				
 					wifiMap.get(resultWifiList.get(i).SSID).updateAP(resultWifiList.get(i));
-					wifiMap.get(resultWifiList.get(i).SSID).setAntennas(1);
+					wifiMap.get(resultWifiList.get(i).SSID).addAntennas();
 					wifiMap.get(resultWifiList.get(i).SSID).setRepresentable(true);
 				}
 			}
