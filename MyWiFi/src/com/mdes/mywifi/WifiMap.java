@@ -2,15 +2,17 @@ package com.mdes.mywifi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import com.mdes.mywifi.chart.DynamicGraphActivity;
+import com.mdes.mywifi.chart.MultipleGraph;
 
 import android.graphics.Color;
 import android.net.wifi.ScanResult;
 import android.util.Log;
+import android.webkit.WebView.FindListener;
 
 /**
  * Esta clase contiene y gestiona el HashMap que almacena todos los objetos
@@ -30,6 +32,7 @@ public class WifiMap {
 	public static List<String> representableList = new ArrayList<String>();	
 	public static String[] representableArray;
 	private static int aux = 0;
+	private static HashMap<String, Integer> SSIDList;
 
 
 	/**
@@ -39,56 +42,65 @@ public class WifiMap {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static void putValue(List<ScanResult> resultWifiList){
-//		try{
-			BSSIDList = new ArrayList<String>();
+		//		try{
 
-			for (int i = 0; i < resultWifiList.size(); i++) {
-				BSSIDList.add(resultWifiList.get(i).BSSID);
-				
-				//Comprobar si la red ya existe en el HashMap
-				//Si no existe
-				if (!wifiMap.containsKey(resultWifiList.get(i).BSSID)){
-					//Crear nuevo objeto de la clase Wifi con ella
-					Wifi wifi = new Wifi(resultWifiList.get(i));
-					wifiMap.put(resultWifiList.get(i).BSSID, wifi);
-					Log.i("BSSID","Se guarda nueva la red de BSSID: "+ resultWifiList.get(i).BSSID);
-					wifiMap.get(resultWifiList.get(i).BSSID).setColor(calculateColor());
-					aux++;
-				}
-				//Si existe guardar el último valor de potencia obtenido.
-				else
-				{				
-					wifiMap.get(resultWifiList.get(i).BSSID).updateAP(resultWifiList.get(i));
-//					wifiMap.get(resultWifiList.get(i).BSSID).setAntennas(1);
-					wifiMap.get(resultWifiList.get(i).BSSID).setRepresentable(true);
-				}
+		resetAntennas();
+		BSSIDList = new ArrayList<String>();
+		SSIDList = new HashMap<String, Integer>();
+
+		for (int i = 0; i < resultWifiList.size(); i++) {
+			BSSIDList.add(resultWifiList.get(i).BSSID);
+
+			//Comprobar si la red ya existe en el HashMap
+			//Si no existe
+			if (!wifiMap.containsKey(resultWifiList.get(i).BSSID)){
+				//Crear nuevo objeto de la clase Wifi con ella
+				Wifi wifi = new Wifi(resultWifiList.get(i));
+				wifiMap.put(resultWifiList.get(i).BSSID, wifi);
+				wifiMap.get(resultWifiList.get(i).BSSID).setColor(calculateColor());
+				aux++;					
 			}
-			//Las redes que no han sido encontradas en el último escaneo
-			//se guardan con valor -120 (suficientemente bajo)
-			Iterator it = wifiMap.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry e = (Map.Entry)it.next();
-				if(!BSSIDList.contains(e.getKey())){
-					wifiMap.get(e.getKey()).setRepresentable(false);
+			//Si existe guardar el último valor de potencia obtenido.
+			else
+			{				
+				wifiMap.get(resultWifiList.get(i).BSSID).updateAP(resultWifiList.get(i));
+				if (!wifiMap.get(resultWifiList.get(i).BSSID).isRepresentable() 
+						&& WifiThread.isGraph 
+						&& !wifiMap.get(resultWifiList.get(i).BSSID).getLine().isShown())
+				{
+					Log.i("TREN","Añadoooooo: " + resultWifiList.get(i).SSID);
+					MultipleGraph.addSingleLine(wifiMap.get(resultWifiList.get(i).BSSID));
 				}
+				wifiMap.get(resultWifiList.get(i).BSSID).setRepresentable(true);
 			}
-//		}catch (Exception e){
-//			e.printStackTrace();
-//			LogManager lm = new LogManager(e);
-//		}
+			if (!SSIDList.containsKey(resultWifiList.get(i).SSID)){
+				SSIDList.put(resultWifiList.get(i).SSID,1);
+			}
+			else{
+				findBSSID(resultWifiList.get(i).SSID);
+			}
+		}
+		//Las redes que no han sido encontradas en el último escaneo
+		//se guardan con valor -120 (suficientemente bajo)
+		Iterator it = wifiMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry e = (Map.Entry)it.next();
+			if(!BSSIDList.contains(e.getKey())){
+				wifiMap.get(e.getKey()).setRepresentable(false);
+			}
+		}
+		//		}catch (Exception e){
+		//			e.printStackTrace();
+		//			LogManager lm = new LogManager(e);
+		//		}
 	}
-	
-	
+
+
 	public static void reset(){
 		Log.i("BSSID","RESET");
 		wifiMap = new HashMap<String,Wifi>();
 	}
-	
-//
-//	public static Wifi getWifi(String SSID){
-//		return wifiMap.get(SSID);
-//	}
-	
+
 	/**
 	 * Esta función obtiene las BSSID de todas las redes "representables"
 	 * del HashMap.
@@ -96,17 +108,17 @@ public class WifiMap {
 	@SuppressWarnings("rawtypes")
 	public static void getRepresentableKey(){
 
-			representableList = new ArrayList<String>();
-			Iterator it = wifiMap.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry e = (Map.Entry)it.next();
-				if(wifiMap.get(e.getKey()).isRepresentable()){
-					representableList.add((String) e.getKey());
-				}}
-			representableArray = new String[representableList.size()];
-			for( int i = 0; i < representableArray.length; i++){
-				representableArray[i] = representableList.get(i);
-			}
+		representableList = new ArrayList<String>();
+		Iterator it = wifiMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry e = (Map.Entry)it.next();
+			if(wifiMap.get(e.getKey()).isRepresentable()){
+				representableList.add((String) e.getKey());
+			}}
+		representableArray = new String[representableList.size()];
+		for( int i = 0; i < representableArray.length; i++){
+			representableArray[i] = representableList.get(i);
+		}
 	}
 
 	/**
@@ -154,7 +166,7 @@ public class WifiMap {
 		}
 		return i;
 	}
-	
+
 	/**
 	 * Esta función obtiene el mínimo nivel de potencia de los obtenidos 
 	 * en el último escaneo.
@@ -182,15 +194,40 @@ public class WifiMap {
 		if(aux > colors.length-1){
 			aux = aux-colors.length*aux/colors.length;
 		}	
-//		aux++;
+		//		aux++;
 		return colors[aux];
 	}
-	
-	private void resetAntennas(){
+
+	private static void resetAntennas(){
 		Iterator it = wifiMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry e = (Map.Entry)it.next();
-			wifiMap.get(e.getKey()).setAntennas(0);
+			wifiMap.get(e.getKey()).setAntennas(1);
 		}
 	}
+
+	public static void resetLines(){
+		Iterator it = wifiMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry e = (Map.Entry)it.next();
+			Line line = wifiMap.get(e.getKey()).getLine();
+			line.setShown(false);
+		}
+	}
+	
+	private static void findBSSID (String SSID){
+		ArrayList<String> list = new ArrayList<String>();
+		Iterator it = wifiMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry e = (Map.Entry)it.next();
+			if (wifiMap.get(e.getKey()).getSSID().equals(SSID)){
+				list.add(wifiMap.get(e.getKey()).getBSSID());
+			}
+		}
+		for(int i = 0; i<list.size(); i++){
+			wifiMap.get(list.get(i)).setAntennas(list.size());			
+		}
+
+	}
+
 }

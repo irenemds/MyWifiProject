@@ -29,7 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.mdes.mywifi.HelpDialog;
-import com.mdes.mywifi.HiloWifi;
+import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
@@ -216,15 +216,15 @@ public class NetInfoActivity extends Activity {
 	
 	public void getInfo(){
 		String[] values;
-		if (wifi.getBSSID().equals(HiloWifi.currentAP.getBSSID()))
+		if (wifi.getBSSID().equals(WifiThread.currentAP.getBSSID()))
 		{
 	        values = new String[] { "BSSID: "+ wifi.getBSSID(), 
 	                "Frecuencia: " +Integer.toString(wifi.getFreq())+ " MHz",
 	                "Canal: " + Integer.toString(wifi.getChannel()),
 	                "Número de repetidores: " + Integer.toString(wifi.getAntennas()), 
 	                "Propiedades: " + wifi.getCap(),
-	                "MAC: " + HiloWifi.currentAP.getMAC(),
-	                "IP: " + HiloWifi.currentAP.getIPString()            
+	                "MAC: " + WifiThread.currentAP.getMAC(),
+	                "IP: " + WifiThread.currentAP.getIPString()            
 	               };
 	        buttonv.setEnabled(true);
 		}

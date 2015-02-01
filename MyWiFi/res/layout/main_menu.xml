@@ -7,7 +7,8 @@
         android:id="@+id/List1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/LL02" />
+        android:layout_above="@+id/LL02"
+        android:layout_alignParentTop="true" />
 
     <LinearLayout
         android:id="@+id/LL02"

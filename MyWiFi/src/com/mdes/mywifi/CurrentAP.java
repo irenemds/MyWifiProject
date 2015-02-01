@@ -32,7 +32,7 @@ public class CurrentAP {
 	 */
 	public void updateAP(WifiInfo wifiInfo){
 		//Comprueba si el dispositivo está conectado a alguna red
-		if(HiloWifi.currentAP != null){
+		if(WifiThread.currentAP != null){
 			//Comprueba si está conectado al mismo punto de acceso que 
 			//el que ya tenía almacenado, si es distinto actualiza
 			if (!BSSID.equals(wifiInfo.getBSSID())){

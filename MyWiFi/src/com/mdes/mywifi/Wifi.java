@@ -89,7 +89,6 @@ public class Wifi {
 	}
 	
 	public void updateAP (ScanResult scanResult){
-		antennas++;
 		freq = scanResult.frequency;
 		cap = scanResult.capabilities;
 		saveLevel(scanResult.level);
@@ -122,8 +121,9 @@ public class Wifi {
 	public void setRepresentable (boolean x){
 		representable = x;
 		if (!x){
-		saveLevel(-120);
-		antennas = 0;
+			saveLevel(-120);
+			antennas = 0;
+//			line.deleteLine();
 		}
 	}
 
@@ -163,6 +163,10 @@ public class Wifi {
 		}
 		Log.i("INFO", "Mínimo: " + min);
 		return min;
+	}
+	
+	public Line getLine(){
+		return line;
 	}
 
 }

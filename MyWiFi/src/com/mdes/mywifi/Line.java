@@ -17,23 +17,33 @@ public class Line {
 	private TimeSeries dataset; 
 	private XYSeriesRenderer renderer = new XYSeriesRenderer();
 	private int[] colors = {Color.MAGENTA, Color.WHITE, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW};
+	private boolean shown;
 
 	public Line(Wifi wifi)
 	{
-		dataset = new TimeSeries(wifi.getSSID()); 
-		MultipleGraph.mDataset.addSeries(dataset);
+		dataset = new TimeSeries(wifi.getSSID());
 		lineNumber++;
 		setColor();
+		shown = true;
 		renderer.setFillPoints(true);
 		renderer.setLineWidth(4);
 		renderer.setPointStyle(PointStyle.CIRCLE);
 		renderer.setFillPoints(true);
-		renderer.setDisplayChartValues(true);
+//		renderer.setDisplayChartValues(true);
 		renderer.setChartValuesTextSize(15);
 		renderer.setDisplayChartValuesDistance(10);
-
-		MultipleGraph.mRenderer.addSeriesRenderer(renderer);	
 	}
+	
+
+	public boolean isShown() {
+		return shown;
+	}
+
+
+	public void setShown(boolean shown) {
+		this.shown = shown;
+	}
+
 
 	public Line()
 	{
@@ -71,4 +81,51 @@ public class Line {
 			LogManager lm = new LogManager(e);
 		}
 	}
+
+
+	public TimeSeries getDataset() {
+		return dataset;
+	}
+
+
+	public void setDataset(TimeSeries dataset) {
+		this.dataset = dataset;
+	}
+
+
+	public XYSeriesRenderer getRenderer() {
+		return renderer;
+	}
+
+
+	public void setRenderer(XYSeriesRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+	
+//	public void deleteLine(){
+//		MultipleGraph.mDataset.r
+//		shown = false;
+//	}
+//	
+//	public void addLine(){
+//		MultipleGraph.mDataset.addSeries(dataset);
+//		shown = true;
+//	}
+//
+//	public boolean isshown() {
+//		return shown;
+//	}
+	
+//	public void createGraph(){
+//		for( int i = 0; i < WifiMap.representableArray.length; i++){
+//			String BSSID = WifiMap.representableArray[i];
+//			Wifi wifi = WifiMap.wifiMap.get(BSSID);
+//			Line line = wifi.getLine();
+//			
+//			dataset = new TimeSeries(wifi.getSSID()); 
+//			MultipleGraph.mDataset.addSeries(dataset);
+//		}
+//		
+//	}
 }

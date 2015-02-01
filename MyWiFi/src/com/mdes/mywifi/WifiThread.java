@@ -5,15 +5,17 @@ import java.util.List;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.mdes.mywifi.activity.WifiListActivity;
+import com.mdes.mywifi.chart.DynamicGraphActivity;
 import com.mdes.mywifi.chart.FrequencyGraphActivity;
 import com.mdes.mywifi.chart.MultipleGraph;
 /**
@@ -23,7 +25,7 @@ import com.mdes.mywifi.chart.MultipleGraph;
  * Manda mensajes BroadCast que son interpretados por las actividades.
  *
  */
-public class HiloWifi extends Thread{
+public class WifiThread extends Thread{
     /**
      * Control de ejecución del hilo
      */
@@ -42,12 +44,13 @@ public class HiloWifi extends Thread{
     public static CurrentAP currentAP = new CurrentAP();
     
     public static SupplicantState supState; 
+    public static boolean isGraph;
  
     /**
      * HiloWifi, inicializa el hilo, dándole valor a sus principales atributos
      * @param wifiList objeto de la clase WifiList, obtiene WifiManager y Contexto
      */
-    public HiloWifi(WifiListActivity wifiList){
+    public WifiThread(WifiListActivity wifiList){
  
         wifiMap = new WifiMap();
         this.wifiList = wifiList;
@@ -55,6 +58,7 @@ public class HiloWifi extends Thread{
  
         //La variabe bucle solo será false cuando lo indique alguna de las actividades
         bucle = true;
+        isGraph = false;
  
         MultipleGraph multipleGraph = new MultipleGraph();}
  
@@ -104,6 +108,7 @@ public class HiloWifi extends Thread{
                         wifiList.sendBroadcast(i);
                     }       
                 }
+                WifiMap.getRepresentableKey();
                 //Actualiza los valores de resultados en WifiList
                 wifiList.updateValues(resultWifiList);
                  
@@ -113,7 +118,7 @@ public class HiloWifi extends Thread{
             }
             Wifi.contador++;
             try {
-                sleep(500);
+                sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

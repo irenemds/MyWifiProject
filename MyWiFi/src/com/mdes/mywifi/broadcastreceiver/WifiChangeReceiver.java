@@ -2,7 +2,7 @@ package com.mdes.mywifi.broadcastreceiver;
 
 
 import com.mdes.mywifi.CurrentAP;
-import com.mdes.mywifi.HiloWifi;
+import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.activity.WifiListActivity;
 
@@ -28,7 +28,7 @@ public class WifiChangeReceiver extends BroadcastReceiver {
 		switch(extraWifiState){
 		//Si se está desactivando ya no estaremos conectados a ninguna red
 		case WifiManager.WIFI_STATE_DISABLING:
-			HiloWifi.currentAP = new CurrentAP();
+			WifiThread.currentAP = new CurrentAP();
 			break;
 		//Si está desactivado muestra un diálogo	
 		case WifiManager.WIFI_STATE_DISABLED:

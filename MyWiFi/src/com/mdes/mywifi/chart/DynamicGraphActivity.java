@@ -10,11 +10,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
+import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
@@ -29,6 +30,8 @@ public class DynamicGraphActivity extends Activity {
 	private GraphicalView mChartView;
 	private BroadcastReceiver graphReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +72,17 @@ public class DynamicGraphActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-	unRegistrerReceivers();
-
+		WifiThread.isGraph = false;
+		unRegistrerReceivers();
+		MultipleGraph.deleteGraph();
 	}
 	@Override
 	protected void onResume() {
+		Log.i("GRAPH","ON RESUME DE DYNAMIC GRAPH");
 		try{
 			super.onResume();
+			WifiThread.isGraph = true;
+			MultipleGraph.createGraph();
 			if (mChartView == null) {
 				LinearLayout layout = new LinearLayout(this);
 				layout.setOrientation(LinearLayout.VERTICAL);

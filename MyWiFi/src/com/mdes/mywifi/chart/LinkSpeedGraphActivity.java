@@ -18,7 +18,7 @@ import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
-import com.mdes.mywifi.HiloWifi;
+import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
@@ -69,7 +69,7 @@ public class LinkSpeedGraphActivity extends Activity{
 				@Override
 				public void onReceive(Context context, Intent intent) {
 					Bundle extras = getIntent().getExtras();
-					if(HiloWifi.currentAP.getBSSID().equals(extras.getString("BSSID"))){
+					if(WifiThread.currentAP.getBSSID().equals(extras.getString("BSSID"))){
 						LinkSpeedGraphActivity.mRenderer.setYAxisMax(100);
 						LinkSpeedGraphActivity.mRenderer.setYAxisMin(0);
 						if(Wifi.contador > 15){

@@ -18,7 +18,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.mdes.mywifi.CustomAdapter;
-import com.mdes.mywifi.HiloWifi;
+import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
@@ -27,6 +27,7 @@ import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
 import com.mdes.mywifi.chart.DynamicGraphActivity;
 import com.mdes.mywifi.chart.FrequencyGraphActivity;
+import com.mdes.mywifi.chart.MultipleGraph;
 import com.mdes.mywifi.chart.PieGraphActivity;
 
 
@@ -44,7 +45,7 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 	private ListView lista;
 	private Intent intent;
 
-	public HiloWifi hiloWifi;
+	public WifiThread hiloWifi;
 	private Wifi wifiClick;
 	
 	private int index;
@@ -77,7 +78,7 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 			wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
 			
 			//Se inicia el hilo, este será el que realice los escaneos periódicos
-			hiloWifi = new HiloWifi(this);
+			hiloWifi = new WifiThread(this);
 			hiloWifi.createThread();
 			
 			//Inicializa ListView y asigna onItemClickListener
@@ -99,7 +100,6 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 					getScrollPosition();
 					CustomAdapter adapter = new CustomAdapter(getApplicationContext(), resultWifiList);
 					lista.setAdapter(adapter);
-					WifiMap.getRepresentableKey();
 					setScrollPosition();
 					}catch (NullPointerException e){
 						e.printStackTrace();

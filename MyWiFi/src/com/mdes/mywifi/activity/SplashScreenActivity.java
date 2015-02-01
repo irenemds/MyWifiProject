@@ -11,7 +11,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.mdes.mywifi.HiloWifi;
+import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
  
@@ -19,7 +19,7 @@ public class SplashScreenActivity extends Activity {
 
     private static final long SPLASH_SCREEN_DELAY = 3000;
     private WifiManager wifiManager; 
-    private HiloWifi hiloWifi;
+    private WifiThread hiloWifi;
     private WifiChangeReceiver wifiReceiver = new WifiChangeReceiver();
     @Override
     protected void onCreate(Bundle savedInstanceState) {

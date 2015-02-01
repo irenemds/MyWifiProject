@@ -59,13 +59,13 @@ public class CustomAdapter extends BaseAdapter {
 			ScanResult result = (ScanResult) getItem(posicion);
 
 			holder.level.setText(Integer.toString(result.level)+" dBm");
-			if (result.BSSID.equals(HiloWifi.currentAP.getBSSID()))
+			if (result.BSSID.equals(WifiThread.currentAP.getBSSID()))
 			{
 				holder.SSID.setTypeface(Typeface.DEFAULT_BOLD);
 				holder.SSID.setTextColor(Color.parseColor("#009C8F"));
 			}
 			holder.SSID.setText(result.SSID); 
-			if (result.SSID == HiloWifi.currentAP.getSSID()){
+			if (result.SSID == WifiThread.currentAP.getSSID()){
 				holder.level.setTypeface(null, Typeface.BOLD);
 				holder.SSID.setTypeface(null, Typeface.BOLD);
 			}

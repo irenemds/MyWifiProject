@@ -2,9 +2,12 @@ package com.mdes.mywifi.chart;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
+import org.achartengine.model.TimeSeries;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
+import com.mdes.mywifi.Line;
+import com.mdes.mywifi.Wifi;
 import com.mdes.mywifi.WifiMap;
 
 import android.content.Context;
@@ -39,4 +42,25 @@ public class MultipleGraph {
 		
 	}
 	
+	public static void createGraph(){
+		for( int i = 0; i < WifiMap.representableArray.length; i++){
+			String BSSID = WifiMap.representableArray[i];
+			Wifi wifi = WifiMap.wifiMap.get(BSSID);
+			addSingleLine(wifi);	
+		}
+		
+	}
+	
+	public static void deleteGraph(){ 
+			mDataset.clear();
+			mRenderer.removeAllRenderers();
+			WifiMap.resetLines();
+	}
+	
+	public static void addSingleLine(Wifi wifi){
+		Line line = wifi.getLine();
+		line.setShown(true);
+		mDataset.addSeries(line.getDataset());
+		mRenderer.addSeriesRenderer(line.getRenderer());	
+	}
 }
