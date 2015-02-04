@@ -43,7 +43,7 @@ public class CustomAdapter extends BaseAdapter {
 
 
 			//Si no se ha cargado el layout previamente
-			if (vistaReciclada == null){
+//			if (vistaReciclada == null){
 				vistaReciclada = inflater.inflate(R.layout.elemento_lista, null);
 				holder = new ViewHolder();
 				holder.level = (TextView) vistaReciclada.findViewById(R.id.level);
@@ -51,10 +51,10 @@ public class CustomAdapter extends BaseAdapter {
 				holder.barraNivel = (ImageView) vistaReciclada.findViewById(R.id.barraNivel);
 				holder.security = (ImageView) vistaReciclada.findViewById(R.id.seguridad);
 				vistaReciclada.setTag(holder);
-			}
-			else {
-				holder = (ViewHolder) vistaReciclada.getTag();
-			}
+//			}
+//			else {
+//				holder = (ViewHolder) vistaReciclada.getTag();
+//			}
 
 			ScanResult result = (ScanResult) getItem(posicion);
 
@@ -65,10 +65,10 @@ public class CustomAdapter extends BaseAdapter {
 				holder.SSID.setTextColor(Color.parseColor("#009C8F"));
 			}
 			holder.SSID.setText(result.SSID); 
-			if (result.SSID == WifiThread.currentAP.getSSID()){
-				holder.level.setTypeface(null, Typeface.BOLD);
-				holder.SSID.setTypeface(null, Typeface.BOLD);
-			}
+//			if (result.SSID == WifiThread.currentAP.getSSID()){
+//				holder.level.setTypeface(null, Typeface.BOLD);
+//				holder.SSID.setTypeface(null, Typeface.BOLD);
+//			}
 			
 			holder.barraNivel.setImageResource(WifiLevelImage.getWifiLevelImage(result.level));
 			holder.security.setImageResource(WifiSecurityImage.getWifiSecurityImage(result.BSSID));
