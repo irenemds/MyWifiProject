@@ -52,10 +52,11 @@ public class Line {
 
 	public Line()
 	{
-		dataset = new TimeSeries("Link Speed"); 
-		dataset.clear();
+		dataset = new TimeSeries("Link Speed");
+		LinkSpeedGraphActivity.mDataset.clear();
+		LinkSpeedGraphActivity.mRenderer.removeAllRenderers();	
 		LinkSpeedGraphActivity.mDataset.addSeries(dataset);
-		renderer.setColor(Color.LTGRAY);
+		renderer.setColor(Color.parseColor("#009C8F"));
 		renderer.setFillPoints(true);
 		renderer.setLineWidth(4);
 		renderer.setPointStyle(PointStyle.CIRCLE);
