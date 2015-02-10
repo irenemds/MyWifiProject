@@ -60,24 +60,44 @@ public class DialGraphActivity extends Activity  {
 		
 		//Quitar título de la actividad y pantalla completa
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
-		setContentView(R.layout.xy_chart);
 
 		registerReceivers();
 
 		Bundle extras = getIntent().getExtras();
 		wifi = WifiMap.wifiMap.get(extras.getString("BSSID"));
+		category = new CategorySeries(wifi.getSSID());
 
 		setUp();
+		renderer = new DialRenderer();
+		renderer.setChartTitleTextSize(20);
+		renderer.setLabelsTextSize(15);
+		renderer.setLegendTextSize(20);
+		renderer.setMargins(new int[] {50, 40, 15, 30});
+		r = new SimpleSeriesRenderer();
+		r.setColor(Color.parseColor("#009C8F"));
+		renderer.addSeriesRenderer(r);
+		r = new SimpleSeriesRenderer();
+		r.setColor(Color.WHITE);
+		renderer.addSeriesRenderer(r);
+		r = new SimpleSeriesRenderer();
+		r.setColor(Color.parseColor("#C1CABC"));
+		renderer.addSeriesRenderer(r);
+		renderer.setLabelsTextSize(20);
+		renderer.setLabelsColor(Color.WHITE);
+		renderer.setShowLabels(true);
+		renderer.setVisualTypes(new DialRenderer.Type[] {Type.ARROW, Type.NEEDLE, Type.NEEDLE});
+		renderer.setMinValue(-120);
+		renderer.setMaxValue(-20);
+		renderer.setApplyBackgroundColor(true);
+		renderer.setBackgroundColor(Color.BLACK);
 
 		currentActivityReceiver = new BroadcastReceiver(){
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				if (wifi.isRepresentable()){
+					category.clear();
 					setUp();
-					view = ChartFactory.getDialChartView(DialGraphActivity.this, category, renderer);		
-					setContentView(view);
 					view.repaint();
 				}else{
 					finish();
@@ -106,32 +126,9 @@ public class DialGraphActivity extends Activity  {
 
 	private void setUp(){
 
-		category = new CategorySeries(wifi.getSSID());
 		category.add("Actual", wifi.getLastLevel());
 		category.add("Mínimo", wifi.getMinLevel());
 		category.add("Máximo", wifi.getMaxLevel());
-		renderer = new DialRenderer();
-		renderer.setChartTitleTextSize(20);
-		renderer.setLabelsTextSize(15);
-		renderer.setLegendTextSize(20);
-		renderer.setMargins(new int[] {50, 40, 15, 30});
-		r = new SimpleSeriesRenderer();
-		r.setColor(Color.BLUE);
-		renderer.addSeriesRenderer(r);
-		r = new SimpleSeriesRenderer();
-		r.setColor(Color.MAGENTA);
-		renderer.addSeriesRenderer(r);
-		r = new SimpleSeriesRenderer();
-		r.setColor(Color.GREEN);
-		renderer.addSeriesRenderer(r);
-		renderer.setLabelsTextSize(20);
-		renderer.setLabelsColor(Color.WHITE);
-		renderer.setShowLabels(true);
-		renderer.setVisualTypes(new DialRenderer.Type[] {Type.ARROW, Type.NEEDLE, Type.NEEDLE});
-		renderer.setMinValue(-120);
-		renderer.setMaxValue(-20);
-		renderer.setApplyBackgroundColor(true);
-		renderer.setBackgroundColor(Color.BLACK);
 	}
 
 	@Override
