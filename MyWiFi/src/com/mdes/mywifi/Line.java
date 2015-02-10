@@ -16,7 +16,12 @@ public class Line {
 	public static int lineNumber;
 	private TimeSeries dataset; 
 	private XYSeriesRenderer renderer = new XYSeriesRenderer();
-	private int[] colors = {Color.MAGENTA, Color.WHITE, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW};
+	int[] colors = new int[] { Color.parseColor("#009C8F"), Color.parseColor("#74C044"), 
+			Color.parseColor("#EEC32E"), Color.parseColor("#84C441"),
+			Color.parseColor("#41C4BF"), Color.parseColor("#4166C4"),
+			Color.parseColor("#B04E9D"), Color.parseColor("#FF2F2F"),
+			Color.parseColor("#33FF99"), Color.parseColor("#DCE45F"),
+			Color.parseColor("#FFD06B")};
 	private boolean shown;
 
 	public Line(Wifi wifi)
@@ -101,31 +106,4 @@ public class Line {
 	public void setRenderer(XYSeriesRenderer renderer) {
 		this.renderer = renderer;
 	}
-
-	
-//	public void deleteLine(){
-//		MultipleGraph.mDataset.r
-//		shown = false;
-//	}
-//	
-//	public void addLine(){
-//		MultipleGraph.mDataset.addSeries(dataset);
-//		shown = true;
-//	}
-//
-//	public boolean isshown() {
-//		return shown;
-//	}
-	
-//	public void createGraph(){
-//		for( int i = 0; i < WifiMap.representableArray.length; i++){
-//			String BSSID = WifiMap.representableArray[i];
-//			Wifi wifi = WifiMap.wifiMap.get(BSSID);
-//			Line line = wifi.getLine();
-//			
-//			dataset = new TimeSeries(wifi.getSSID()); 
-//			MultipleGraph.mDataset.addSeries(dataset);
-//		}
-//		
-//	}
 }

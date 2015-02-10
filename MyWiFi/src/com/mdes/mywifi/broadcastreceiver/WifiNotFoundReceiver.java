@@ -3,6 +3,7 @@ package com.mdes.mywifi.broadcastreceiver;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.R.id;
 import com.mdes.mywifi.R.layout;
+import com.mdes.mywifi.activity.WifiListActivity;
 import com.mdes.mywifi.WifiMap;
 
 import android.app.Dialog;
@@ -27,7 +28,7 @@ public class WifiNotFoundReceiver extends BroadcastReceiver {
 	public void onReceive(Context c, Intent intent) {
 		//Comprueba el valor del Extra para saber si ha encontrado redes o no
 		//Si ya existe un diálogo abierto no hace falta abrir otro.
-		if(!intent.getBooleanExtra("WifiFound", false)&& !isDialog){
+		if(!intent.getBooleanExtra("WifiFound", false)&& !isDialog && WifiListActivity.wifiManager.isWifiEnabled()){
 
 			Log.i("INFO","No hay redes");
 			

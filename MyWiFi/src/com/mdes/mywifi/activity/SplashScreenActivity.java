@@ -18,7 +18,6 @@ import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 public class SplashScreenActivity extends Activity {
 
     private static final long SPLASH_SCREEN_DELAY = 3000;
-    private WifiManager wifiManager; 
     private WifiThread hiloWifi;
     private WifiChangeReceiver wifiReceiver = new WifiChangeReceiver();
     @Override
@@ -28,7 +27,10 @@ public class SplashScreenActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_screen);
-//        registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+
+        //Inicia servicio controlador de Wifi
+		WifiListActivity.wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+        
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
@@ -39,14 +41,7 @@ public class SplashScreenActivity extends Activity {
                 finish();
             }
         };
-    		wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
     		
-    		//Comprobar estado inicial de Wifi, si esta desactivado mostrar dialogo
-    		if (wifiManager.isWifiEnabled() == false)
-    		{  
-    			wifiReceiver.wifiAlertDialog(this);
-    		}
-    		// El wifi está activado, lanzar hilo
     		
         Timer timer = new Timer();
         timer.schedule(task, SPLASH_SCREEN_DELAY);

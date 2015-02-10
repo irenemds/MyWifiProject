@@ -147,6 +147,7 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 	public void updateValues (List<ScanResult> results){
 		resultWifiList = results;
 		saveLevel();
+Log.i("BSSID","sale de saveLevel");
 	}
 
 	/**

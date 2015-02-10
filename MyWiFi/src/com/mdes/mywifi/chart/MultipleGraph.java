@@ -1,17 +1,16 @@
 package com.mdes.mywifi.chart;
 
-import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
-import org.achartengine.model.TimeSeries;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
+import android.graphics.Color;
+import android.util.Log;
+
+import com.mdes.mywifi.BandWidthLine;
 import com.mdes.mywifi.Line;
 import com.mdes.mywifi.Wifi;
 import com.mdes.mywifi.WifiMap;
-
-import android.content.Context;
-import android.graphics.Color;
 
 public class MultipleGraph {
 
@@ -50,6 +49,37 @@ public class MultipleGraph {
 		}
 		
 	}
+
+	public static void createFreqGraph(){
+Log.i("BW", "Representar: "+WifiMap.representableArray.length);
+		for( int i = 0; i < WifiMap.representableArray.length; i++){
+			String BSSID = WifiMap.representableArray[i];
+			Wifi wifi = WifiMap.wifiMap.get(BSSID);		
+			Log.i("BW","represento: "+wifi.getSSID());
+			addFreqLine(wifi);	
+		}
+		
+	}
+	
+	public static void addFreqLine(Wifi wifi){
+		BandWidthLine bwLine = wifi.getBwLine();
+		bwLine.setShown(true);
+		FrequencyGraphActivity.mDataset.addSeries(bwLine.getDataset());
+		FrequencyGraphActivity.mRenderer.addSeriesRenderer(bwLine.getRenderer());	
+	}
+//	
+//	public static void deleteFreqLine(Wifi wifi){
+//		BandWidthLine bwLine = wifi.getBwLine();
+//		bwLine.setShown(false);
+//		FrequencyGraphActivity.mDataset.removeSeries(bwLine.getDataset());
+//		FrequencyGraphActivity.mRenderer.removeSeriesRenderer(bwLine.getRenderer());	
+//	}
+	
+	public static void deleteFreqGraph(){ 
+		FrequencyGraphActivity.mDataset.clear();
+		FrequencyGraphActivity.mRenderer.removeAllRenderers();
+		WifiMap.resetLines();
+}
 	
 	public static void deleteGraph(){ 
 			mDataset.clear();

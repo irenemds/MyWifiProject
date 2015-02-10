@@ -45,7 +45,7 @@ public class WifiThread extends Thread{
     
     public static SupplicantState supState; 
     public static boolean isGraph;
- 
+    public static boolean isFreqGraph;
     /**
      * HiloWifi, inicializa el hilo, dándole valor a sus principales atributos
      * @param wifiList objeto de la clase WifiList, obtiene WifiManager y Contexto
@@ -55,6 +55,9 @@ public class WifiThread extends Thread{
         wifiMap = new WifiMap();
         this.wifiList = wifiList;
         wifiManager = wifiList.getWifiManager();
+        
+//        FrequencyGraphActivity.mDataset = new XYMultipleSeriesDataset();
+//        FrequencyGraphActivity.mRenderer = new XYMultipleSeriesRenderer();
  
         //La variabe bucle solo será false cuando lo indique alguna de las actividades
         bucle = true;
@@ -82,41 +85,37 @@ public class WifiThread extends Thread{
                         currentAP.updateAP(wifiManager.getConnectionInfo()); 
                     }
  
-                    //Reinicializar controladores de gráfica de frecuencia para redibujarla
-                    FrequencyGraphActivity.mDataset = new XYMultipleSeriesDataset();
-                    FrequencyGraphActivity.mRenderer = new XYMultipleSeriesRenderer();
- 
-                    resultWifiList = wifiManager.getScanResults();
-                    if (resultWifiList.size()!=0 && resultWifiList != null){
-                        //Una vez obtenidos los resultados avisa a las demás actividades
-                        Intent i = new Intent();
-                        i.setAction("com.mdes.mywifi.timer");
-                        wifiList.sendBroadcast(i);
-                         
-                        Intent i2 = new Intent();
-                        i2.putExtra("WifiFound", true);
-                        i2.setAction("com.mdes.mywifi.wififound");
-                        wifiList.sendBroadcast(i2);
- 
-                    }
-                    else{
-                        //Si no ha encontrado redes wifi
-                        Log.i("INFO","No encuentra redes wifi");
-                        Intent i = new Intent();
-                        i.putExtra("WifiFound", false);
-                        i.setAction("com.mdes.mywifi.wifinotfound");
-                        wifiList.sendBroadcast(i);
-                    }       
-                }
-                WifiMap.getRepresentableKey();
+                    resultWifiList = wifiManager.getScanResults();    
+                }            
                 //Actualiza los valores de resultados en WifiList
                 wifiList.updateValues(resultWifiList);
-                 
+                WifiMap.getRepresentableKey();                 
             }catch(NullPointerException e){
                 LogManager lm = new LogManager(e);
                 e.printStackTrace();
             }
-            Wifi.contador++;
+            Wifi.contador++; 
+            if (WifiListActivity.wifiManager.isWifiEnabled() && resultWifiList.size()!=0 && resultWifiList != null){
+Log.i("BSSID","Hay "+ resultWifiList.size() +  " resultados");
+                //Una vez obtenidos los resultados avisa a las demás actividades
+                Intent i = new Intent();
+                i.setAction("com.mdes.mywifi.timer");
+                wifiList.sendBroadcast(i);
+                 
+                Intent i2 = new Intent();
+                i2.putExtra("WifiFound", true);
+                i2.setAction("com.mdes.mywifi.wififound");
+                wifiList.sendBroadcast(i2);
+            }
+            else{
+Log.i("BSSID","No hay redes");
+                //Si no ha encontrado redes wifi
+                Log.i("INFO","No encuentra redes wifi");
+                Intent i = new Intent();
+                i.putExtra("WifiFound", false);
+                i.setAction("com.mdes.mywifi.wifinotfound");
+                wifiList.sendBroadcast(i);
+            }  
             try {
                 sleep(2000);
             } catch (InterruptedException e) {

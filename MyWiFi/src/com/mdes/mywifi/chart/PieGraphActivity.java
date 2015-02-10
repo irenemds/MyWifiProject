@@ -33,8 +33,12 @@ public class PieGraphActivity extends Activity {
 	private static GraphicalView view;
 	private WifiChangeReceiver wifiReceiver = new WifiChangeReceiver(); 
 	private int[] values;
-	int[] colors = new int[] { Color.BLUE, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.CYAN, Color.GRAY, Color.WHITE,
-			Color.LTGRAY, Color.GREEN, Color.BLUE, Color.MAGENTA};
+	int[] colors = new int[] { Color.parseColor("#009C8F"), Color.parseColor("#74C044"), 
+			Color.parseColor("#EEC32E"), Color.parseColor("#84C441"),
+			Color.parseColor("#41C4BF"), Color.parseColor("#4166C4"),
+			Color.parseColor("#B04E9D"), Color.parseColor("#FF2F2F"),
+			Color.parseColor("#33FF99"), Color.parseColor("#DCE45F"),
+			Color.parseColor("#FFD06B")};
 	private LinearLayout layout;
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();

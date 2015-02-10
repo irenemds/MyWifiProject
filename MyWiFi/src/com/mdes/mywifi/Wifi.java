@@ -105,9 +105,17 @@ public class Wifi {
 		Point p = new Point(contador, levels.get(contador));
 		line.addNewPoints(p);
 		if (representable){
-			bwLine = new BandWidthLine(this);
+			bwLine.updateBwLine(this);
 		}
 		
+	}
+
+	public BandWidthLine getBwLine() {
+		return bwLine;
+	}
+
+	public void setBwLine(BandWidthLine bwLine) {
+		this.bwLine = bwLine;
 	}
 
 	public int getAntennas() {

@@ -6,13 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.mdes.mywifi.chart.DynamicGraphActivity;
-import com.mdes.mywifi.chart.MultipleGraph;
-
 import android.graphics.Color;
 import android.net.wifi.ScanResult;
 import android.util.Log;
-import android.webkit.WebView.FindListener;
+
+import com.mdes.mywifi.chart.MultipleGraph;
 
 /**
  * Esta clase contiene y gestiona el HashMap que almacena todos los objetos
@@ -42,7 +40,6 @@ public class WifiMap {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static void putValue(List<ScanResult> resultWifiList){
-		//		try{
 
 		resetAntennas();
 		BSSIDList = new ArrayList<String>();
@@ -50,7 +47,6 @@ public class WifiMap {
 
 		for (int i = 0; i < resultWifiList.size(); i++) {
 			BSSIDList.add(resultWifiList.get(i).BSSID);
-
 			//Comprobar si la red ya existe en el HashMap
 			//Si no existe
 			if (!wifiMap.containsKey(resultWifiList.get(i).BSSID)){
@@ -58,28 +54,49 @@ public class WifiMap {
 				Wifi wifi = new Wifi(resultWifiList.get(i));
 				wifiMap.put(resultWifiList.get(i).BSSID, wifi);
 				wifiMap.get(resultWifiList.get(i).BSSID).setColor(calculateColor());
+				
 				aux++;					
+				if ( WifiThread.isGraph)
+				{
+					MultipleGraph.addSingleLine(wifiMap.get(resultWifiList.get(i).BSSID));
+				}
+
+				if (WifiThread.isFreqGraph)
+				{
+					MultipleGraph.addFreqLine(wifiMap.get(resultWifiList.get(i).BSSID));
+				}
 			}
 			//Si existe guardar el último valor de potencia obtenido.
 			else
-			{				
+			{					
 				wifiMap.get(resultWifiList.get(i).BSSID).updateAP(resultWifiList.get(i));
 				if (!wifiMap.get(resultWifiList.get(i).BSSID).isRepresentable() 
-						&& WifiThread.isGraph 
+						&& WifiThread.isGraph
 						&& !wifiMap.get(resultWifiList.get(i).BSSID).getLine().isShown())
 				{
-					Log.i("TREN","Añadoooooo: " + resultWifiList.get(i).SSID);
 					MultipleGraph.addSingleLine(wifiMap.get(resultWifiList.get(i).BSSID));
 				}
+
+//				if (!wifiMap.get(resultWifiList.get(i).BSSID).isRepresentable() 
+//						&& WifiThread.isFreqGraph
+//						&& !wifiMap.get(resultWifiList.get(i).BSSID).getBwLine().isShown())
+//				{
+//					Log.i("TREN","Añado frecuencia: " + resultWifiList.get(i).SSID);
+//					MultipleGraph.addFreqLine(wifiMap.get(resultWifiList.get(i).BSSID));
+//				}
+
 				wifiMap.get(resultWifiList.get(i).BSSID).setRepresentable(true);
 			}
+			//ANTENAS
 			if (!SSIDList.containsKey(resultWifiList.get(i).SSID)){
 				SSIDList.put(resultWifiList.get(i).SSID,1);
 			}
 			else{
 				findBSSID(resultWifiList.get(i).SSID);
 			}
+			wifiMap.get(resultWifiList.get(i).BSSID).setRepresentable(true);
 		}
+		Log.i("BSSID","BSSIDList tiene"+ BSSIDList.size());		
 		//Las redes que no han sido encontradas en el último escaneo
 		//se guardan con valor -120 (suficientemente bajo)
 		Iterator it = wifiMap.entrySet().iterator();
@@ -89,15 +106,10 @@ public class WifiMap {
 				wifiMap.get(e.getKey()).setRepresentable(false);
 			}
 		}
-		//		}catch (Exception e){
-		//			e.printStackTrace();
-		//			LogManager lm = new LogManager(e);
-		//		}
 	}
 
 
 	public static void reset(){
-		Log.i("BSSID","RESET");
 		wifiMap = new HashMap<String,Wifi>();
 	}
 
@@ -107,13 +119,12 @@ public class WifiMap {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static void getRepresentableKey(){
-
 		representableList = new ArrayList<String>();
 		Iterator it = wifiMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry e = (Map.Entry)it.next();
 			if(wifiMap.get(e.getKey()).isRepresentable()){
-				representableList.add((String) e.getKey());
+				representableList.add(wifiMap.get(e.getKey()).getBSSID());
 			}}
 		representableArray = new String[representableList.size()];
 		for( int i = 0; i < representableArray.length; i++){
@@ -190,11 +201,17 @@ public class WifiMap {
 	 * @return int, el color que se debe asignar a la siguiente red.
 	 */
 	public static int calculateColor(){
-		int[] colors = {Color.MAGENTA, Color.WHITE, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW};
+		int[] colors = new int[] { Color.parseColor("#009C8F"), Color.parseColor("#74C044"), 
+				Color.parseColor("#EEC32E"), Color.parseColor("#84C441"),
+				Color.parseColor("#41C4BF"), Color.parseColor("#4166C4"),
+				Color.parseColor("#B04E9D"), Color.parseColor("#FF2F2F"),
+				Color.parseColor("#33FF99"), Color.parseColor("#DCE45F"),
+				Color.parseColor("#FFD06B")};
+		
 		if(aux > colors.length-1){
 			aux = aux-colors.length*aux/colors.length;
 		}	
-		//		aux++;
+		
 		return colors[aux];
 	}
 
@@ -212,9 +229,11 @@ public class WifiMap {
 			Map.Entry e = (Map.Entry)it.next();
 			Line line = wifiMap.get(e.getKey()).getLine();
 			line.setShown(false);
+			BandWidthLine bwLine = wifiMap.get(e.getKey()).getBwLine();
+			bwLine.setShown(false);
 		}
 	}
-	
+
 	private static void findBSSID (String SSID){
 		ArrayList<String> list = new ArrayList<String>();
 		Iterator it = wifiMap.entrySet().iterator();

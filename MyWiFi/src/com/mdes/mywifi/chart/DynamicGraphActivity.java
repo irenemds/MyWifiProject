@@ -78,7 +78,6 @@ public class DynamicGraphActivity extends Activity {
 	}
 	@Override
 	protected void onResume() {
-		Log.i("GRAPH","ON RESUME DE DYNAMIC GRAPH");
 		try{
 			super.onResume();
 			WifiThread.isGraph = true;

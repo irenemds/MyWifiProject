@@ -19,10 +19,12 @@ import android.util.Log;
  *
  */
 public class WifiChangeReceiver extends BroadcastReceiver {
-	
+
+	private boolean isDialog = false;
+
 	@Override
 	public void onReceive(Context c, Intent intent) {
-		
+
 		int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);		
 		//Realiza distintas operaciones en función del estado del Wifi
 		switch(extraWifiState){
@@ -30,13 +32,13 @@ public class WifiChangeReceiver extends BroadcastReceiver {
 		case WifiManager.WIFI_STATE_DISABLING:
 			WifiThread.currentAP = new CurrentAP();
 			break;
-		//Si está desactivado muestra un diálogo	
+			//Si está desactivado muestra un diálogo	
 		case WifiManager.WIFI_STATE_DISABLED:
 			Log.i("INFO", "Broadcast -  Wifi off");
 			WifiMap.reset();
 			wifiAlertDialog(c);
 			break;
-		//Si se activa el contenido es sólo para informar
+			//Si se activa el contenido es sólo para informar
 		case WifiManager.WIFI_STATE_ENABLED:
 			Log.i("INFO", "Broadcast -  Wifi on, lanza hilo");
 			break;	
@@ -46,34 +48,40 @@ public class WifiChangeReceiver extends BroadcastReceiver {
 			break;
 		}
 	}
-	
+
 	/**
 	 * Función para mostrar diálogo cuando el Wifi del dispositivo está apagado.
 	 * @param c Contexto de la actividad en la que se encuentra en el momento de la llamada.
 	 */
 	public void wifiAlertDialog(Context c){
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(c);
+		if(isDialog == false)
+		{
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(c);
 
-		alertDialogBuilder.setTitle("Wifi desactivado");
+			alertDialogBuilder.setTitle("Wifi desactivado");
 
-		// Opciones: encender Wifi o Salir de la aplicación.
-		alertDialogBuilder
-		.setMessage("Es necesario activar el Wifi para usar esta aplicación")
-		.setCancelable(false)
-		.setPositiveButton("Activar",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int id) {
-				WifiListActivity.wifiManager.setWifiEnabled(true);
-			}
-		})
-		.setNegativeButton("Salir",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int id) {
-				System.exit(0);
-			}
-		});
+			// Opciones: encender Wifi o Salir de la aplicación.
+			alertDialogBuilder
+			.setMessage("Es necesario activar el Wifi para usar esta aplicación")
+			.setCancelable(false)
+			.setPositiveButton("Activar",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					WifiListActivity.wifiManager.setWifiEnabled(true);
+					isDialog = false;
+				}
+			})
+			.setNegativeButton("Salir",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					isDialog = false;
+					System.exit(0);
+				}
+			});
 
-		// crear AlertDialog
-		AlertDialog alertDialog = alertDialogBuilder.create();
-		alertDialog.show();
+			// crear AlertDialog
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
+			isDialog = true;
+		}
 	}
 
 }
