@@ -47,13 +47,13 @@ public class PieGraphActivity extends Activity {
 		try{ 
 			registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 			super.onCreate(savedInstanceState);
-			
+
 			//Quitar título de la actividad y pantalla completa
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-			setContentView(R.layout.xy_chart);
-			
-			layout = (LinearLayout) findViewById(R.id.chart);
+			renderer = new DefaultRenderer();
+			series = new CategorySeries("Pie Graph");
+
 			getValues();
 			renderer.setChartTitle("Redes por canal");
 			renderer.setChartTitleTextSize(27);
@@ -64,7 +64,7 @@ public class PieGraphActivity extends Activity {
 			renderer.setApplyBackgroundColor(true);
 			renderer.setMargins(new int[] { 50, 40, 10, 30 });
 			renderer.setLegendTextSize(20);
-			
+
 			currentActivityReceiver= new BroadcastReceiver(){
 
 				@Override
@@ -98,36 +98,16 @@ public class PieGraphActivity extends Activity {
 	}
 
 	private void getValues(){
-//		try{
-			renderer = new DefaultRenderer();
-			series = new CategorySeries("Pie Graph");
-			values = WifiMap.getChannelAP();
-			int k = 0;
-			for (int i = 0; i<values.length; i++) {
-				Log.i("INFO","LONG "+ i);
-				if(values[i] > 0){
-					int canal = i+1;
-//					Log.i("INFO","VALOR "+ Integer.toString(i+1) + ": "+values[i]);
-					series.add("Canal " + canal, values[i]);
-					SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-					r.setColor(colors[i]);
-					renderer.addSeriesRenderer(r);
-			}}
-//			int i = 0;
-//			while (i < k) {
-//				SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-//				r.setColor(colors[i]);
-//				renderer.addSeriesRenderer(r);
-//				i++;
-//			}
-			view = ChartFactory.getPieChartView(this, series, renderer);
-			layout.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.MATCH_PARENT));
+		series.clear();
 
-//		}catch(Exception e){
-//			e.printStackTrace();
-//			LogManager lm = new LogManager(e);
-//		}
+		values = WifiMap.getChannelAP();
+		for (int i = 0; i<values.length; i++) {
+			int canal = i+1;
+			series.add("Canal " + canal, values[i]);
+			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+			r.setColor(colors[canal-1]);
+			renderer.addSeriesRenderer(r);
+		}
 	}
 
 
@@ -151,7 +131,7 @@ public class PieGraphActivity extends Activity {
 			LogManager lm = new LogManager(e);
 		}
 	}
-	
+
 	private void registerReceivers(){
 		registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 		registerReceiver(currentActivityReceiver, new IntentFilter("com.mdes.mywifi.timer"));
@@ -164,5 +144,5 @@ public class PieGraphActivity extends Activity {
 		unregisterReceiver(wifiNotFoundReceiver);
 		unregisterReceiver(currentActivityReceiver);
 	}
-	
+
 }
