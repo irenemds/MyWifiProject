@@ -53,6 +53,7 @@ public class Line {
 	public Line()
 	{
 		dataset = new TimeSeries("Link Speed"); 
+		dataset.clear();
 		LinkSpeedGraphActivity.mDataset.addSeries(dataset);
 		renderer.setColor(Color.LTGRAY);
 		renderer.setFillPoints(true);
