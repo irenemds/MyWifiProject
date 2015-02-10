@@ -56,8 +56,8 @@ public class WifiThread extends Thread{
         this.wifiList = wifiList;
         wifiManager = wifiList.getWifiManager();
         
-//        FrequencyGraphActivity.mDataset = new XYMultipleSeriesDataset();
-//        FrequencyGraphActivity.mRenderer = new XYMultipleSeriesRenderer();
+        FrequencyGraphActivity.mDataset = new XYMultipleSeriesDataset();
+        FrequencyGraphActivity.mRenderer = new XYMultipleSeriesRenderer();
  
         //La variabe bucle solo será false cuando lo indique alguna de las actividades
         bucle = true;

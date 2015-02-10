@@ -26,30 +26,15 @@ public class FrequencyGraphActivity extends Activity {
 	public static GraphicalView view;
 	public static XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
 	public static XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
-	public static XYMultipleSeriesDataset mDatasetprueba = new XYMultipleSeriesDataset();
-	public static XYMultipleSeriesRenderer mRendererprueba = new XYMultipleSeriesRenderer();
 	private WifiChangeReceiver wifiReceiver = new WifiChangeReceiver();
 	private GraphicalView mChartView;
 	private Context c;
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
-	private int aux = 0;
-	private TimeSeries dataset; 
-	private XYSeriesRenderer renderer = new XYSeriesRenderer();
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
-
-		//////////////////////////////////////////////////////////////////
-		dataset = new TimeSeries("prueba");
-		dataset.add(2,2);
-		dataset.add(7,7);
-		mDatasetprueba.addSeries(dataset);
-		mRendererprueba.addSeriesRenderer(renderer);
-
-
-		////////////////////////////////////////////////////////////
 		//		try{
 		registerReceivers();
 		rendererSetUp();
@@ -59,7 +44,7 @@ public class FrequencyGraphActivity extends Activity {
 		//Quitar título de la actividad y pantalla completa
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		view = ChartFactory.getLineChartView(this, FrequencyGraphActivity.mDatasetprueba, FrequencyGraphActivity.mRendererprueba);		
+		view = ChartFactory.getLineChartView(this, FrequencyGraphActivity.mDataset, FrequencyGraphActivity.mRenderer);		
 		setContentView(view);
 		currentActivityReceiver = new BroadcastReceiver(){
 
@@ -68,8 +53,8 @@ public class FrequencyGraphActivity extends Activity {
 				rendererSetUp();
 				mRenderer.setYAxisMax(-50);
 				mRenderer.setYAxisMin(-120);
-				MultipleGraph.deleteFreqGraph();
-				MultipleGraph.createFreqGraph();
+//				MultipleGraph.deleteFreqGraph();
+//				MultipleGraph.createFreqGraph();
 				view.repaint();
 			}
 
@@ -91,13 +76,13 @@ public class FrequencyGraphActivity extends Activity {
 		WifiThread.isFreqGraph = false;
 		super.onPause();
 		unregisterReceivers();
-		MultipleGraph.deleteFreqGraph();
+//		MultipleGraph.deleteFreqGraph();
 	}
 
 	@Override
 	protected void onResume() {
 		WifiThread.isFreqGraph = true;
-		MultipleGraph.createFreqGraph();
+//		MultipleGraph.createFreqGraph();
 		super.onResume();
 		registerReceivers();
 	}

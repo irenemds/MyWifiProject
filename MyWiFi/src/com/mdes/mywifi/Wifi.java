@@ -131,6 +131,7 @@ public class Wifi {
 		if (!x){
 			saveLevel(-120);
 			antennas = 0;
+			bwLine.deleteLine();
 //			line.deleteLine();
 		}
 	}

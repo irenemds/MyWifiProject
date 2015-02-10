@@ -4,9 +4,9 @@ import org.achartengine.model.TimeSeries;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import com.mdes.mywifi.chart.FrequencyGraphActivity;
+import com.mdes.mywifi.chart.MultipleGraph;
 
 import android.graphics.Color;
-import android.util.Log;
 
 /**
  * Esta clase se emplea para crear las líneas que se representarán en
@@ -55,12 +55,10 @@ public class BandWidthLine {
 		renderer.setLineWidth(4);
 		renderer.setDisplayChartValuesDistance(1);
 		renderer.setColor(colors[aux]);
-		if(WifiThread.currentAP.getSSID().equals(wifi.getSSID()))
-		{
-			FrequencyGraphActivity.mDatasetprueba.addSeries(dataset);
-			FrequencyGraphActivity.mRendererprueba.addSeriesRenderer(renderer);
-		}
-
+		
+		shown = true;
+		FrequencyGraphActivity.mDataset.addSeries(getDataset());
+		FrequencyGraphActivity.mRenderer.addSeriesRenderer(getRenderer());	
 	}
 
 	public TimeSeries getDataset() {
@@ -101,12 +99,12 @@ public class BandWidthLine {
 			}
 			//En cualquier caso añadimos el valor de y, transformado para que marque
 			//el canal y no la frecuencia.
-			dataset.add((yValue-2407)/5, xValue);
-			if(WifiThread.currentAP.getSSID().equals(wifi.getSSID()))
-			{
-				Log.i("BW","X: "+xValue+" Y: "+(yValue-2407)/5);
-			}	
+			dataset.add((yValue-2407)/5, xValue);	
 		}
 
+	}
+	
+	public void deleteLine(){
+		dataset.clear();
 	}
 }

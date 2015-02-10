@@ -50,16 +50,15 @@ public class MultipleGraph {
 		
 	}
 
-	public static void createFreqGraph(){
-Log.i("BW", "Representar: "+WifiMap.representableArray.length);
-		for( int i = 0; i < WifiMap.representableArray.length; i++){
-			String BSSID = WifiMap.representableArray[i];
-			Wifi wifi = WifiMap.wifiMap.get(BSSID);		
-			Log.i("BW","represento: "+wifi.getSSID());
-			addFreqLine(wifi);	
-		}
-		
-	}
+//	public static void createFreqGraph(){
+//Log.i("BW", "Representar: "+WifiMap.representableArray.length);
+//		for( int i = 0; i < WifiMap.representableArray.length; i++){
+//			String BSSID = WifiMap.representableArray[i];
+//			Wifi wifi = WifiMap.wifiMap.get(BSSID);		
+//			addFreqLine(wifi);	
+//		}
+//		
+//	}
 	
 	public static void addFreqLine(Wifi wifi){
 		BandWidthLine bwLine = wifi.getBwLine();
@@ -75,11 +74,11 @@ Log.i("BW", "Representar: "+WifiMap.representableArray.length);
 //		FrequencyGraphActivity.mRenderer.removeSeriesRenderer(bwLine.getRenderer());	
 //	}
 	
-	public static void deleteFreqGraph(){ 
-		FrequencyGraphActivity.mDataset.clear();
-		FrequencyGraphActivity.mRenderer.removeAllRenderers();
-		WifiMap.resetLines();
-}
+//	public static void deleteFreqGraph(){
+//		FrequencyGraphActivity.mDataset.clear();
+//		FrequencyGraphActivity.mRenderer.removeAllRenderers();
+//		WifiMap.resetLines();
+//}
 	
 	public static void deleteGraph(){ 
 			mDataset.clear();
