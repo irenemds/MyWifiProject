@@ -11,10 +11,5 @@
         android:id="@+id/ayuda"
         android:orderInCategory="100"
         android:title="Ayuda"/>
-     
-     <item
-        android:id="@+id/medidor"
-        android:orderInCategory="100"
-        android:title="Medidor de Potencia"/>
 
 </menu>

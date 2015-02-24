@@ -63,7 +63,7 @@ public class PieGraphActivity extends Activity {
 			renderer.setLabelsTextSize(20);
 			renderer.setApplyBackgroundColor(true);
 			renderer.setMargins(new int[] { 50, 40, 10, 30 });
-			renderer.setLegendTextSize(20);
+			renderer.setShowLegend(false);
 
 			currentActivityReceiver= new BroadcastReceiver(){
 

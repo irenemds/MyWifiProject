@@ -13,15 +13,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Typeface;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.widget.AdapterView.OnItemClickListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,12 +30,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.mdes.mywifi.HelpDialog;
-import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
 import com.mdes.mywifi.WifiLevelImage;
 import com.mdes.mywifi.WifiMap;
+import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
 import com.mdes.mywifi.chart.DialGraphActivity;
@@ -45,7 +46,7 @@ import com.mdes.mywifi.chart.LinkSpeedGraphActivity;
  * por el usuario en la actividad WifiListActivity.
  *
  */
-public class NetInfoActivity extends Activity {
+public class NetInfoActivity extends Activity implements OnItemClickListener {
 
 	private ListView lista;
 	
@@ -55,6 +56,7 @@ public class NetInfoActivity extends Activity {
 	private Button buttonp;
 	private Button buttonv;
 
+	private String text;
 
 	ActionBar actionBar = null;
 	private HelpDialog helpDialog;
@@ -97,6 +99,7 @@ public class NetInfoActivity extends Activity {
 			SSID.setText(wifi.getSSID());
 			IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
 			getInfo();
+			lista.setOnItemClickListener(this);
 			
 			//BroadCastReceiver para manejar evento de tiempo,mostrar valores actualizados.
 			currentActivityReceiver = new BroadcastReceiver(){
@@ -161,8 +164,9 @@ public class NetInfoActivity extends Activity {
 
 			case R.id.ayuda:
 				setResult(Activity.RESULT_CANCELED);
-				String text = "Se muestra la información principal de la red seleccionada";
-				helpDialog = new HelpDialog(this, text);
+				String text = "Se muestra la información principal de la red seleccionada. Para más información a cerca de cada uno de los parámetros"
+						+ " que se muestran en la pantalla haga click sobre ellos.";
+				helpDialog = new HelpDialog(this,"Ayuda", text);
 				return true;
 
 			default:
@@ -253,5 +257,46 @@ public class NetInfoActivity extends Activity {
 	private void setScrollPosition(){
 		lista.setSelectionFromTop(index, offset);	
 	}
+
+	@Override
+	public void onItemClick(AdapterView parent, View v, int position, long id) {
+		switch (position) {
+		case 0:
+			text = "Es el nombre de identificador único de todos los paquetes de una red inalámbrica. "
+					+ "Esta formado con la dirección MAC (Meadia Access Control) del Punto de Acceso seleccionado.";
+			helpDialog = new HelpDialog(this,"BSSID (Basic Service Set Identifier)", text);
+			break;
+		case 1:
+			text = "Frecuencia en Mega Hertzios a la que está transmitiendo el Punto de Acceso seleccionado.";
+			helpDialog = new HelpDialog(this,"Frecuencia de transmisión", text);
+			break;
+		case 2:
+			text = "La banda de frecuencia en la que transmite el wifi se divide franjas de 20 MHz, conocidas"
+					+ " como canales.";
+			helpDialog = new HelpDialog(this,"Canal de transmisión", text);
+			break;
+		case 3:
+			text = "Número de Puntos de Acceso (AP) detectados que están transmitiendo ese mismo SSID";
+			helpDialog = new HelpDialog(this,"Repetidores", text);
+			break;
+		case 4:
+			text = "Características de seguridad y cifrado del Punto de Acceso (AP) seleccionado.";
+			helpDialog = new HelpDialog(this,"Propiedades del AP", text);
+			break;
+		case 5:
+			text = "Identificador numérico que caracteriza la interfaz de red del Punto de Acceso (AP) seleccionado.";
+			helpDialog = new HelpDialog(this,"Dirección IP (Internet Protocol)", text);
+			break;
+		case 6:
+			Log.i("INFO","6");
+			break;
+		default:
+			Log.i("INFO","+6" + position);
+			break;
+		}
+		
+	}
+	
+	
 
 }

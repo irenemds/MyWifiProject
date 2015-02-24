@@ -5,12 +5,12 @@ import android.content.Context;
 
 public class HelpDialog {
 
-	public HelpDialog(Context c, String text){
+	public HelpDialog(Context c,String title, String text){
 
 		try{
 
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(c);
-			alertDialogBuilder.setTitle("Ayuda");
+			alertDialogBuilder.setTitle(title);
 
 			alertDialogBuilder
 			.setMessage(text)
