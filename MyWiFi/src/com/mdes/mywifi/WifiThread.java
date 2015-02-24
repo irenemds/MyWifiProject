@@ -75,9 +75,12 @@ public class WifiThread extends Thread{
         while(bucle){
                       try{
             try{
+           	
                 //Si el wifi está conectado realiza el escaneo
                 if (wifiManager.isWifiEnabled()){
                     wifiManager.startScan();
+                	//Se resetea el número de repetidores de todos los puntos de acceso.
+                	WifiMap.resetAntennas();
                     //Comprueba si está conectado a alguna red
                     supState = wifiManager.getConnectionInfo().getSupplicantState();
                     if( supState.toString().equals("ASSOCIATED") || supState.toString().equals("COMPLETED")
