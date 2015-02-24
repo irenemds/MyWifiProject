@@ -33,12 +33,13 @@ public class PieGraphActivity extends Activity {
 	private static GraphicalView view;
 	private WifiChangeReceiver wifiReceiver = new WifiChangeReceiver(); 
 	private int[] values;
-	int[] colors = new int[] { Color.parseColor("#009C8F"), Color.parseColor("#74C044"), 
+	private int[] colors = new int[] { Color.parseColor("#009C8F"), Color.parseColor("#74C044"), 
 			Color.parseColor("#EEC32E"), Color.parseColor("#84C441"),
 			Color.parseColor("#41C4BF"), Color.parseColor("#4166C4"),
 			Color.parseColor("#B04E9D"), Color.parseColor("#FF2F2F"),
 			Color.parseColor("#33FF99"), Color.parseColor("#DCE45F"),
-			Color.parseColor("#FFD06B")};
+			Color.parseColor("#DCE45F")};
+	private SimpleSeriesRenderer[] simpleSeriesRenderer;
 	private LinearLayout layout;
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
@@ -47,7 +48,13 @@ public class PieGraphActivity extends Activity {
 		try{ 
 			registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 			super.onCreate(savedInstanceState);
-
+			
+			simpleSeriesRenderer = new SimpleSeriesRenderer[11]; 
+			for (int i = 0; i < simpleSeriesRenderer.length; i++){
+				simpleSeriesRenderer[i] = new SimpleSeriesRenderer();
+				simpleSeriesRenderer[i].setColor(colors[i]);				
+			}
+			
 			//Quitar título de la actividad y pantalla completa
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -70,7 +77,6 @@ public class PieGraphActivity extends Activity {
 				@Override
 				public void onReceive(Context context, Intent intent) {	
 					getValues();
-					onResume();
 					view.repaint();
 				}
 
@@ -99,14 +105,14 @@ public class PieGraphActivity extends Activity {
 
 	private void getValues(){
 		series.clear();
-
+		renderer.removeAllRenderers();
 		values = WifiMap.getChannelAP();
 		for (int i = 0; i<values.length; i++) {
 			int canal = i+1;
-			series.add("Canal " + canal, values[i]);
-			SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-			r.setColor(colors[canal-1]);
-			renderer.addSeriesRenderer(r);
+			if (values[i] > 0){
+				series.add("Canal " + canal, values[i]);
+				renderer.addSeriesRenderer(simpleSeriesRenderer[i]);
+			}
 		}
 	}
 

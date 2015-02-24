@@ -5,9 +5,6 @@ import java.util.List;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
@@ -15,7 +12,6 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.mdes.mywifi.activity.WifiListActivity;
-import com.mdes.mywifi.chart.DynamicGraphActivity;
 import com.mdes.mywifi.chart.FrequencyGraphActivity;
 import com.mdes.mywifi.chart.MultipleGraph;
 /**
@@ -99,7 +95,6 @@ public class WifiThread extends Thread{
             }
             Wifi.contador++; 
             if (WifiListActivity.wifiManager.isWifiEnabled() && resultWifiList.size()!=0 && resultWifiList != null){
-Log.i("BSSID","Hay "+ resultWifiList.size() +  " resultados");
                 //Una vez obtenidos los resultados avisa a las demás actividades
                 Intent i = new Intent();
                 i.setAction("com.mdes.mywifi.timer");
@@ -111,7 +106,6 @@ Log.i("BSSID","Hay "+ resultWifiList.size() +  " resultados");
                 wifiList.sendBroadcast(i2);
             }
             else{
-Log.i("BSSID","No hay redes");
                 //Si no ha encontrado redes wifi
                 Log.i("INFO","No encuentra redes wifi");
                 Intent i = new Intent();

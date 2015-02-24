@@ -41,7 +41,6 @@ public class WifiMap {
 	@SuppressWarnings("rawtypes")
 	public static void putValue(List<ScanResult> resultWifiList){
 
-		resetAntennas();
 		BSSIDList = new ArrayList<String>();
 		SSIDList = new HashMap<String, Integer>();
 
@@ -215,7 +214,7 @@ public class WifiMap {
 		return colors[aux];
 	}
 
-	private static void resetAntennas(){
+	public static void resetAntennas(){
 		Iterator it = wifiMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry e = (Map.Entry)it.next();
