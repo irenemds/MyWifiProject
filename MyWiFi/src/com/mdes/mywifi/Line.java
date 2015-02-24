@@ -21,7 +21,8 @@ public class Line {
 			Color.parseColor("#41C4BF"), Color.parseColor("#4166C4"),
 			Color.parseColor("#B04E9D"), Color.parseColor("#FF2F2F"),
 			Color.parseColor("#33FF99"), Color.parseColor("#DCE45F"),
-			Color.parseColor("#FFD06B")};
+			Color.parseColor("#FFD06B"), Color.BLUE, Color.WHITE,
+			Color.GRAY, Color.GREEN, Color.RED, Color.YELLOW};
 	private boolean shown;
 
 	public Line(Wifi wifi)

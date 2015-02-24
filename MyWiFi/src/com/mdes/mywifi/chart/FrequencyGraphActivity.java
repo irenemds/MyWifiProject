@@ -17,6 +17,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.WindowManager;
 
+import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
@@ -51,10 +52,9 @@ public class FrequencyGraphActivity extends Activity {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				rendererSetUp();
-				mRenderer.setYAxisMax(-50);
-				mRenderer.setYAxisMin(-120);
-//				MultipleGraph.deleteFreqGraph();
-//				MultipleGraph.createFreqGraph();
+				if(WifiMap.getMaxLevel() > -50){
+					mRenderer.setYAxisMax((WifiMap.getMaxLevel()/10)*10+10);
+				}
 				view.repaint();
 			}
 
@@ -105,6 +105,8 @@ public class FrequencyGraphActivity extends Activity {
 				mRenderer.setXAxisMin(0);
 				mRenderer.setYLabels(11);
 				mRenderer.setXLabels(11);
+				mRenderer.setYAxisMax(-50);
+				mRenderer.setYAxisMin(-120);
 	}
 
 	private void registerReceivers(){

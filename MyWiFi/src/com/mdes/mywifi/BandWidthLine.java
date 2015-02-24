@@ -3,10 +3,10 @@ package com.mdes.mywifi;
 import org.achartengine.model.TimeSeries;
 import org.achartengine.renderer.XYSeriesRenderer;
 
-import com.mdes.mywifi.chart.FrequencyGraphActivity;
-import com.mdes.mywifi.chart.MultipleGraph;
-
 import android.graphics.Color;
+import android.util.Log;
+
+import com.mdes.mywifi.chart.FrequencyGraphActivity;
 
 /**
  * Esta clase se emplea para crear las líneas que se representarán en
@@ -23,7 +23,8 @@ public class BandWidthLine {
 			Color.parseColor("#41C4BF"), Color.parseColor("#4166C4"),
 			Color.parseColor("#B04E9D"), Color.parseColor("#FF2F2F"),
 			Color.parseColor("#33FF99"), Color.parseColor("#DCE45F"),
-			Color.parseColor("#FFD06B")};
+			Color.parseColor("#FFD06B"), Color.BLUE, Color.WHITE,
+			Color.GRAY, Color.GREEN, Color.RED, Color.YELLOW};
 	private boolean shown;
 	private static int aux = 0;
 	private double xValue = -120;
@@ -34,7 +35,7 @@ public class BandWidthLine {
 	 */
 	public BandWidthLine(Wifi wifi){		
 		dataset = new TimeSeries(wifi.getSSID());
-		
+Log.i("TREN","WIFI "+ wifi.getSSID());
 		aux++;
 		if(aux >= colors.length){
 			aux = aux-colors.length;
@@ -99,12 +100,22 @@ public class BandWidthLine {
 			}
 			//En cualquier caso añadimos el valor de y, transformado para que marque
 			//el canal y no la frecuencia.
-			dataset.add((yValue-2407)/5, xValue);	
+			dataset.add((yValue-2407)/5, xValue);
+			if (shown == false){
+				FrequencyGraphActivity.mRenderer.addSeriesRenderer(renderer);
+				FrequencyGraphActivity.mDataset.addSeries(dataset);
+				
+Log.i("TREN","WIFI "+ wifi.getSSID());
+			}
+			shown = true;
 		}
 
 	}
 	
 	public void deleteLine(){
 		dataset.clear();
+		FrequencyGraphActivity.mRenderer.removeSeriesRenderer(renderer);
+		FrequencyGraphActivity.mDataset.removeSeries(dataset);
+		shown = false;
 	}
 }
