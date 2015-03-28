@@ -28,9 +28,7 @@ public class MultipleGraph {
 		mRenderer.setShowGrid(true);
 	    mRenderer.setApplyBackgroundColor(true);
 	    mRenderer.setBackgroundColor(Color.BLACK);
-	    mRenderer.setAxisTitleTextSize(20);
-	    mRenderer.setChartTitle("Gráfica de Potencias");
-	    mRenderer.setChartTitleTextSize(27);
+	    mRenderer.setAxisTitleTextSize(20);;
 		mRenderer.setAxisTitleTextSize(20);
 	    mRenderer.setLabelsTextSize(20);
 		mRenderer.setYTitle("Potencia [dBm]");

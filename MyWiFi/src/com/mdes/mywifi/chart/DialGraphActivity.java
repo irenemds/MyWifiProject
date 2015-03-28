@@ -22,6 +22,7 @@ import org.achartengine.renderer.DialRenderer;
 import org.achartengine.renderer.DialRenderer.Type;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,9 +31,13 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.mdes.mywifi.HelpDialog;
+import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.Wifi;
 import com.mdes.mywifi.WifiMap;
@@ -54,6 +59,9 @@ public class DialGraphActivity extends Activity  {
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
 
+	ActionBar actionBar = null;
+	private HelpDialog helpDialog;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -67,9 +75,11 @@ public class DialGraphActivity extends Activity  {
 		wifi = WifiMap.wifiMap.get(extras.getString("BSSID"));
 		category = new CategorySeries(wifi.getSSID());
 
+		actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(false);
+		
 		setUp();
 		renderer = new DialRenderer();
-		renderer.setChartTitleTextSize(20);
 		renderer.setLabelsTextSize(15);
 		renderer.setLegendTextSize(20);
 		renderer.setMargins(new int[] {50, 40, 15, 30});
@@ -135,5 +145,36 @@ public class DialGraphActivity extends Activity  {
 	protected void onPause() {
 		super.onPause();
 		unregisterReceivers();
+	}
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.help_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		try{
+			switch(item.getItemId()) {
+			
+			case R.id.ayuda:
+				setResult(Activity.RESULT_CANCELED);
+				String text = "En esta imágen se puede comprobar el valor de potencia obtenido en"
+						+ " el último escaneo del Punto de Acceso seleccionado y, también, los valores"
+						+ " máximo y mínimo recibidos en anteriores escaneos de dicho AP."
+						+ "Esto puede resultar útil para analizar la potencia recibida en función de la posición"
+						+ " en la que se encuentre el dispositivo móvil y/o el AP. ";
+				helpDialog = new HelpDialog(this,"Ayuda", text);
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LogManager lm = new LogManager(e);
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }

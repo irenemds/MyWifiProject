@@ -7,6 +7,7 @@ import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 
 import android.R.layout;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,11 +17,14 @@ import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
+import com.mdes.mywifi.HelpDialog;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.WifiMap;
@@ -38,11 +42,14 @@ public class PieGraphActivity extends Activity {
 			Color.parseColor("#41C4BF"), Color.parseColor("#4166C4"),
 			Color.parseColor("#B04E9D"), Color.parseColor("#FF2F2F"),
 			Color.parseColor("#33FF99"), Color.parseColor("#DCE45F"),
-			Color.parseColor("#DCE45F")};
+			Color.RED};
 	private SimpleSeriesRenderer[] simpleSeriesRenderer;
 	private LinearLayout layout;
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
+	
+	ActionBar actionBar = null;
+	private HelpDialog helpDialog;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		try{ 
@@ -58,11 +65,14 @@ public class PieGraphActivity extends Activity {
 			//Quitar título de la actividad y pantalla completa
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+			actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(false);
+			
 			renderer = new DefaultRenderer();
 			series = new CategorySeries("Pie Graph");
 
+			
 			getValues();
-			renderer.setChartTitle("Redes por canal");
 			renderer.setChartTitleTextSize(27);
 			renderer.setStartAngle(180);
 			renderer.setDisplayValues(true);
@@ -70,7 +80,7 @@ public class PieGraphActivity extends Activity {
 			renderer.setLabelsTextSize(20);
 			renderer.setApplyBackgroundColor(true);
 			renderer.setMargins(new int[] { 50, 40, 10, 30 });
-			renderer.setShowLegend(false);
+			renderer.setShowLegend(true);
 
 			currentActivityReceiver= new BroadcastReceiver(){
 
@@ -87,6 +97,37 @@ public class PieGraphActivity extends Activity {
 		}
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.help_menu, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		try{
+			switch(item.getItemId()) {
+			
+			case R.id.ayuda:
+				setResult(Activity.RESULT_CANCELED);
+				String text = "Esta gráfica muestra una comparativa gráfica de la proporción "
+						+ "de puntos de acceso que están transmitiendo en cada canal. ";
+				helpDialog = new HelpDialog(this,"Ayuda", text);
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LogManager lm = new LogManager(e);
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	
 	protected void onStart() {
 		try{
 			super.onStart();

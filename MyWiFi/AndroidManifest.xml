@@ -70,7 +70,7 @@
         </activity>
         <activity
             android:name="com.mdes.mywifi.chart.LinkSpeedGraphActivity"
-            android:label="@string/title_activity_level_graph"
+            android:label="@string/title_activity_link_graph"
             android:parentActivityName="com.mdes.mywifi.activity.CurrentAPActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -86,7 +86,7 @@
         </activity>
         <activity
             android:name="com.mdes.mywifi.chart.FrequencyGraphActivity"
-            android:label="@string/title_activity_level_graph"
+            android:label="@string/title_activity_freq_graph"
             android:parentActivityName="com.mdes.mywifi.activity.FrequencyGraphActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -102,7 +102,7 @@
         </activity>
         <activity
             android:name="com.mdes.mywifi.chart.DialGraphActivity"
-            android:label="@string/title_activity_level_graph"
+            android:label="@string/title_activity_potenciometro"
             android:parentActivityName="com.mdes.mywifi.activity.NetInfoActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -112,13 +112,13 @@
 
             <intent-filter>
                 <action android:name="com.mdes.mywifi.LINKSPEEDGRAPHACTIVITY" />
-
+				
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.mdes.mywifi.chart.PieGraphActivity"
-            android:label="@string/title_activity_level_graph"
+            android:label="@string/title_activity_pie_graph"
             android:parentActivityName="com.mdes.mywifi.activity.WifiListActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->

@@ -5,6 +5,7 @@ import org.achartengine.GraphicalView;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,11 +14,14 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
+import com.mdes.mywifi.HelpDialog;
 import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
@@ -36,11 +40,16 @@ public class LinkSpeedGraphActivity extends Activity{
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
 
+	ActionBar actionBar = null;
+	private HelpDialog helpDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		try{
 
+			actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(false);
+			
 			registerReceivers();
 
 			mRenderer.setClickEnabled(false);
@@ -48,7 +57,6 @@ public class LinkSpeedGraphActivity extends Activity{
 			mRenderer.setApplyBackgroundColor(true);
 			mRenderer.setBackgroundColor(Color.BLACK);
 			mRenderer.setAxisTitleTextSize(16);
-			mRenderer.setChartTitleTextSize(27);
 			mRenderer.setLabelsTextSize(20);
 			mRenderer.setAxisTitleTextSize(20);
 			mRenderer.setChartTitle("Velocidad de enlace");
@@ -122,6 +130,36 @@ public class LinkSpeedGraphActivity extends Activity{
 		}
 	}
 
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.help_menu, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		try{
+			switch(item.getItemId()) {
+			
+			case R.id.ayuda:
+				setResult(Activity.RESULT_CANCELED);
+				String text = "Esta gráfica muestra una representación en tiempo real de los "
+						+ " megabits por segundo recibidos a través del enlace establecido con el punto"
+						+ " de acceso seleccionado.";
+				helpDialog = new HelpDialog(this,"Ayuda", text);
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LogManager lm = new LogManager(e);
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	private void registerReceivers(){
 		registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 		registerReceiver(currentActivityReceiver, new IntentFilter("com.mdes.mywifi.timer"));

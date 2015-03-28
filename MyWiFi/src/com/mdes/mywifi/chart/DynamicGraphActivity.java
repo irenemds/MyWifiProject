@@ -3,6 +3,7 @@ package com.mdes.mywifi.chart;
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,11 +11,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.mdes.mywifi.HelpDialog;
 import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
@@ -31,7 +34,8 @@ public class DynamicGraphActivity extends Activity {
 	private BroadcastReceiver graphReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
 	
-	
+	ActionBar actionBar = null;
+	private HelpDialog helpDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,9 @@ public class DynamicGraphActivity extends Activity {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			
 			setContentView(R.layout.xy_chart);
+			
+			actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(false);
 			
 			graphReceiver = new BroadcastReceiver(){
 				@Override
@@ -56,10 +63,43 @@ public class DynamicGraphActivity extends Activity {
 				}
 			};
 			
-			registerReceivers();			
+			registerReceivers();
+			
 		}catch (Exception e){
 			e.printStackTrace();
 			LogManager lm = new LogManager(e);
+		}
+	}
+	
+	/*	---------- Menu ----------- */
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.help_menu, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		try{
+			switch(item.getItemId()) {
+			
+			case R.id.ayuda:
+				setResult(Activity.RESULT_CANCELED);
+				String text = "Esta gráfica muestra la comparativa en tiempo real de la potencia recibida de"
+						+ "cada punt de acceso detectado en los escaneos realizados.";
+				helpDialog = new HelpDialog(this,"Ayuda", text);
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LogManager lm = new LogManager(e);
+			return super.onOptionsItemSelected(item);
 		}
 	}
 

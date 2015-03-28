@@ -67,9 +67,6 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 
 	private GraphicalView mChartView;
 	
-	private String[] infoText;
-	private String[] descText;
-	
 	private int index;
 	private int offset;
 	
@@ -284,14 +281,13 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 			helpDialog = new HelpDialog(this,"Propiedades del AP", text);
 			break;
 		case 5:
-			text = "Identificador numérico que caracteriza la interfaz de red del Punto de Acceso (AP) seleccionado.";
-			helpDialog = new HelpDialog(this,"Dirección IP (Internet Protocol)", text);
+			text = "También conocida como dirección física, es un código formado por"
+					+ " 48 bits es única para cada tarjeta o dispositivo de red";
+			helpDialog = new HelpDialog(this,"Dirección MAC (Medium Access Control)", text);
 			break;
 		case 6:
-			Log.i("INFO","6");
-			break;
-		default:
-			Log.i("INFO","+6" + position);
+			text = "Identificador numérico que caracteriza la interfaz de red del Punto de Acceso (AP) seleccionado.";
+			helpDialog = new HelpDialog(this,"Dirección IP (Internet Protocol)", text);
 			break;
 		}
 		

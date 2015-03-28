@@ -12,6 +12,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -70,6 +71,7 @@ public class WifiListActivity extends Activity implements OnItemClickListener {
 
 			//Activar pantalla completa			
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			
 			//Asigna el layout a visualizar
 			setContentView(R.layout.main_menu);

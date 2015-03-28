@@ -11,6 +11,10 @@
     <string name="title_activity_redwifi">Detalles de AP</string>
     <string name="title_activity_net_info">Info de AP</string>
     <string name="title_activity_level_graph">Gráfica de potencias</string>
+    <string name="title_activity_pie_graph">Gráfica sectorial de canales</string>
+    <string name="title_activity_freq_graph">Gráfica espectral de canales</string>
+    <string name="title_activity_link_graph">Gráfica de velocidad de enlace</string>
+    <string name="title_activity_potenciometro">Medidor de potencia</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_info_ap">Info AP</string>
 

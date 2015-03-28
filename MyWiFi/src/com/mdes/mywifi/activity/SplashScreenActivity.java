@@ -10,6 +10,7 @@ import android.content.pm.ActivityInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.R;
@@ -25,6 +26,7 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
  
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_screen);
 

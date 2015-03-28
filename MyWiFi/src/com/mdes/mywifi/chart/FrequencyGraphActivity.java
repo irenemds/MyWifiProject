@@ -7,6 +7,7 @@ import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,8 +16,13 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.WindowManager;
 
+import com.mdes.mywifi.HelpDialog;
+import com.mdes.mywifi.LogManager;
+import com.mdes.mywifi.R;
 import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
@@ -33,6 +39,8 @@ public class FrequencyGraphActivity extends Activity {
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
 
+	ActionBar actionBar = null;
+	private HelpDialog helpDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,10 @@ public class FrequencyGraphActivity extends Activity {
 
 		view = ChartFactory.getLineChartView(this, FrequencyGraphActivity.mDataset, FrequencyGraphActivity.mRenderer);		
 		setContentView(view);
+		
+		actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(false);
+		
 		currentActivityReceiver = new BroadcastReceiver(){
 
 			@Override
@@ -93,9 +105,6 @@ public class FrequencyGraphActivity extends Activity {
 				mRenderer.setShowGrid(true);
 				mRenderer.setApplyBackgroundColor(true);
 				mRenderer.setBackgroundColor(Color.BLACK);
-				mRenderer.setAxisTitleTextSize(20);
-				mRenderer.setChartTitleTextSize(27);
-				mRenderer.setChartTitle("Gráfica de transmisión por canales");
 				mRenderer.setLabelsTextSize(20);
 				mRenderer.setLegendTextSize(20);
 				mRenderer.setYTitle("Potencia [dBm]");
@@ -107,6 +116,39 @@ public class FrequencyGraphActivity extends Activity {
 				mRenderer.setXLabels(11);
 				mRenderer.setYAxisMax(-50);
 				mRenderer.setYAxisMin(-120);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.help_menu, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		try{
+			switch(item.getItemId()) {
+			
+			case R.id.ayuda:
+				setResult(Activity.RESULT_CANCELED);
+				String text = "Esta gráfica muestra en que canal está transmitiendo "
+						+ "cada punto de acceso detectado en los escaneos realizados. "
+						+ "A partir de esta es fácil analizar en cual de los canales existen"
+						+ "menos interferencias de otras transmisiones Wifi y, por tanto,"
+						+ "en cual de ellos se obtendrá el mejor rendimiento para nuestra red.";
+				helpDialog = new HelpDialog(this,"Ayuda", text);
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LogManager lm = new LogManager(e);
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	private void registerReceivers(){

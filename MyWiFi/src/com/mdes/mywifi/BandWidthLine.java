@@ -1,6 +1,7 @@
 package com.mdes.mywifi;
 
 import org.achartengine.model.TimeSeries;
+import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.graphics.Color;
@@ -101,6 +102,13 @@ Log.i("TREN","WIFI "+ wifi.getSSID());
 			//En cualquier caso añadimos el valor de y, transformado para que marque
 			//el canal y no la frecuencia.
 			dataset.add((yValue-2407)/5, xValue);
+			XYSeries[] xySeries = FrequencyGraphActivity.mDataset.getSeries();
+			for (int i = 0 ; i < xySeries.length; i++){
+				if (xySeries[i].equals(dataset)){
+					Log.i("TREN", "SISISISISI YA ESTABA");
+					shown = true;
+				}
+			}
 			if (shown == false){
 				FrequencyGraphActivity.mRenderer.addSeriesRenderer(renderer);
 				FrequencyGraphActivity.mDataset.addSeries(dataset);
