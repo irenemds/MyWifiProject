@@ -1,18 +1,4 @@
-/**
- * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
- *  
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *  
- *      http://www.apache.org/licenses/LICENSE-2.0
- *  
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package com.mdes.mywifi.chart;
 
 import org.achartengine.ChartFactory;
@@ -36,16 +22,18 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.mdes.mywifi.HelpDialog;
-import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
-import com.mdes.mywifi.Wifi;
-import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
+import com.mdes.mywifi.help.HelpDialog;
+import com.mdes.mywifi.log.LogManager;
+import com.mdes.mywifi.wifi.Wifi;
+import com.mdes.mywifi.wifi.WifiMap;
 
 /**
- * Budget demo pie chart.
+ * Esta clase se emplea para realizar la representación gráfica del nivel de potencia recibido de un
+ * punto de acceso empleando la opción Dial Graph de la biblioteca de gráficas.
+ *
  */
 public class DialGraphActivity extends Activity  {
 
@@ -59,6 +47,7 @@ public class DialGraphActivity extends Activity  {
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
 
+	private boolean saved = false;
 	ActionBar actionBar = null;
 	private HelpDialog helpDialog;
 	
@@ -69,8 +58,10 @@ public class DialGraphActivity extends Activity  {
 		//Quitar título de la actividad y pantalla completa
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+		//Dar de alta receivers
 		registerReceivers();
 
+		//Recibe información del punto de acceso actual mediante extras de la actividad previa
 		Bundle extras = getIntent().getExtras();
 		wifi = WifiMap.wifiMap.get(extras.getString("BSSID"));
 		category = new CategorySeries(wifi.getSSID());
@@ -78,10 +69,14 @@ public class DialGraphActivity extends Activity  {
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(false);
 		
+		//Configuración gráfica
 		setUp();
 		renderer = new DialRenderer();
-		renderer.setLabelsTextSize(15);
-		renderer.setLegendTextSize(20);
+		renderer.setZoomEnabled(false);
+		renderer.setClickEnabled(false);
+		renderer.setPanEnabled(false);
+		renderer.setLabelsTextSize(25);
+		renderer.setLegendTextSize(25);
 		renderer.setMargins(new int[] {50, 40, 15, 30});
 		r = new SimpleSeriesRenderer();
 		r.setColor(Color.parseColor("#009C8F"));
@@ -102,10 +97,11 @@ public class DialGraphActivity extends Activity  {
 		renderer.setBackgroundColor(Color.BLACK);
 
 		currentActivityReceiver = new BroadcastReceiver(){
-
+			//Receiver para actualizar información cuando el hilo secundario avise
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				if (wifi.isRepresentable()){
+					//vaciar, configurar y actualizar gráfica
 					category.clear();
 					setUp();
 					view.repaint();
@@ -139,6 +135,9 @@ public class DialGraphActivity extends Activity  {
 		category.add("Actual", wifi.getLastLevel());
 		category.add("Mínimo", wifi.getMinLevel());
 		category.add("Máximo", wifi.getMaxLevel());
+		if (saved){
+			category.add("Guardado", wifi.getSavedValue());
+		}
 	}
 
 	@Override
@@ -149,25 +148,43 @@ public class DialGraphActivity extends Activity  {
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		getMenuInflater().inflate(R.menu.help_menu, menu);
+		getMenuInflater().inflate(R.menu.dial_menu, menu);
 		return true;
 	}
 
+	//Opciones del menú
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		try{
 			switch(item.getItemId()) {
-			
 			case R.id.ayuda:
 				setResult(Activity.RESULT_CANCELED);
 				String text = "En esta imágen se puede comprobar el valor de potencia obtenido en"
 						+ " el último escaneo del Punto de Acceso seleccionado y, también, los valores"
 						+ " máximo y mínimo recibidos en anteriores escaneos de dicho AP."
+						+ "Permite también guardar el valor de un escaneo para compararlo con los posteriores."
 						+ "Esto puede resultar útil para analizar la potencia recibida en función de la posición"
 						+ " en la que se encuentre el dispositivo móvil y/o el AP. ";
 				helpDialog = new HelpDialog(this,"Ayuda", text);
 				return true;
-
+			case R.id.guardar:
+				//Guardar valor en objeto wifi
+				wifi.setSavedValue(wifi.getLastLevel());
+				if (!saved){
+					r = new SimpleSeriesRenderer();
+					r.setColor(Color.YELLOW);
+					renderer.addSeriesRenderer(r);
+					renderer.setVisualTypes(new DialRenderer.Type[] {Type.ARROW, Type.NEEDLE, Type.NEEDLE, Type.ARROW});
+					saved = true;
+				}
+				return true;
+			case R.id.salir:
+				Intent intent = new Intent(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_HOME);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+				return true;
+			
 			default:
 				return super.onOptionsItemSelected(item);
 			}

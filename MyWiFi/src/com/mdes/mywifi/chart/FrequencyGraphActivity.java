@@ -20,14 +20,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
-import com.mdes.mywifi.HelpDialog;
-import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
-import com.mdes.mywifi.WifiMap;
-import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
-
+import com.mdes.mywifi.help.HelpDialog;
+import com.mdes.mywifi.log.LogManager;
+import com.mdes.mywifi.thread.WifiThread;
+import com.mdes.mywifi.wifi.WifiMap;
+/**
+ * Esta clase se emplea para crear las gráficas que representarán la potencia recibida en función
+ * del canal de transmisión.
+ *
+ */
 public class FrequencyGraphActivity extends Activity {
 
 	public static GraphicalView view;
@@ -38,13 +42,12 @@ public class FrequencyGraphActivity extends Activity {
 	private Context c;
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
-
+	private boolean pausa = false;
 	ActionBar actionBar = null;
 	private HelpDialog helpDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//		try{
 		registerReceivers();
 		rendererSetUp();
 
@@ -55,19 +58,22 @@ public class FrequencyGraphActivity extends Activity {
 
 		view = ChartFactory.getLineChartView(this, FrequencyGraphActivity.mDataset, FrequencyGraphActivity.mRenderer);		
 		setContentView(view);
-		
+
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(false);
-		
-		currentActivityReceiver = new BroadcastReceiver(){
 
+		currentActivityReceiver = new BroadcastReceiver(){
+			//Receiver para actualizar la información
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				rendererSetUp();
-				if(WifiMap.getMaxLevel() > -50){
-					mRenderer.setYAxisMax((WifiMap.getMaxLevel()/10)*10+10);
+				if(!pausa){
+					rendererSetUp();
+					if(WifiMap.getMaxLevel() > -50){ 
+						//Mayor que el límite inicial
+						mRenderer.setYAxisMax((WifiMap.getMaxLevel()/10)*10+10);
+					}
+					view.repaint();
 				}
-				view.repaint();
 			}
 
 		};
@@ -77,9 +83,9 @@ public class FrequencyGraphActivity extends Activity {
 		super.onStart();
 		WifiThread.isFreqGraph = true;
 		c = this;
-				rendererSetUp();
-				view = ChartFactory.getLineChartView(this, mDataset, mRenderer);	
-				setContentView(view);
+		rendererSetUp();
+		view = ChartFactory.getLineChartView(this, mDataset, mRenderer);	
+		setContentView(view);
 		registerReceivers();
 	}
 
@@ -88,36 +94,37 @@ public class FrequencyGraphActivity extends Activity {
 		WifiThread.isFreqGraph = false;
 		super.onPause();
 		unregisterReceivers();
-//		MultipleGraph.deleteFreqGraph();
 	}
 
 	@Override
 	protected void onResume() {
 		WifiThread.isFreqGraph = true;
-//		MultipleGraph.createFreqGraph();
 		super.onResume();
 		registerReceivers();
 	}
 
 
 	private void rendererSetUp(){
-				mRenderer.setClickEnabled(false);
-				mRenderer.setShowGrid(true);
-				mRenderer.setApplyBackgroundColor(true);
-				mRenderer.setBackgroundColor(Color.BLACK);
-				mRenderer.setLabelsTextSize(20);
-				mRenderer.setLegendTextSize(20);
-				mRenderer.setYTitle("Potencia [dBm]");
-				mRenderer.setXTitle("Canal");
-				mRenderer.setMargins(new int[] { 50, 40, 10, 30 });
-				mRenderer.setXAxisMax(12);
-				mRenderer.setXAxisMin(0);
-				mRenderer.setYLabels(11);
-				mRenderer.setXLabels(11);
-				mRenderer.setYAxisMax(-50);
-				mRenderer.setYAxisMin(-120);
+		mRenderer.setClickEnabled(false);
+		mRenderer.setShowGrid(true);
+		mRenderer.setApplyBackgroundColor(true);
+		mRenderer.setBackgroundColor(Color.BLACK);
+		mRenderer.setLabelsTextSize(25);
+		mRenderer.setLegendTextSize(25);
+		mRenderer.setAxisTitleTextSize(25);
+		mRenderer.setYTitle("Potencia [dBm]");
+		mRenderer.setXTitle("Canal");
+		mRenderer.setMargins(new int[] { 50, 40, 10, 30 });
+		mRenderer.setXAxisMax(12);
+		mRenderer.setXAxisMin(0);
+		mRenderer.setYLabels(11);
+		mRenderer.setXLabels(11);
+		mRenderer.setYAxisMax(-50);
+		mRenderer.setYAxisMin(-120);
+		mRenderer.setZoomEnabled(false);
+		mRenderer.setPanEnabled(false);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -130,7 +137,7 @@ public class FrequencyGraphActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		try{
 			switch(item.getItemId()) {
-			
+
 			case R.id.ayuda:
 				setResult(Activity.RESULT_CANCELED);
 				String text = "Esta gráfica muestra en que canal está transmitiendo "
@@ -139,6 +146,21 @@ public class FrequencyGraphActivity extends Activity {
 						+ "menos interferencias de otras transmisiones Wifi y, por tanto,"
 						+ "en cual de ellos se obtendrá el mejor rendimiento para nuestra red.";
 				helpDialog = new HelpDialog(this,"Ayuda", text);
+				return true;
+			case R.id.pausa:
+				pausa = !pausa;
+				if (pausa){
+					item.setTitle("Reanudar");
+				}
+				else{
+					item.setTitle("Pausa");
+				}
+				return true;
+			case R.id.salir:
+				Intent intent = new Intent(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_HOME);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
 				return true;
 
 			default:

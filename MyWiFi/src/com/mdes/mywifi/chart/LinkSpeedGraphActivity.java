@@ -21,15 +21,19 @@ import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
-import com.mdes.mywifi.HelpDialog;
-import com.mdes.mywifi.WifiThread;
-import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
-import com.mdes.mywifi.Wifi;
-import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
-
+import com.mdes.mywifi.help.HelpDialog;
+import com.mdes.mywifi.log.LogManager;
+import com.mdes.mywifi.thread.WifiThread;
+import com.mdes.mywifi.wifi.Wifi;
+import com.mdes.mywifi.wifi.WifiMap;
+/**
+ * Esta clase se emplea para crear las gráficas que representarán la velocidad de enlace
+ * a lo largo del tiempo.
+ *
+ */
 public class LinkSpeedGraphActivity extends Activity{
 
 	public static GraphicalView view;
@@ -43,6 +47,8 @@ public class LinkSpeedGraphActivity extends Activity{
 	ActionBar actionBar = null;
 	private HelpDialog helpDialog;
 
+	private boolean pausa = false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		try{
@@ -57,13 +63,14 @@ public class LinkSpeedGraphActivity extends Activity{
 			mRenderer.setApplyBackgroundColor(true);
 			mRenderer.setBackgroundColor(Color.BLACK);
 			mRenderer.setAxisTitleTextSize(16);
-			mRenderer.setLabelsTextSize(20);
-			mRenderer.setAxisTitleTextSize(20);
-			mRenderer.setChartTitle("Velocidad de enlace");
+			mRenderer.setLabelsTextSize(25);
+			mRenderer.setAxisTitleTextSize(25);
 			mRenderer.setLegendTextSize(20);
 			mRenderer.setYTitle("Velocidad [Mbps]");
 			mRenderer.setMargins(new int[] { 50, 40, 10, 30 });
 			mRenderer.setPointSize(5);
+			mRenderer.setZoomEnabled(false);
+			mRenderer.setPanEnabled(false);
 
 			super.onCreate(savedInstanceState);
 			
@@ -83,8 +90,10 @@ public class LinkSpeedGraphActivity extends Activity{
 						if(Wifi.contador > 15){
 							LinkSpeedGraphActivity.mRenderer.setXAxisMax(Wifi.contador);
 							LinkSpeedGraphActivity.mRenderer.setXAxisMin(Wifi.contador-15);
-						}			
-						view.repaint();
+						}
+						if (!pausa){
+							view.repaint();
+						}
 					}
 
 					else{
@@ -146,10 +155,28 @@ public class LinkSpeedGraphActivity extends Activity{
 				setResult(Activity.RESULT_CANCELED);
 				String text = "Esta gráfica muestra una representación en tiempo real de los "
 						+ " megabits por segundo recibidos a través del enlace establecido con el punto"
-						+ " de acceso seleccionado.";
+						+ " de acceso seleccionado. Esta velocidad varía a lo largo del tiempo para intentar"
+						+ "mantener un enlace estable en todo momento. Puede depender de factores como la "
+						+ "distancia entre el dispositivo y el punto de acceso, el número de dispositivos"
+						+ "conectados a él.";
 				helpDialog = new HelpDialog(this,"Ayuda", text);
 				return true;
-
+			case R.id.pausa:
+				pausa = !pausa;
+				if (pausa){
+					item.setTitle("Reanudar");
+				}
+				else{
+					 item.setTitle("Pausa");
+				}
+				return true;
+			case R.id.salir:
+				Intent intent = new Intent(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_HOME);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+				return true;
+			
 			default:
 				return super.onOptionsItemSelected(item);
 			}

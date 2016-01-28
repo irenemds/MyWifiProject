@@ -16,30 +16,31 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.widget.AdapterView.OnItemClickListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.mdes.mywifi.HelpDialog;
-import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
-import com.mdes.mywifi.Wifi;
-import com.mdes.mywifi.WifiLevelImage;
-import com.mdes.mywifi.WifiMap;
-import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
 import com.mdes.mywifi.chart.DialGraphActivity;
 import com.mdes.mywifi.chart.LinkSpeedGraphActivity;
+import com.mdes.mywifi.help.HelpDialog;
+import com.mdes.mywifi.log.LogManager;
+import com.mdes.mywifi.thread.WifiThread;
+import com.mdes.mywifi.wifi.Wifi;
+import com.mdes.mywifi.wifi.WifiLevelImage;
+import com.mdes.mywifi.wifi.WifiMap;
 
 /**
  * En esta actividad se muestra información del punto de acceso seleccionado
@@ -74,7 +75,7 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		try{
 			super.onCreate(savedInstanceState);
-			
+			//Configuración de pantalla
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			
 			setContentView(R.layout.net_info);
@@ -88,14 +89,17 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 		    buttonp = (Button) findViewById(R.id.buttonp);
 		    buttonv = (Button) findViewById(R.id.buttonv);
 		
+		    //Recibe red seleccionada
 			Bundle extras = getIntent().getExtras();
 			Log.i("BSSID", "recibo" + extras.getString("BSSID"));
 			wifi = WifiMap.wifiMap.get(extras.getString("BSSID"));
-//					WifiMap.getWifi(extras.getString("SSID"));
-			  
+			
+			//Representa información en pantalla
 			SSID.setText(wifi.getSSID());
 			IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
 			getInfo();
+			
+			//Activa listener de la lista
 			lista.setOnItemClickListener(this);
 			
 			//BroadCastReceiver para manejar evento de tiempo,mostrar valores actualizados.
@@ -104,8 +108,10 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 				@Override
 				public void onReceive(Context context, Intent intent) {
 					if(wifi.isRepresentable()){			
+						//Actualiza nivel potencia
 						IMAGE.setImageResource(WifiLevelImage.getWifiLevelImage(wifi.getLastLevel()));
 						try{
+							//Fijar posición scroll en los escaneos
 							getScrollPosition();
 							getInfo();
 							setScrollPosition();
@@ -115,6 +121,7 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 							}
 					}
 					else{
+						//Si la red no está disponible cierra la actividad
 						finish();
 					}
 				}
@@ -137,33 +144,47 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 	}
 
 
+	//Acciones del menú
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		try{
 			switch(item.getItemId()) {
 			case R.id.guardar:
+				//Guardar datos de potencia
 				File root = Environment.getExternalStorageDirectory();
 				File file = new File(root +"/"+ wifi.getSSID() + ".txt");
 				Log.i("INFO","root "+ root);
 				FileWriter filewriter;
 				try {
+					//Almacena información de potencia en el dispositivo
 					filewriter = new FileWriter(file);
 					BufferedWriter out = new BufferedWriter(filewriter);
 					out.write(WifiMap.getCSV(wifi.getBSSID()));
 					out.close();
 				} catch (IOException e) {
+					//Guarda en log errores
 					LogManager lm = new LogManager(e);
 					e.printStackTrace();
 				}
 
+				Toast.makeText(getApplicationContext(), "Datos de potencia almacenados en el dispositivo.", Toast.LENGTH_LONG).show();
 				setResult(Activity.RESULT_OK);
 				return true;
 
 			case R.id.ayuda:
+				//Mensaje de ayuda
 				setResult(Activity.RESULT_CANCELED);
-				String text = "Se muestra la información principal de la red seleccionada. Para más información a cerca de cada uno de los parámetros"
+				String text = "Se muestra la información principal del punto de acceso seleccionado. Para más información acerca de cada uno de los parámetros"
 						+ " que se muestran en la pantalla haga click sobre ellos.";
 				helpDialog = new HelpDialog(this,"Ayuda", text);
+				return true;
+				
+			case R.id.salir:
+				//Salir de la aplicación.
+				Intent intent = new Intent(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_HOME);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
 				return true;
 
 			default:
@@ -210,6 +231,7 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 
 	public void potenciometro (View view)
 	{
+		//Iniciar actividad potenciómetro
 		Intent intent = new Intent(NetInfoActivity.this, DialGraphActivity.class);
 		intent.putExtra("BSSID", wifi.getBSSID());
 		startActivity(intent);
@@ -217,6 +239,7 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 	
 	public void getInfo(){
 		String[] values;
+		//Representar valores de parámetros para el punto de acceso conectado al dispositivo
 		if (wifi.getBSSID().equals(WifiThread.currentAP.getBSSID()))
 		{
 	        values = new String[] { "BSSID: "+ wifi.getBSSID(), 
@@ -229,6 +252,7 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 	               };
 	        buttonv.setEnabled(true);
 		}
+		//Representar valores de parámetros para el punto de acceso NO conectado al dispositivo
 		else{
 	        values = new String[] { "BSSID: "+ wifi.getBSSID(), 
 	                "Frecuencia: " +Integer.toString(wifi.getFreq())+ " MHz",
@@ -258,35 +282,43 @@ public class NetInfoActivity extends Activity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView parent, View v, int position, long id) {
 		switch (position) {
+		//Mensajes de ayuda para cada uno de los parámetros representados
 		case 0:
 			text = "Es el nombre de identificador único de todos los paquetes de una red inalámbrica. "
-					+ "Esta formado con la dirección MAC (Meadia Access Control) del Punto de Acceso seleccionado.";
+					+ "Esta formado con la dirección MAC (Media Access Control) del Punto de Acceso seleccionado.";
 			helpDialog = new HelpDialog(this,"BSSID (Basic Service Set Identifier)", text);
 			break;
 		case 1:
-			text = "Frecuencia en Mega Hertzios a la que está transmitiendo el Punto de Acceso seleccionado.";
+			text = "Este campo indica la frecuencia de transmisión empleada por el punto de acceso seleccionado dentro del posible espectro. ";
 			helpDialog = new HelpDialog(this,"Frecuencia de transmisión", text);
 			break;
 		case 2:
-			text = "La banda de frecuencia en la que transmite el wifi se divide franjas de 20 MHz, conocidas"
-					+ " como canales.";
+			text = "Este campo indica la porción estandarizada del espectro de frecuencias "
+					+ "en la que transmite el punto de acceso. Su correcta elección determina en gran medida la calidad de la conexión, "
+					+ ", comprueba en las gráficas de frecuencia y canales si el canal "+wifi.getChannel()+" es el mejor para tu punto de acceso.";
 			helpDialog = new HelpDialog(this,"Canal de transmisión", text);
 			break;
 		case 3:
-			text = "Número de Puntos de Acceso (AP) detectados que están transmitiendo ese mismo SSID";
+			text = "Número de Puntos de Acceso (AP) detectados que están transmitiendo ese mismo SSID. La existencia de más "
+					+ "puntos de acceso para una misma WLAN implia un mayor área de cobertura y mayor capacidad "
+					+ "para dar acceso a más dispositivos conectados.";
 			helpDialog = new HelpDialog(this,"Repetidores", text);
 			break;
 		case 4:
-			text = "Características de seguridad y cifrado del Punto de Acceso (AP) seleccionado.";
+			text = "Características de seguridad, cifrado y configuración del Punto de Acceso (AP) seleccionado. "
+					+ "Se indica el tipo de autenticación, uso de claves, cifrado y configuración de la red, además indica si el punto de acceso dispone "
+					+ "de funcionalidad WPS. Esta información no es muy relevante para la calidad de conexión, pero sí "
+					+ "es interesante conocer las opcioines ofrecidas por el punto de acceso.";
 			helpDialog = new HelpDialog(this,"Propiedades del AP", text);
 			break;
 		case 5:
 			text = "También conocida como dirección física, es un código formado por"
-					+ " 48 bits es única para cada tarjeta o dispositivo de red";
+					+ " 48 bits, es única para cada tarjeta o dispositivo de red.  Sólo disponible si el dispositivo está conectado a esa red.";
 			helpDialog = new HelpDialog(this,"Dirección MAC (Medium Access Control)", text);
 			break;
 		case 6:
-			text = "Identificador numérico que caracteriza la interfaz de red del Punto de Acceso (AP) seleccionado.";
+			text = "Información del dispositivo móvil, indica la dirección IP que le ha sido asignada dentro de red "
+					+ "la WLAN seleccionada. Sólo disponible si el dispositivo está conectado a esa red.";
 			helpDialog = new HelpDialog(this,"Dirección IP (Internet Protocol)", text);
 			break;
 		}

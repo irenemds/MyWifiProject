@@ -1,10 +1,10 @@
 package com.mdes.mywifi.broadcastreceiver;
 
 
-import com.mdes.mywifi.CurrentAP;
-import com.mdes.mywifi.WifiThread;
-import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.activity.WifiListActivity;
+import com.mdes.mywifi.thread.WifiThread;
+import com.mdes.mywifi.wifi.CurrentAP;
+import com.mdes.mywifi.wifi.WifiMap;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;

@@ -4,7 +4,7 @@ import com.mdes.mywifi.R;
 import com.mdes.mywifi.R.id;
 import com.mdes.mywifi.R.layout;
 import com.mdes.mywifi.activity.WifiListActivity;
-import com.mdes.mywifi.WifiMap;
+import com.mdes.mywifi.wifi.WifiMap;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -16,7 +16,6 @@ import android.widget.TextView;
 /**
  * Este BroadCastReceiver muestra un Diálogo cuando la aplicación no encuentra redes,
  * también lo cierra cuando las encuentra.
- * @author Usuario1
  *
  */
 public class WifiNotFoundReceiver extends BroadcastReceiver {

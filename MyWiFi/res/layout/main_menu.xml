@@ -7,8 +7,7 @@
         android:id="@+id/List1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/LL02"
-        android:layout_below="@+id/imageView1" />
+        android:layout_above="@+id/LL02" />
 
     <LinearLayout
         android:id="@+id/LL02"
@@ -22,38 +21,33 @@
             android:id="@+id/lineGraph"
             android:layout_width="108dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:onClick="lineGraphHandler"
-            android:text="Potencia" 
-			android:textColor="#FFFFFF" />
+            android:text="Potencia"
+            android:layout_weight="1.17"
+            android:textColor="#FFFFFF" />
         
         <Button
             android:id="@+id/PieGraph"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:onClick="pieGraphHandler"
-            android:text="Canales" 
+            android:text="Canales"
+            android:layout_weight="1.17"
             android:textColor="#FFFFFF" />
         
         <Button
             android:id="@+id/FrecGraph"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|center_horizontal"
             android:onClick="frecGraphHandler"
-            android:text="Frecuencia" 
+            android:text="Frecuencia"
+            android:layout_weight="1.17"
             android:textColor="#FFFFFF" />
         
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="138dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/text" />
 
 </RelativeLayout>

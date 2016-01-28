@@ -12,6 +12,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center_vertical"
         android:textColor="@android:color/black" 
+        android:text="SSID" />
         android:textSize="16sp" />
 
     <TextView
@@ -23,6 +24,7 @@
         android:ellipsize="marquee"
         android:textColor="@android:color/darker_gray" 
         android:singleLine="true"
+        android:text="Potencia" />
         android:textSize="12sp" />
 
         <ImageView
@@ -32,7 +34,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/seguridad"
             android:layout_toRightOf="@+id/barraNivel"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/signal3" />
 
         <ImageView
             android:id="@+id/seguridad"
@@ -40,6 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/barraNivel"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/lockup" />
     
 </RelativeLayout>

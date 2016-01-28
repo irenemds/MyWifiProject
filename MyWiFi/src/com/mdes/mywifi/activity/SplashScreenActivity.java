@@ -12,10 +12,12 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.mdes.mywifi.WifiThread;
 import com.mdes.mywifi.R;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
- 
+import com.mdes.mywifi.thread.WifiThread;
+/*
+ * Actividad para Imágen Inicial de la aplicación.
+ */
 public class SplashScreenActivity extends Activity {
 
     private static final long SPLASH_SCREEN_DELAY = 3000;

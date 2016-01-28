@@ -1,5 +1,9 @@
 package com.mdes.mywifi.chart;
-
+/**
+ * Esta clase se emplea para crear las gráficas que representarán el número de puntos de acceso transmitiendo
+ * por canal de transmisión.
+ *
+ */
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.model.CategorySeries;
@@ -24,12 +28,12 @@ import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
-import com.mdes.mywifi.HelpDialog;
-import com.mdes.mywifi.LogManager;
 import com.mdes.mywifi.R;
-import com.mdes.mywifi.WifiMap;
 import com.mdes.mywifi.broadcastreceiver.WifiChangeReceiver;
 import com.mdes.mywifi.broadcastreceiver.WifiNotFoundReceiver;
+import com.mdes.mywifi.help.HelpDialog;
+import com.mdes.mywifi.log.LogManager;
+import com.mdes.mywifi.wifi.WifiMap;
 
 public class PieGraphActivity extends Activity {
 	private DefaultRenderer renderer = new DefaultRenderer();
@@ -42,12 +46,13 @@ public class PieGraphActivity extends Activity {
 			Color.parseColor("#41C4BF"), Color.parseColor("#4166C4"),
 			Color.parseColor("#B04E9D"), Color.parseColor("#FF2F2F"),
 			Color.parseColor("#33FF99"), Color.parseColor("#DCE45F"),
-			Color.RED};
+			Color.parseColor("#FFA500")};
 	private SimpleSeriesRenderer[] simpleSeriesRenderer;
 	private LinearLayout layout;
 	private BroadcastReceiver currentActivityReceiver;
 	private WifiNotFoundReceiver wifiNotFoundReceiver = new WifiNotFoundReceiver();
-	
+	private boolean pausa = false;
+
 	ActionBar actionBar = null;
 	private HelpDialog helpDialog;
 
@@ -55,39 +60,44 @@ public class PieGraphActivity extends Activity {
 		try{ 
 			registerReceiver(wifiReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 			super.onCreate(savedInstanceState);
-			
+
 			simpleSeriesRenderer = new SimpleSeriesRenderer[11]; 
 			for (int i = 0; i < simpleSeriesRenderer.length; i++){
 				simpleSeriesRenderer[i] = new SimpleSeriesRenderer();
 				simpleSeriesRenderer[i].setColor(colors[i]);				
 			}
-			
+
 			//Quitar título de la actividad y pantalla completa
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 			actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(false);
-			
+
 			renderer = new DefaultRenderer();
 			series = new CategorySeries("Pie Graph");
 
-			
+
 			getValues();
 			renderer.setChartTitleTextSize(27);
 			renderer.setStartAngle(180);
 			renderer.setDisplayValues(true);
 			renderer.setBackgroundColor(Color.BLACK);
-			renderer.setLabelsTextSize(20);
+			renderer.setLabelsTextSize(30);
+			renderer.setLegendTextSize(25);
 			renderer.setApplyBackgroundColor(true);
 			renderer.setMargins(new int[] { 50, 40, 10, 30 });
 			renderer.setShowLegend(true);
+			renderer.setZoomEnabled(false);
+			renderer.setPanEnabled(false);
 
 			currentActivityReceiver= new BroadcastReceiver(){
 
 				@Override
 				public void onReceive(Context context, Intent intent) {	
-					getValues();
-					view.repaint();
+					if (!pausa){
+						getValues();
+						view.repaint();
+					}
 				}
 
 			};
@@ -109,14 +119,32 @@ public class PieGraphActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		try{
 			switch(item.getItemId()) {
-			
+
 			case R.id.ayuda:
 				setResult(Activity.RESULT_CANCELED);
 				String text = "Esta gráfica muestra una comparativa gráfica de la proporción "
-						+ "de puntos de acceso que están transmitiendo en cada canal. ";
+						+ "de puntos de acceso que están transmitiendo en cada canal. Aquellos "
+						+ "canales en los que transmita un menor número de redes sufrirán menos interferencias"
+						+ ", por lo que es recomendable seleccionarlos en la configuración de tu punto de "
+						+ "acceso inalámbrico, aunque también se debe tener en cuenta las interferencias"
+						+ "que pueden provocar los puntos de acceso que transmiten en los canales contiguos."
+						+ "Esta información se puede comprobar en la gráfica de frecuencia.";
 				helpDialog = new HelpDialog(this,"Ayuda", text);
 				return true;
-
+			case R.id.salir:
+				Intent intent = new Intent(Intent.ACTION_MAIN);
+				intent.addCategory(Intent.CATEGORY_HOME);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+				return true;
+			case R.id.pausa:
+				pausa = !pausa;
+				if (pausa){
+					item.setTitle("Reanudar");
+				}
+				else{
+					 item.setTitle("Pausa");
+				}
 			default:
 				return super.onOptionsItemSelected(item);
 			}
@@ -127,7 +155,7 @@ public class PieGraphActivity extends Activity {
 		}
 	}
 
-	
+
 	protected void onStart() {
 		try{
 			super.onStart();
